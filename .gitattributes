@@ -1,0 +1,6 @@
+# Webアセットは改行をLFに正規化（リポジトリ内・配信ともLF）
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary

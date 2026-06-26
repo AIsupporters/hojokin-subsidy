@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 正式名称・運営者・法務リンクは代表確定済（2026-06-23）。新着通知のメール登録フォームはBrevo接続時に追加。 -->
+<title>補助金調べるくん｜国と大阪の補助金・助成金 新着まとめ</title>
+<meta name="description" content="国と大阪府の補助金・助成金の新着を毎朝自動チェックしてまとめてお届け。気になるものを素早く見つけて保存・共有できる無料サービス（運営：AIサポーターズ株式会社）。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-sweep" aria-hidden="true"></div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">国 ＋ 大阪府 ／ 補助金・助成金の新着を毎朝自動チェック</p>
+    <h1>補助金調べるくん</h1>
+    <p class="lede">国と大阪の補助金、新着を毎朝まとめてお届け。気になるものを素早く見つけて、保存・共有できます。</p>
+    <div class="scoreboard" id="scoreboard" role="group" aria-label="重要度別の件数"></div>
+    <p class="meta">
+      <span id="last-updated">最終更新: —</span>
+      <span id="new-summary"></span>
+    </p>
+    <details class="scope">
+      <summary>監視範囲とご注意</summary>
+      <div class="scope-body">
+        <p id="sources"></p>
+        <p id="uncovered" class="uncovered"></p>
+        <p class="disclaimer">本サービスは公開情報をもとに補助金情報を自動収集・整理して提供する無料の情報サービスです。表示する重要度・該当度などのスコアはAIによる参考情報であり、申請の可否・採択や「申請すべきか」の専門的助言を示すものではありません。補助額・補助率・締切等は必ず各制度の公式情報・募集要項をご確認ください。情報の正確性・最新性・網羅性を保証するものではありません。</p>
+      </div>
+    </details>
+  </div>
+</header>
+
+<section class="profile-panel" id="profile-panel" aria-labelledby="pp-title">
+  <div class="wrap">
+    <div class="pp-head">
+      <h2 id="pp-title">会社情報を入れると、自社に合う補助金が見えます</h2>
+      <p class="pp-lede">業種と従業員規模を選ぶと、対象になりやすい制度と「補助上限の目安」を表示します。一覧もあなたの業種で絞り込まれます。</p>
+    </div>
+    <div class="pp-body">
+      <div class="pp-inputs">
+        <div class="pp-field">
+          <label for="pp-industry">業種</label>
+          <select id="pp-industry"><option value="">業種を選択</option></select>
+        </div>
+        <div class="pp-field">
+          <label for="pp-size">従業員規模</label>
+          <select id="pp-size"><option value="">規模を選択</option></select>
+        </div>
+        <p class="pp-note">※「常時使用する従業員数（役員・同居親族・日雇い・試用期間中を除く）」でお選びください。</p>
+      </div>
+      <div class="pp-result" id="pp-result" aria-live="polite"></div>
+    </div>
+    <details class="pp-register" id="pp-register">
+      <summary><span class="pp-reg-title">会社情報を登録して新着を受け取る（無料）</span><span class="pp-reg-sub">業種・規模に合う新着補助金をお届けします</span></summary>
+      <form id="reg-form" class="reg-form" novalidate>
+        <div class="reg-grid">
+          <div class="reg-row">
+            <label for="reg-email">メールアドレス <span class="req">必須</span></label>
+            <input type="email" id="reg-email" required autocomplete="email" placeholder="you@example.com">
+          </div>
+          <div class="reg-row">
+            <label for="reg-company">会社名・屋号 <span class="req">必須</span></label>
+            <input type="text" id="reg-company" required autocomplete="organization" placeholder="株式会社○○">
+          </div>
+        </div>
+        <p class="reg-picknote" id="reg-picknote">業種・従業員規模は上で選んだ内容で登録します。</p>
+        <div class="reg-consents">
+          <label class="reg-chk"><input type="checkbox" id="reg-consent1" required> 新着補助金の通知・お役立ち情報をメールで受け取る（送信者：AIサポーターズ株式会社）<span class="req">必須</span></label>
+          <label class="reg-chk"><input type="checkbox" id="reg-consent2"> AIサポーターズのサービス・ご提案のご案内メールも受け取る（任意）</label>
+        </div>
+        <p class="reg-priv">ご入力情報の取り扱いは<a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。業種・規模は、あなたに合った補助金の表示・通知のために利用します。</p>
+        <button type="submit" class="reg-submit">登録する（無料）</button>
+        <p class="reg-status" id="reg-status" role="status" aria-live="polite"></p>
+        <p class="reg-soon">※ メールでの新着通知は現在準備中です。受付開始の準備が整い次第ご案内します（この時点では送信は行われません）。</p>
+      </form>
+    </details>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap">
+    <section class="controls" aria-label="絞り込みと出力">
+      <div class="controls-filter">
+        <label class="visually-hidden" for="q">キーワード検索</label>
+        <div class="search"><input type="search" id="q" placeholder="補助金名・実施機関で検索"></div>
+        <label class="visually-hidden" for="category">地域</label>
+        <select id="category">
+          <option value="">地域: すべて</option>
+          <option value="国">国</option>
+          <option value="大阪">大阪</option>
+          <option value="その他">その他</option>
+        </select>
+        <label class="visually-hidden" for="perspective">相性の視点（業種/自社）</label>
+        <select id="perspective" aria-label="相性の視点">
+          <option value="">🔎 視点：未設定（業種を選ぶ）</option>
+          <option value="jisha">AIサポーターズ（自社の精密採点）</option>
+          <option value="製造・ものづくり">製造・ものづくり</option>
+          <option value="IT・DX・AI">IT・DX・AI</option>
+          <option value="雇用・労務・人材">雇用・労務・人材</option>
+          <option value="創業・起業">創業・起業</option>
+          <option value="省力化・自動化">省力化・自動化</option>
+          <option value="環境・脱炭素・省エネ">環境・脱炭素・省エネ</option>
+          <option value="観光・飲食・小売">観光・飲食・小売</option>
+          <option value="医療・介護・福祉">医療・介護・福祉</option>
+          <option value="農林・水産">農林・水産</option>
+        </select>
+        <label class="visually-hidden" for="sort">並び替え</label>
+        <select id="sort">
+          <option value="deadline">締切が近い順</option>
+          <option value="new">新着順</option>
+          <option value="score">該当度が高い順</option>
+        </select>
+        <label class="chk"><input type="checkbox" id="newonly"> 新着のみ</label>
+      </div>
+      <div class="controls-action">
+        <button id="save" type="button" class="btn">絞り込みを保存</button>
+        <button id="copy" type="button" class="btn">URLをコピー</button>
+        <button id="csv" type="button" class="btn">CSV</button>
+        <button id="ics" type="button" class="btn">カレンダー</button>
+      </div>
+    </section>
+    <div class="status-bar">
+      <p id="result-count" class="result-count" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div id="chips" class="chips" aria-label="適用中の絞り込み"></div>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="persp-banner" class="persp-banner"></div>
+  <h2 class="visually-hidden">補助金の一覧</h2>
+  <div id="list" class="list"></div>
+  <p id="empty" class="empty" role="status" aria-live="polite" hidden></p>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>補助金調べるくん</strong> ／ 運営者: AIサポーターズ株式会社</p>
+    <p class="footer-links">
+      <a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>
+      ・<a href="https://ai-supporters.com/tokusyoho/" target="_blank" rel="noopener noreferrer">特定商取引法に基づく表記</a>
+      ・<a href="https://ai-supporters.com/contact/" target="_blank" rel="noopener noreferrer">お問い合わせ・情報交換</a>
+    </p>
+    <p>【ご利用にあたって】本サービスは国・大阪府等の公開情報をもとに補助金情報を自動収集・整理して提供する無料の情報サービスです。表示する重要度・該当度などのスコアはAIによる参考情報であり、申請の可否・採択や「申請すべきか」の専門的助言を示すものではありません。補助額・補助率・締切等は必ず各制度の公式情報・募集要項をご確認ください。情報の正確性・最新性・網羅性を保証するものではなく、本サービスの利用により生じた損害について当社は責任を負いかねます。</p>
+    <p class="tiny">メールでの新着通知（無料登録）は近日公開予定です。補助金やAI活用のご相談・情報交換は、お問い合わせからお気軽にどうぞ。</p>
+    <p class="tiny">© AIサポーターズ株式会社</p>
+  </div>
+</footer>
+
+<script src="eligibility.js?v=1"></script>
+<script src="app.js?v=6"></script>
+</body>
+</html>

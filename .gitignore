@@ -1,0 +1,17 @@
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# secrets — never commit（防御的・本リポジトリには元々存在しない）
+.env
+.env.*
+*.key
+*.pem
+*credential*
+
+# 一時/作業ファイル
+*.log
+tmp/

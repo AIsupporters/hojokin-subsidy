@@ -1,0 +1,296 @@
+{
+  "https://j-net21.smrj.go.jp/snavi2/articles/183800": {
+    "maxLimit": "200万円（インボイス特例適用で+50万円＝250万円）",
+    "rate": "2/3",
+    "source": "https://r6.jizokukahojokin.info/sogyo/doc/r6_koubover8_sogyo4.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183795": {
+    "maxLimit": "50万円",
+    "rate": "2/3",
+    "source": "https://www.chusho.meti.go.jp/koukai/hojyokin/kobo/2026/260527002.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183798": {
+    "maxLimit": "50万円",
+    "rate": "2/3（賃金引上げ特例のうち赤字事業者は3/4）",
+    "source": "https://r6.jizokukahojokin.info/doc/r6_koubover7_ip20.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181620": {
+    "maxLimit": "50万円",
+    "rate": "2/3（賃金引上げ特例の赤字事業者は3/4）",
+    "source": "https://r6.jizokukahojokin.info/"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181526": {
+    "maxLimit": "750万〜8,000万円(規模別)",
+    "rate": "1/2（小規模事業者・再生事業者は2/3）",
+    "source": "https://shoryokuka.smrj.go.jp/ippan/"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181371": {
+    "deadline": "2026-12-15",
+    "maxLimit": "200万円",
+    "rate": "2/3",
+    "source": "https://r6.jizokukahojokin.info/sogyo/jizokukahojokin.php"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181240": {
+    "deadline": "2026-07-21",
+    "maxLimit": "450万円",
+    "rate": "1/2以内（最低賃金近傍の事業者は2/3以内）",
+    "source": "https://it-shien.smrj.go.jp/applicant/subsidy/normal/"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180135": {
+    "maxLimit": "1,000万円（賃上げ要件達成時1,500万円）",
+    "rate": "1/2以下",
+    "source": "https://shoryokuka.smrj.go.jp/catalog/about/"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/184650": {
+    "maxLimit": "500万円",
+    "rate": "2/3以内",
+    "source": "https://www.pref.osaka.lg.jp/o110050/keieishien/rieki/riekiritur8.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183731": {
+    "maxLimit": "30万円",
+    "rate": "2/3以内",
+    "source": "https://www.city.minoh.lg.jp/syoukou/zeroichoouen.html"
+  },
+  "https://www.city.sakai.lg.jp/sangyo/shienyuushi/chusho/proddev/monochalle.html": {
+    "deadline": "2026-06-30",
+    "maxLimit": "300万円",
+    "rate": "1/2以内",
+    "source": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/chusho/proddev/monochalle.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181731": {
+    "maxLimit": "20万円",
+    "rate": "1/2以内",
+    "source": "https://www.city.suita.osaka.jp/sangyo/1018028/1018029/1018030/1043691.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180803": {
+    "maxLimit": "500万円",
+    "rate": "2分の1",
+    "source": "https://teqs.jp/aikaihatsuhojyo"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180037": {
+    "maxLimit": "50万円",
+    "rate": "10分の8（80%）",
+    "source": "https://www.pref.osaka.lg.jp/o110100/fukugyou-kenngyou.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/174882": {
+    "maxLimit": "10万円",
+    "rate": "2分の1",
+    "source": "https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/hojokin/r8aisokushinhozyo.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/174881": {
+    "maxLimit": "10万円",
+    "rate": "3分の2",
+    "source": "https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/hojokin/r8aiseminar.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183049": {
+    "maxLimit": "300万円/事業者(特許150・各登録60・抜駆対策30万円)",
+    "rate": "1/2",
+    "source": "https://www.inpit.go.jp/shien/gaikoku/index.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182735": {
+    "maxLimit": "30万〜600万円(コース・人数別/最大600万)",
+    "rate": "4/5または3/4(賃金水準別)",
+    "source": "https://www.mhlw.go.jp/content/11200000/001693416.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182259": {
+    "maxLimit": "25万円",
+    "rate": "2/3",
+    "source": "https://www.chusho.meti.go.jp/keiei/saisei/04.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182084": {
+    "deadline": "2026-06-29",
+    "maxLimit": "300万円(1事業者)/特許出願は150万円",
+    "rate": "1/2",
+    "source": "https://www.inpit.go.jp/shien/gaikoku/index.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182085": {
+    "maxLimit": "1企業300万円(1出願:特許150万円/実用新案・意匠・商標60万円/冒認対策商標30万円)",
+    "rate": "1/2以内",
+    "source": "https://www.m-osaka.com/jp/service/foreign_appl.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182088": {
+    "maxLimit": "300万円(通常枠)",
+    "rate": "2/3",
+    "source": "https://www.smrj.go.jp/supporter/revitalization/improvement.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181621": {
+    "deadline": "2026-02-27",
+    "maxLimit": "5000万円",
+    "rate": "2/3以内・定額(経費区分による)",
+    "source": "https://mirasapo-plus.go.jp/wordpress/wp-content/uploads/2025/12/24164422/r6_koubover4_kk2.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181513": {
+    "maxLimit": "200万円",
+    "rate": "1/2",
+    "source": "https://www.chisou.go.jp/sousei/kigyou_shienkin.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181378": {
+    "maxLimit": "3,000万〜5,500万円(公費上限・融資倍率別)",
+    "rate": "原則1/2(条件不利2/3、財政力0.25未満や成長分野等は3/4)",
+    "source": "https://www.soumu.go.jp/main_content/001066220.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181238": {
+    "deadline": "2026-04-17",
+    "maxLimit": "9,750万円(通常枠3年合計)〜3億円(大型研究開発枠3年合計)",
+    "rate": "2/3以内(大学等は定額)",
+    "source": "https://www.chusho.meti.go.jp/koukai/hojyokin/kobo/2026/260216001.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181246": {
+    "rate": "利率引下げ -0.65%(雇用拡大時 -0.9%)",
+    "source": "https://www.jfc.go.jp/n/finance/search/sogyo_tokurei_m.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181248": {
+    "maxLimit": "7,200万円(融資限度額)",
+    "rate": "基準利率(要件該当で特別利率A/B/C)",
+    "source": "https://www.jfc.go.jp/n/finance/search/01_sinkikaigyou_m.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181249": {
+    "maxLimit": "直接貸付7億2千万円/代理貸付1億2千万円(融資限度額)",
+    "source": "https://www.jfc.go.jp/n/finance/search/02_zyoseikigyouka_m_t.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181157": {
+    "maxLimit": "750万〜9000万円(枠・規模・特例別)",
+    "source": "https://shinjigyou-shinshutsu.smrj.go.jp/"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180436": {
+    "maxLimit": "経費助成15万〜50万円/人(訓練時間別)・年度上限1,000万円/事業所",
+    "rate": "中小45%(大企業30%)、賃金要件等充足で60%(45%)。有期実習型は75%→100%",
+    "source": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/kyufukin/d01-1.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180437": {
+    "maxLimit": "30万〜36万円（賃金助成除く定額）",
+    "rate": "定額（補助率なし）",
+    "source": "https://www.mhlw.go.jp/content/11800000/001687563.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180438": {
+    "maxLimit": "2500万円(1事業所1年度・枠別に300万〜1000万円)",
+    "rate": "最大3/4(75%・枠別に45〜75%)",
+    "source": "https://www.mhlw.go.jp/content/11800000/001705830.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180439": {
+    "maxLimit": "経費助成 最大50万円/人(中小)・30万円/人(大)、1事業所1億円/年",
+    "rate": "経費助成 中小3/4(75%)・大3/5(60%)、賃金助成 1000円/500円(1人1時間)",
+    "source": "https://www.mhlw.go.jp/content/11800000/001705831.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180225": {
+    "maxLimit": "最大1,190万円(運送業・賃上げ加算含む)",
+    "rate": "3/4(一部要件で4/5)",
+    "source": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000120692_00001.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180226": {
+    "maxLimit": "50万〜150万円(成果目標別/加算別途)",
+    "rate": "3/4(30人以下の特定取組は4/5)",
+    "source": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000120692.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180194": {
+    "maxLimit": "最大230万円(賃金要件達成時287.5万円)",
+    "rate": "定額＋対象経費1/2(雇用環境整備、賃金要件で62.5/100・75/100)",
+    "source": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000199292_00005.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180196": {
+    "maxLimit": "20万円（制度導入助成）＋10万〜15万円（目標達成助成）",
+    "rate": "定額（補助率なし）",
+    "source": "https://www.mhlw.go.jp/content/11600000/001239697.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180201": {
+    "maxLimit": "80万円(1人当たり・最大)",
+    "rate": "定額(助成率の定めなし。賃金総額が上限)",
+    "source": "https://www.mhlw.go.jp/content/11910500/001512366.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/179158": {
+    "maxLimit": "750万〜7,000万円(規模別)",
+    "rate": "1/2(賃金特例で2/3)",
+    "source": "https://shinjigyou-shinshutsu.smrj.go.jp/docs/shinjigyou_koubo_4.pdf"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/184649": {
+    "maxLimit": "50万円",
+    "rate": "定額(賃上げ率に応じ3万〜5万円/人)",
+    "source": "https://www.city.ibaraki.osaka.jp/kikou/sangyo/shoukou/menu/rodofukushi/minasamahe/68403.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183543": {
+    "maxLimit": "50万〜150万円(出店場所により異なる)",
+    "rate": "1/2",
+    "source": "https://www.city.takatsuki.osaka.jp/site/miryokuaruomise/170922.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/182196": {
+    "maxLimit": "300万円(1企業あたり)",
+    "rate": "1/2",
+    "source": "https://www.m-osaka.com/jp/service/foreign_appl.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/183512": {
+    "rate": "市内企業:月額賃借料の5/10、市外企業:3/10(助成期間は利用開始日から3年間)",
+    "source": "https://www.city.higashiosaka.lg.jp/0000043101.html"
+  },
+  "https://www.pref.osaka.lg.jp/o110020/energy/inobe_kikin/inobe_kikinn_sienpuroguramu_r8.html": {
+    "maxLimit": "1億〜4億円(事業区分別)",
+    "source": "https://www.pref.osaka.lg.jp/o110020/energy/inobe_kikin/inobe_kikinn_sienpuroguramu_r8.html"
+  },
+  "https://www.pref.osaka.lg.jp/o110110/01jinzai_jinnzaiikuseisienhojokin.html": {
+    "deadline": "2026-03-09",
+    "maxLimit": "1人につき上限20万円(その他研修)／運輸・建設・デジタルは上限なし",
+    "rate": "3/4(運輸・建設・デジタル)、その他1/2",
+    "source": "https://www.pref.osaka.lg.jp/o110110/01jinzai_jinnzaiikuseisienhojokin.html"
+  },
+  "https://www.pref.osaka.lg.jp/o110020/energy/inobe_kikin/inobe_kikinn_sienpuroguramu.html": {
+    "deadline": "2025-05-01",
+    "maxLimit": "1億〜4億円(事業区分別)",
+    "source": "https://www.pref.osaka.lg.jp/o110020/energy/inobe_kikin/inobe_kikinn_sienpuroguramu.html"
+  },
+  "https://www.city.sakai.lg.jp/sangyo/shienyuushi/sogyo/jisshyo.html": {
+    "deadline": "2026-06-30",
+    "maxLimit": "100万円",
+    "rate": "1/2以内",
+    "source": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/sogyo/jisshyo.html"
+  },
+  "https://www.city.sakai.lg.jp/sangyo/dentosangyo/subsidy/openfactoryhojyo.html": {
+    "maxLimit": "20万円",
+    "rate": "1/2以内",
+    "source": "https://www.city.sakai.lg.jp/sangyo/dentosangyo/subsidy/openfactoryhojyo.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181253": {
+    "maxLimit": "100万円",
+    "rate": "1/2以内",
+    "source": "https://www.city.kishiwada.lg.jp/page/43-sinaimarugotorabohojokin.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181281": {
+    "maxLimit": "10万円(技能講習等は上限5万円)",
+    "rate": "1/2",
+    "source": "https://www.city.kishiwada.lg.jp/page/43-jinzaiikusei.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181274": {
+    "maxLimit": "20万円(動画制作費は上限3万円)",
+    "rate": "1/2(補助対象経費の2分の1)",
+    "source": "https://www.city.kishiwada.lg.jp/page/43-tenjikai.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181272": {
+    "maxLimit": "30万円",
+    "rate": "2分の1（千円未満切捨て）",
+    "source": "https://www.city.kishiwada.lg.jp/page/43-digital-hozyokinn.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/181256": {
+    "maxLimit": "10万円",
+    "rate": "1/2",
+    "source": "https://www.city.kishiwada.lg.jp/page/43-hanrokaitaku.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180369": {
+    "maxLimit": "15万円",
+    "rate": "1/2",
+    "source": "https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/hojokin/R8tenjikai.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/180370": {
+    "maxLimit": "10万〜15万円(事業区分別)",
+    "rate": "2分の1",
+    "source": "https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/hojokin/R8jinzaikakuho.html"
+  },
+  "https://j-net21.smrj.go.jp/snavi2/articles/176613": {
+    "maxLimit": "200万円",
+    "rate": "2/3",
+    "source": "https://www.city.suita.osaka.jp/sangyo/1018028/1018029/1018030/1041621.html"
+  },
+  "https://www.city.suita.osaka.jp/sangyo/1018028/1018029/1018030/1023431.html": {
+    "deadline": "2026-07-27",
+    "maxLimit": "月額5万円(対象期間12か月)",
+    "rate": "1/2",
+    "source": "https://www.city.suita.osaka.jp/sangyo/1018028/1018029/1018030/1023431.html"
+  }
+}
