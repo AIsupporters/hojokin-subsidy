@@ -386,6 +386,8 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 }
 .tag.kuni{background:var(--kuni-bg);color:var(--kuni);font-weight:700}
 .tag.osaka{background:var(--osaka-bg);color:var(--osaka);font-weight:700}
+.tag.kyoto{background:#efe2f1;color:#7a3f86;font-weight:700}
+.tag.hyogo{background:#dbeceb;color:#1f6f6b;font-weight:700}
 .tag.new{
   background:var(--new-bg);color:var(--new);font-weight:700;display:inline-flex;align-items:center;gap:6px;
 }

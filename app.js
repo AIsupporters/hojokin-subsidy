@@ -143,7 +143,7 @@ function card(it, persp, rel) {
   const dl = deadlineInfo(it);
   const reg = regionDisplay(it.region);
   const url = safeUrl(it.url);
-  const catCls = it.category === "国" ? "kuni" : it.category === "大阪" ? "osaka" : "";
+  const catCls = it.category === "国" ? "kuni" : it.category === "大阪" ? "osaka" : it.category === "京都" ? "kyoto" : it.category === "兵庫" ? "hyogo" : "";
   return `<li class="card${rel && rel.kind === "jisha" ? " rank-" + esc(rel.level) : ""}">
     <div class="card-top">
       ${badge(persp, rel)}
