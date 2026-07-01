@@ -212,7 +212,18 @@ img{max-width:100%}
   -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='M21 21l-4-4'/></svg>") center/contain no-repeat;
   mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'><circle cx='11' cy='11' r='7'/><path d='M21 21l-4-4'/></svg>") center/contain no-repeat;
 }
-.search input{width:100%;padding-left:38px!important}
+.search input{
+  width:100%;min-height:44px;padding:10px 12px 10px 40px;
+  border:1.5px solid var(--ink);border-radius:0;background:var(--card);
+  font-family:var(--sans);font-size:15px;color:var(--ink);
+  -webkit-appearance:none;appearance:none;transition:box-shadow .14s,border-color .14s;
+}
+.search input::placeholder{color:var(--faint)}
+.search input:hover{border-color:var(--accent)}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:3px 3px 0 0 var(--accent)}
+.search input::-webkit-search-decoration,.search input::-webkit-search-cancel-button,.search input::-webkit-search-results-button{-webkit-appearance:none;display:none}
+/* 簡易検索：セレクタの下に出る絞り込みチップとの隙間 */
+#panel-simple .chips{margin-top:12px}
 
 .controls input,.controls select{
   padding:10px 12px;border:1.5px solid var(--ink);border-radius:0;
@@ -281,15 +292,16 @@ img{max-width:100%}
 .detail-conds{display:flex;gap:8px;flex-wrap:wrap;min-height:2px}
 .detail-empty{color:var(--muted);font-size:13.5px;margin:0}
 /* 絞り込みセレクタ（地域・業種・並び替え）をボタンと同じ大きさ・体裁に */
-#category,#perspective,#sort{
+#category,#city,#perspective,#sort{
   padding:10px 34px 10px 13px;border:1.5px solid var(--ink);border-radius:0;background:var(--card);
   font-family:var(--sans);font-size:14px;color:var(--ink);min-height:44px;min-width:158px;cursor:pointer;
   -webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23132a44' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
   background-repeat:no-repeat;background-position:right 11px center;background-size:15px;transition:box-shadow .14s,border-color .14s;
 }
-#category:hover,#perspective:hover,#sort:hover{border-color:var(--accent)}
-#category:focus,#perspective:focus,#sort:focus{outline:none;border-color:var(--accent);box-shadow:3px 3px 0 0 var(--accent)}
+#category:hover,#city:hover,#perspective:hover,#sort:hover{border-color:var(--accent)}
+#category:focus,#city:focus,#perspective:focus,#sort:focus{outline:none;border-color:var(--accent);box-shadow:3px 3px 0 0 var(--accent)}
+#city:disabled{opacity:.5;cursor:not-allowed;background-color:var(--paper-deep)}
 .action-gap{display:inline-block;width:1px;align-self:stretch;background:var(--hair);margin:0 6px}
 .only-detail[hidden]{display:none}
 a.btn{text-decoration:none;display:inline-flex;align-items:center}
@@ -513,6 +525,8 @@ main.wrap{padding-top:38px;padding-bottom:20px}
   .search{grid-column:1/-1;flex:1 1 auto;min-width:0}
   .chk{grid-column:1/-1;min-height:42px;border:1.5px dashed var(--hair);justify-content:center}
   .controls-action{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+  .action-gap{display:none}
+  #category,#city,#perspective,#sort{width:100%;min-width:0}
   .btn{width:100%;min-width:0;justify-content:center}
   .status-bar{flex-direction:column;align-items:flex-start;gap:10px}
 

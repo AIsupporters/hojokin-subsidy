@@ -72,6 +72,49 @@ let SIZE = "";       // 自社の規模ID（URL size=・小規模向け制度の
 let MODE = "simple"; // "detail"=詳細検索(自社登録内容) / "simple"=簡易検索(業種×地域)
 let ORIG = null;     // 開いたときの登録内容スナップショット（「絞り込み状態を初期化」で復元）
 let EDIT_TOKEN = ""; // 登録情報を編集する用トークン（URL edit=）
+let CITY = "";       // 市区町村（URL city=・都道府県の下位）
+let REGION_CITIES = { "大阪府": [], "京都府": [], "兵庫県": [] }; // 補助金データに実在する市区町村（検索用・init時に生成）
+
+// 都道府県の表記ゆれを正規化（旧値 大阪/京都/兵庫・全国 → 大阪府/京都府/兵庫県・国）。その他は絞り込みなし扱い。
+function normPref(v) {
+  v = String(v || "").trim();
+  if (!v) return "";
+  if (v === "国" || v === "全国") return "国";
+  if (v.startsWith("大阪")) return "大阪府";
+  if (v.startsWith("京都")) return "京都府";
+  if (v.startsWith("兵庫")) return "兵庫県";
+  return ""; // その他・未対応都道府県 → すべて表示
+}
+// 補助金1件が「都道府県／市区町村」の絞り込みに合致するか（region文字列を階層で判定・捏造なし）
+function regionMatch(it, pref, city) {
+  pref = normPref(pref);
+  if (!pref) return true;
+  const parts = String(it.region || "").split(/\s*\/\s*/).map((x) => x.trim()).filter(Boolean);
+  if (pref === "国") return parts.some((x) => x === "国" || x.startsWith("全国"));
+  if (city) return parts.some((x) => x === pref + city || x.startsWith(pref + city));
+  return parts.some((x) => x.startsWith(pref));
+}
+// 検索用の市区町村リストを補助金データから生成（結果が必ず存在する市区町村だけ）
+function deriveRegionCities() {
+  const m = { "大阪府": new Set(), "京都府": new Set(), "兵庫県": new Set() };
+  for (const it of DATA.items) {
+    const parts = String(it.region || "").split(/\s*\/\s*/).map((x) => x.trim());
+    for (const part of parts) for (const pref of ["大阪府", "京都府", "兵庫県"]) {
+      if (part.startsWith(pref)) { const c = part.slice(pref.length).trim(); if (c) m[pref].add(c); }
+    }
+  }
+  REGION_CITIES = { "大阪府": [...m["大阪府"]].sort(), "京都府": [...m["京都府"]].sort(), "兵庫県": [...m["兵庫県"]].sort() };
+}
+// 市区町村セレクトを、選択中の都道府県に応じて詰め替える（カスケード）
+function populateCity(prefRaw) {
+  const pref = normPref(prefRaw);
+  const sel = els.city; if (!sel) return;
+  const cur = sel.value;
+  const cities = (pref && pref !== "国" && REGION_CITIES[pref]) ? REGION_CITIES[pref] : [];
+  sel.innerHTML = `<option value="">市区町村: すべて</option>` + cities.map((c) => `<option value="${attr(c)}">${esc(c)}</option>`).join("");
+  sel.disabled = cities.length === 0;
+  sel.value = [...sel.options].some((o) => o.value === cur) ? cur : "";
+}
 
 const els = {};
 let DATA = { items: [], total: 0 };
@@ -147,31 +190,63 @@ function isRecent(it) {
 
 // ---- 状態 ----
 function savedView() { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } }
+function savedOrig() { try { return JSON.parse(localStorage.getItem("sw-orig") || "null"); } catch { return null; } }
 function readState() {
   const p = new URLSearchParams(location.search);
-  const ls = savedView();
-  const fromLine = p.has("ind") || p.has("plans") || p.has("improve") || p.has("support") || p.has("size");
-  const arrOf = (key, map, saved) => p.has(key) ? p.get(key).split(",").map((s) => s.trim()).filter((s) => map[s]) : (fromLine ? [] : (Array.isArray(saved) ? saved.filter((x) => map[x]) : []));
-  // 業種: ?v 優先 → ?ind（公式LINE）→ 保存
-  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : (fromLine ? "" : (ls.persp || "")));
-  if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
-  // 詳細条件（URL優先→なければ保存から復元）
-  PLANS = arrOf("plans", PLAN_MAP, ls.plans);
-  IMPROVES = arrOf("improve", IMPROVE_MAP, ls.improves);
-  SUPPORTS = arrOf("support", SUPPORT_MAP, ls.supports);
-  SIZE = p.has("size") ? p.get("size") : (fromLine ? "" : (ls.size || ""));
-  // モード: mode= 優先 → LINE由来なら詳細 → 保存 → 簡易
-  MODE = p.has("mode") ? (p.get("mode") === "detail" ? "detail" : "simple") : (fromLine ? "detail" : (ls.mode === "detail" ? "detail" : "simple"));
+  const lineOpen = p.has("ind") || p.has("edit"); // 公式LINEが発行したパーソナライズURL
   if (p.has("edit")) EDIT_TOKEN = p.get("edit");
-  const category = p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : (fromLine ? "" : (ls.category || "")));
-  const q = p.has("q") ? p.get("q") : (fromLine ? "" : (ls.q || ""));
-  const sort = p.has("sort") ? p.get("sort") : (ls.sort || "deadline");
+  const arrFromUrl = (key, map) => p.has(key) ? p.get(key).split(",").map((s) => s.trim()).filter((s) => map[s]) : [];
+
+  // 登録内容スナップショット（「絞り込み状態を初期化」で復元する原本）をLINE URLから取得し永続化
+  if (lineOpen) {
+    let oPersp = p.has("ind") ? p.get("ind") : "";
+    if (oPersp && oPersp !== "jisha" && !INDUSTRY_MAP[oPersp]) oPersp = "";
+    const orig = {
+      persp: oPersp,
+      category: normPref(p.has("region") ? p.get("region") : ""),
+      city: p.has("city") ? p.get("city") : "",
+      size: p.has("size") ? p.get("size") : "",
+      plans: arrFromUrl("plans", PLAN_MAP),
+      improves: arrFromUrl("improve", IMPROVE_MAP),
+      supports: arrFromUrl("support", SUPPORT_MAP),
+    };
+    try { localStorage.setItem("sw-orig", JSON.stringify(orig)); } catch {}
+  }
+
+  // ① 明示保存されたビューを最優先で復元（＝公式LINEから開いても「保存した絞り込み」を尊重）。
+  //    登録内容へ戻したいときは「絞り込み状態を初期化」ボタンを使う。
+  const savedRaw = (() => { try { return localStorage.getItem("sw-view"); } catch { return null; } })();
+  if (savedRaw) {
+    let ls; try { ls = JSON.parse(savedRaw); } catch { ls = {}; }
+    let persp = ls.persp || "";
+    if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
+    PLANS = Array.isArray(ls.plans) ? ls.plans.filter((x) => PLAN_MAP[x]) : [];
+    IMPROVES = Array.isArray(ls.improves) ? ls.improves.filter((x) => IMPROVE_MAP[x]) : [];
+    SUPPORTS = Array.isArray(ls.supports) ? ls.supports.filter((x) => SUPPORT_MAP[x]) : [];
+    SIZE = ls.size || "";
+    CITY = ls.city || "";
+    MODE = ls.mode === "detail" ? "detail" : "simple";
+    return { q: ls.q || "", category: normPref(ls.category || ""), sort: ls.sort || "deadline", perspective: persp };
+  }
+
+  // ② 保存が無いとき: URL（公式LINE由来 or 共有リンク）から復元
+  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : "");
+  if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
+  PLANS = arrFromUrl("plans", PLAN_MAP);
+  IMPROVES = arrFromUrl("improve", IMPROVE_MAP);
+  SUPPORTS = arrFromUrl("support", SUPPORT_MAP);
+  SIZE = p.has("size") ? p.get("size") : "";
+  CITY = p.has("city") ? p.get("city") : "";
+  MODE = p.has("mode") ? (p.get("mode") === "detail" ? "detail" : "simple") : (lineOpen ? "detail" : "simple");
+  const category = normPref(p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : ""));
+  const q = p.has("q") ? p.get("q") : "";
+  const sort = p.has("sort") ? p.get("sort") : "deadline";
   return { q, category, sort, perspective: persp };
 }
-function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.perspective.value = s.perspective; }
+function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.perspective.value = s.perspective; populateCity(s.category); if (els.city) els.city.value = CITY; }
 function currentState() { return { q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, perspective: els.perspective.value }; }
 function saveView() {
-  const v = { mode: MODE, q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, persp: els.perspective.value, plans: PLANS, improves: IMPROVES, supports: SUPPORTS, size: SIZE };
+  const v = { mode: MODE, q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, persp: els.perspective.value, city: CITY, plans: PLANS, improves: IMPROVES, supports: SUPPORTS, size: SIZE };
   try { localStorage.setItem("sw-view", JSON.stringify(v)); } catch {}
 }
 function syncUrl(s) {
@@ -179,6 +254,7 @@ function syncUrl(s) {
   if (MODE === "detail") p.set("mode", "detail");
   if (s.q && MODE === "simple") p.set("q", s.q);
   if (s.category) p.set("category", s.category);
+  if (CITY) p.set("city", CITY);
   if (s.sort && s.sort !== "deadline") p.set("sort", s.sort);
   if (s.perspective) p.set("v", s.perspective);
   if (PLANS.length) p.set("plans", PLANS.join(","));
@@ -192,7 +268,7 @@ function syncUrl(s) {
 function baseFilter(s) {
   const words = (MODE === "simple" ? s.q : "").toLowerCase().split(/\s+/).filter(Boolean);
   return DATA.items.filter((it) => {
-    if (s.category && it.category !== s.category) return false;
+    if (!regionMatch(it, s.category, CITY)) return false;
     if (words.length) {
       const hay = (it.name + " " + it.organization + " " + it.region + " " + it.reason).toLowerCase();
       if (!words.every((w) => hay.includes(w))) return false;
@@ -269,8 +345,9 @@ function renderBanner() {
   if (MODE === "detail") { b.innerHTML = ""; b.style.display = "none"; return; } // 詳細はパネル内で説明済み（重複バナー削除）
   b.style.display = "";
   const persp = els.perspective.value, cat = els.category.value;
-  if (!persp && !cat) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
-  const parts = []; if (persp) parts.push(`業種「${esc(persp)}」`); if (cat) parts.push(`地域「${esc(cat)}」`);
+  if (!persp && !cat && !CITY) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
+  const parts = []; if (persp) parts.push(`業種「${esc(persp)}」`);
+  if (cat) parts.push(`地域「${esc(cat === "国" ? "国（全国）" : cat)}${CITY ? " " + esc(CITY) : ""}」`);
   b.className = "persp-banner set"; b.innerHTML = `🔎 <b>簡易検索</b>：${parts.join(" ／ ")}で絞り込み中`;
 }
 
@@ -280,7 +357,8 @@ function renderDetailConds() {
   const chips = [];
   const persp = els.perspective.value, cat = els.category.value;
   if (persp && INDUSTRY_MAP[persp]) chips.push(["persp", `業種：${persp}`]);
-  if (cat) chips.push(["category", `地域：${cat}`]);
+  if (cat) chips.push(["category", `都道府県：${cat === "国" ? "国（全国）" : cat}`]);
+  if (CITY) chips.push(["city", `市区町村：${CITY}`]);
   if (SIZE && SIZE_LABELS[SIZE]) chips.push(["size", `規模：${SIZE_LABELS[SIZE]}`]);
   PLANS.forEach((p) => chips.push(["plan:" + p, `予定：${p}`]));
   IMPROVES.forEach((m) => chips.push(["improve:" + m, `改善：${m}`]));
@@ -290,7 +368,8 @@ function renderDetailConds() {
 }
 function removeDetailCond(k) {
   if (k === "persp") els.perspective.value = "";
-  else if (k === "category") els.category.value = "";
+  else if (k === "category") { els.category.value = ""; CITY = ""; populateCity(""); }
+  else if (k === "city") { CITY = ""; if (els.city) els.city.value = ""; }
   else if (k === "size") SIZE = "";
   else if (k.indexOf("plan:") === 0) PLANS = PLANS.filter((x) => x !== k.slice(5));
   else if (k.indexOf("improve:") === 0) IMPROVES = IMPROVES.filter((x) => x !== k.slice(8));
@@ -312,7 +391,8 @@ function renderScoreboard(persp, buckets, total) {
 function renderChips(s) {
   const chips = [];
   if (s.perspective) chips.push(["v", `業種：${s.perspective === "jisha" ? "自社" : s.perspective}`]);
-  if (s.category) chips.push(["category", `地域：${s.category}`]);
+  if (s.category) chips.push(["category", `都道府県：${s.category === "国" ? "国（全国）" : s.category}`]);
+  if (CITY) chips.push(["city", `市区町村：${CITY}`]);
   if (s.q) chips.push(["q", `「${s.q}」`]);
   els.chips.innerHTML = chips.map(([k, l]) => `<button class="chip" data-k="${k}">${esc(l)}</button>`).join("") + (chips.length ? `<button class="chip clear" data-k="__all">すべて解除</button>` : "");
 }
@@ -383,7 +463,7 @@ function populateProfile() {
 }
 
 function init() {
-  ["q", "category", "perspective", "sort", "save", "copy", "csv", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
+  ["q", "category", "city", "perspective", "sort", "save", "copy", "csv", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
   els.resultCount = $("result-count"); els.banner = $("persp-banner"); els.scoreboard = $("scoreboard");
   els.tabDetail = $("tab-detail"); els.tabSimple = $("tab-simple");
   els.panelDetail = $("panel-detail"); els.panelSimple = $("panel-simple");
@@ -399,31 +479,39 @@ function init() {
     $("uncovered").textContent = data.uncovered || "";
     try { localStorage.setItem("sw-lastseen", data.lastUpdated); } catch {}
     populateProfile();               // ★セレクタを30分類で埋めてから状態反映（順序重要）
+    deriveRegionCities();            // ★市区町村リストを実データから生成（都道府県セレクトのカスケード用）
     applyState(readState());
     // 開いた時点の登録内容を保存（「絞り込み状態を初期化」で復元）
-    ORIG = { persp: els.perspective.value, category: els.category.value, size: SIZE, plans: PLANS.slice(), improves: IMPROVES.slice(), supports: SUPPORTS.slice() };
+    ORIG = savedOrig() || { persp: els.perspective.value, category: els.category.value, size: SIZE, plans: PLANS.slice(), improves: IMPROVES.slice(), supports: SUPPORTS.slice() };
     els.q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(onChange, 160); });
-    ["category", "perspective", "sort"].forEach((id) => els[id].addEventListener("change", onChange));
+    ["perspective", "sort"].forEach((id) => els[id].addEventListener("change", onChange));
+    // 都道府県を変えたら市区町村を詰め替え（カスケード）＋市区町村選択をリセット
+    els.category.addEventListener("change", () => { CITY = ""; populateCity(els.category.value); onChange(); });
+    if (els.city) els.city.addEventListener("change", () => { CITY = els.city.value; onChange(); });
     els.tabDetail.addEventListener("click", () => setMode("detail"));
     els.tabSimple.addEventListener("click", () => setMode("simple"));
     els.detailConds.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (!c) return; removeDetailCond(c.dataset.dk); onChange(); });
     els.clearAll.addEventListener("click", () => {
       if (MODE === "detail") { els.perspective.value = ""; els.category.value = ""; SIZE = ""; PLANS = []; IMPROVES = []; SUPPORTS = []; }
       else { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
+      CITY = ""; populateCity("");
+      try { localStorage.removeItem("sw-view"); } catch {} // 「すべて解除」は保存した絞り込みも消して次回以降も解除状態に
       onChange();
     });
     els.resetDetail.addEventListener("click", () => {
       if (!ORIG) return;
-      els.perspective.value = ORIG.persp; els.category.value = ORIG.category; SIZE = ORIG.size;
+      els.perspective.value = ORIG.persp; els.category.value = normPref(ORIG.category); SIZE = ORIG.size;
+      CITY = ORIG.city || ""; populateCity(els.category.value); if (els.city) els.city.value = CITY;
       PLANS = ORIG.plans.slice(); IMPROVES = ORIG.improves.slice(); SUPPORTS = ORIG.supports.slice();
       onChange();
     });
     els.scoreboard.addEventListener("click", (e) => { const b = e.target.closest(".score"); if (!b) return; const g = b.dataset.g; if (g === restGroup(els.perspective.value)) showRest = true; render(); const sec = $("grp-" + g); if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
     els.chips.addEventListener("click", (e) => {
       const c = e.target.closest(".chip"); if (!c) return; const k = c.dataset.k;
-      if (k === "__all") { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
+      if (k === "__all") { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; CITY = ""; populateCity(""); }
       else if (k === "v") els.perspective.value = "";
-      else if (k === "category") els.category.value = "";
+      else if (k === "category") { els.category.value = ""; CITY = ""; populateCity(""); }
+      else if (k === "city") { CITY = ""; if (els.city) els.city.value = ""; }
       else if (k === "q") els.q.value = "";
       onChange();
     });

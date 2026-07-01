@@ -14,7 +14,10 @@
     "水産・漁業", "エネルギー・環境業", "娯楽・イベント業", "冠婚葬祭・生活サービス業",
     "貿易・輸出入業", "その他サービス業",
   ];
-  var PREFS = ["北海道", "青森県", "岩手県", "宮城県", "秋田県", "山形県", "福島県", "茨城県", "栃木県", "群馬県", "埼玉県", "千葉県", "東京都", "神奈川県", "新潟県", "富山県", "石川県", "福井県", "山梨県", "長野県", "岐阜県", "静岡県", "愛知県", "三重県", "滋賀県", "京都府", "大阪府", "兵庫県", "奈良県", "和歌山県", "鳥取県", "島根県", "岡山県", "広島県", "山口県", "徳島県", "香川県", "愛媛県", "高知県", "福岡県", "佐賀県", "長崎県", "熊本県", "大分県", "宮崎県", "鹿児島県", "沖縄県"];
+  // 本サービスの対応エリアは 国＋大阪府・京都府・兵庫県。都道府県は3府県＋「その他」に統一。
+  var PREFS = ["大阪府", "京都府", "兵庫県", "その他（上記以外）"];
+  var COVERED_PREFS = { "大阪府": 1, "京都府": 1, "兵庫県": 1 };
+  var MUNI = {}; // 都道府県→市区町村配列（data/municipalities.json を読み込み）
   var SALES = ["1000万円未満", "1000〜3000万円", "3000〜5000万円", "5000万円〜1億円", "1〜5億円", "5億円以上"];
   var INVEST = ["100万円以下", "100〜500万円", "500〜1000万円", "1000〜3000万円", "3000万円以上"];
   var PLANS = ["新しい設備を購入予定", "車両購入予定", "店舗改装", "工場新設", "IT導入", "AI導入", "ECサイト", "ホームページ制作", "DX化", "人材採用", "人材育成", "海外展開", "新商品開発", "新サービス開発", "脱炭素", "省エネ設備", "事業承継", "M&A"];
@@ -68,6 +71,21 @@
 
   // ---- 初期化 ----
   fillSelect("f-pref", PREFS);
+  // 市区町村マスタを読み込み、都道府県に応じてカスケード表示
+  function populateCityReg() {
+    var pref = val("f-pref");
+    var sel = $("f-city"); if (!sel) return;
+    var cur = sel.value;
+    var cities = (COVERED_PREFS[pref] && MUNI[pref]) ? MUNI[pref] : [];
+    var html = '<option value="">' + (cities.length ? "市区町村を選択" : "都道府県を先に選択") + "</option>";
+    for (var i = 0; i < cities.length; i++) html += '<option value="' + cities[i] + '">' + cities[i] + "</option>";
+    sel.innerHTML = html;
+    sel.disabled = cities.length === 0;
+    var keep = false; for (var j = 0; j < sel.options.length; j++) if (sel.options[j].value === cur) keep = true;
+    sel.value = keep ? cur : "";
+  }
+  var pf = $("f-pref"); if (pf) pf.addEventListener("change", populateCityReg);
+  fetch("data/municipalities.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) { MUNI = d || {}; populateCityReg(); }).catch(function () {});
   fillSelect("f-industry", INDUSTRIES);
   fillSelect("f-sales", SALES);
   fillSelect("f-invest", INVEST);
@@ -104,12 +122,14 @@
     for (var i = 0; i < required.length; i++) {
       if (!val(required[i][0])) { setStatus("「" + required[i][1] + "」を入力してください。", "err"); $(required[i][0]).focus(); return; }
     }
+    // 市区町村は対応3府県のときだけ必須（「その他」は市区町村なしで登録可）
+    if (COVERED_PREFS[val("f-pref")] && !val("f-city")) { setStatus("「市区町村」を選択してください。", "err"); $("f-city").focus(); return; }
     if (!/.+@.+\..+/.test(val("f-email"))) { setStatus("メールアドレスの形式をご確認ください。", "err"); $("f-email").focus(); return; }
     if (!$("f-consent").checked) { setStatus("プライバシーポリシーへの同意が必要です。", "err"); return; }
 
     var profile = {
       companyName: val("f-company"), repName: val("f-rep"), email: val("f-email"), tel: val("f-tel"),
-      zip: val("f-zip"), prefecture: val("f-pref"), address: val("f-addr"), industry: val("f-industry"),
+      zip: val("f-zip"), prefecture: val("f-pref"), municipality: val("f-city"), address: val("f-addr"), industry: val("f-industry"),
       employees: val("f-emp"), employeesInsured: val("f-emp-ins"), capital: val("f-capital"),
       salesBand: val("f-sales"), prevProfit: val("f-profit"), foundedYm: val("f-founded"), fiscalMonth: val("f-fiscal"),
       plans: checkedValues("plan"), improve: checkedValues("improve"), support: checkedValues("support"),

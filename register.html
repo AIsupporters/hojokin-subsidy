@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=8">
 <style>
   .rf-wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
   .rf-hero{padding:28px 0 12px}
@@ -119,9 +119,15 @@
           <select id="f-pref"><option value="">選択してください</option></select>
         </div>
       </div>
-      <div class="rf-field">
-        <label for="f-addr">住所（市区町村以降）<span class="req">必須</span></label>
-        <input type="text" id="f-addr" autocomplete="address-level2" placeholder="大阪市北区…">
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-city">市区町村<span class="req">必須</span></label>
+          <select id="f-city" disabled><option value="">都道府県を先に選択</option></select>
+        </div>
+        <div class="rf-field">
+          <label for="f-addr">住所（番地・建物など）<span class="req">必須</span></label>
+          <input type="text" id="f-addr" autocomplete="address-level2" placeholder="1-2-3 ○○ビル">
+        </div>
       </div>
       <div class="rf-field">
         <label for="f-industry">業種<span class="req">必須</span></label>
@@ -222,6 +228,6 @@
 
   <p class="rf-foot">運営：AIサポーターズ株式会社 ／ <a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a> ／ <a href="https://ai-supporters.com/contact/" target="_blank" rel="noopener noreferrer">お問い合わせ</a></p>
 </div>
-<script src="register.js?v=1"></script>
+<script src="register.js?v=2"></script>
 </body>
 </html>
