@@ -4,7 +4,7 @@
 "use strict";
 
 const RANK_LIST = ["S", "A", "B", "C"];
-const REL_LIST = ["高", "中", "対象外"];
+const REL_LIST = ["S", "A", "B", "C"]; // 相性もSABC（Sほど重要）
 const PAGE = 40;
 // 業種一覧（登録フォーム register.js と同じ30分類）
 const INDUSTRIES_30 = ["建設・工事業", "製造業", "卸売業", "小売業", "飲食業", "宿泊・観光業", "運送・物流業", "IT・システム開発", "Web制作・デザイン", "広告・マーケティング", "通信業", "不動産業", "建物管理・清掃業", "金融業", "保険業", "医療業", "介護・福祉業", "教育・研修業", "士業", "コンサルティング業", "人材サービス業", "美容・健康業", "自動車関連業", "農業・林業", "水産・漁業", "エネルギー・環境業", "娯楽・イベント業", "冠婚葬祭・生活サービス業", "貿易・輸出入業", "その他サービス業"];
@@ -151,22 +151,23 @@ function relevanceFor(it, persp) {
   const small = detail && (SIZE === "s1_5" || SIZE === "s6_20"); // 小規模向け制度の優先
   if (!hasInd && !hasTheme && !small) return null; // 条件なし＝未設定
   const hay = it.name + " " + it.reason + " " + it.requirements + " " + it.rate + " " + it.organization;
-  // 業種の相性
+  // 業種の相性（一致キーワード数でスコア）
   let matched = [];
-  let indLevel = null;
-  if (hasInd) { matched = INDUSTRY_MAP[persp].filter((k) => hay.includes(k)); indLevel = matched.length >= 2 ? "高" : matched.length === 1 ? "中" : "対象外"; }
-  // テーマ（今後の予定＋改善したいこと＋希望する支援）の相性（1つでも合致＝高）
+  if (hasInd) matched = INDUSTRY_MAP[persp].filter((k) => hay.includes(k));
+  // テーマ（今後の予定＋改善したいこと＋希望する支援）の相性
   let themeMatched = [];
-  let themeLevel = null;
   if (hasTheme) {
     const themes = PLANS.map((p) => [p, PLAN_MAP[p]]).concat(IMPROVES.map((m) => [m, IMPROVE_MAP[m]])).concat(SUPPORTS.map((s) => [s, SUPPORT_MAP[s]]));
     for (const [name, kws] of themes) if (kws && kws.length && kws.some((k) => hay.includes(k))) themeMatched.push(name);
-    themeLevel = themeMatched.length >= 1 ? "高" : "対象外";
   }
   // 小規模事業者向けの主要制度は、小規模の会社に優先表示
   const smallHit = small && /小規模事業者/.test(hay);
-  const rank = { "高": 2, "中": 1, "対象外": 0 };
-  const level = [indLevel, themeLevel, smallHit ? "高" : null].filter(Boolean).reduce((a, b) => (rank[b] > rank[a] ? b : a), "対象外");
+  // 合計スコア → S/A/B/C（Sほど重要。複数軸で合致するほど上位）
+  let score = 0;
+  if (hasInd) score += matched.length >= 3 ? 3 : matched.length === 2 ? 2 : matched.length === 1 ? 1 : 0;
+  if (hasTheme) score += themeMatched.length >= 2 ? 2 : themeMatched.length === 1 ? 1 : 0;
+  if (smallHit) score += 1;
+  const level = score >= 3 ? "S" : score === 2 ? "A" : score === 1 ? "B" : "C";
   return { kind: "industry", level, matched, themeMatched, smallHit };
 }
 function groupsFor(persp) {
@@ -175,7 +176,7 @@ function groupsFor(persp) {
   if (INDUSTRY_MAP[persp] || (detail && (PLANS.length || IMPROVES.length || SUPPORTS.length || SIZE === "s1_5" || SIZE === "s6_20"))) return REL_LIST;
   return null;
 }
-function restGroup(persp) { return persp === "jisha" ? "C" : "対象外"; }
+function restGroup(persp) { return "C"; } // C（相性が薄い）を折りたたみ対象に
 
 // ---- 締切（残り日数・値は素通し） ----
 function deadlineInfo(it) {
@@ -319,16 +320,13 @@ function relLine(it, persp, rel) {
   if (persp && INDUSTRY_MAP[persp]) bits.push(rel.matched && rel.matched.length ? `業種該当：${esc(rel.matched.join("・"))}` : "業種キーワードなし");
   if (rel.themeMatched && rel.themeMatched.length) bits.push(`ご要望に合致：${esc(rel.themeMatched.join("・"))}`);
   if (rel.smallHit) bits.push("小規模事業者向け制度");
-  const cls = rel.level === "高" ? "high" : rel.level === "中" ? "mid" : "low";
+  const cls = (rel.level === "S" || rel.level === "A") ? "high" : rel.level === "B" ? "mid" : "low";
   const label = persp && INDUSTRY_MAP[persp] ? `「${esc(persp)}」との相性` : "あなたの登録内容との相性";
   return `<p class="reason rel-${cls}">${label}：<b>${esc(rel.level)}</b> ／ ${bits.join(" ／ ") || "該当なし"}<span class="rel-note">（目安）</span></p>`;
 }
 function badge(persp, rel) {
   if (!rel) return `<span class="badge none" aria-hidden="true">·</span>`;
-  if (rel.kind === "jisha") return `<span class="badge ${esc(rel.level)}" aria-label="自社該当度${esc(rel.level)}">${esc(rel.level)}</span>`;
-  const cls = rel.level === "高" ? "rel-high" : rel.level === "中" ? "rel-mid" : "rel-low";
-  const txt = rel.level === "対象外" ? "—" : rel.level;
-  return `<span class="badge ${cls}" aria-label="相性${esc(rel.level)}">${txt}</span>`;
+  return `<span class="badge ${esc(rel.level)}" aria-label="相性${esc(rel.level)}">${esc(rel.level)}</span>`;
 }
 function card(it, persp, rel) {
   const dl = deadlineInfo(it);
@@ -356,7 +354,7 @@ function card(it, persp, rel) {
   </li>`;
 }
 
-const GROUP_LABEL = { S: "重要度 S（自社該当度）", A: "重要度 A", B: "重要度 B", C: "重要度 C", "高": "相性 高", "中": "相性 中", "対象外": "対象外（キーワード不一致）" };
+const GROUP_LABEL = { S: "相性 S（最有力）", A: "相性 A", B: "相性 B", C: "相性 C（参考）" };
 
 const SIZE_LABELS = { s1_5: "1〜5人", s6_20: "6〜20人", s21_50: "21〜50人", s51_100: "51〜100人", s101: "101人以上" };
 
@@ -426,7 +424,7 @@ function renderScoreboard(persp, buckets, total) {
     return;
   }
   const groups = groupsFor(persp);
-  const cls = (g) => persp === "jisha" ? g.toLowerCase() : (g === "高" ? "rh" : g === "中" ? "rm" : "rl");
+  const cls = (g) => g.toLowerCase();
   sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("");
 }
 
@@ -482,8 +480,8 @@ function render() {
     arr = arr.map((x) => x.it); const sorted = sortWithin(arr, sort);
     const pairs = sorted.map((it) => ({ it, rel: relevanceFor(it, persp) }));
     let view = pairs, more = "";
-    if (g === rest && !showRest) { view = pairs.slice(0, 8); if (pairs.length > 8) more = `<button class="more" id="more-rest">${rest === "C" ? "重要度C" : "対象外"} を${pairs.length}件表示</button>`; }
-    html += `<section class="group" id="grp-${esc(g)}"><h2 class="group-head g-${g === "高" ? "rh" : g === "中" ? "rm" : g === "対象外" ? "rl" : g.toLowerCase()}"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2><ul class="cards">${view.map((x) => card(x.it, persp, x.rel)).join("")}</ul>${more}</section>`;
+    if (g === rest && !showRest) { view = pairs.slice(0, 8); if (pairs.length > 8) more = `<button class="more" id="more-rest">相性C を${pairs.length}件表示</button>`; }
+    html += `<section class="group group-${g.toLowerCase()}" id="grp-${esc(g)}"><h2 class="group-head"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2><ul class="cards">${view.map((x) => card(x.it, persp, x.rel)).join("")}</ul>${more}</section>`;
   }
   els.list.innerHTML = html;
   const mr = $("more-rest"); if (mr) mr.addEventListener("click", () => { showRest = true; render(); });
@@ -498,7 +496,19 @@ function exportCsv() {
   downloadFile("subsidies.csv", "﻿" + [head.map(cell).join(","), ...body].join("\r\n"), "text/csv");
 }
 function toast(btn, msg, orig) { btn.textContent = msg; setTimeout(() => (btn.textContent = orig), 1500); }
-function onChange() { showRest = false; page = PAGE; render(); }
+// 公式LINEから開いた（編集トークンあり）ときは、絞り込みの変更を自動でプロフィールに保存する。
+// →「絞り込みを保存」を押さなくても、運営側が管理シートで各社の関心条件（今後の予定/改善/希望支援など）を把握できる。
+let autoSaveTimer = null;
+function autoSaveView() {
+  if (!EDIT_TOKEN) return;
+  const v = currentView();
+  try { localStorage.setItem("sw-view", JSON.stringify(v)); } catch {}
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    fetch(SAVE_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: EDIT_TOKEN, view: v }) }).catch(() => {});
+  }, 900);
+}
+function onChange() { showRest = false; page = PAGE; render(); autoSaveView(); }
 
 // ---- 会社プロフィール（業種セレクタを両パネルに展開） ----
 function populateProfile() {

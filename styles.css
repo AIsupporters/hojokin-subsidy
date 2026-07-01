@@ -196,9 +196,8 @@ img{max-width:100%}
    TOOLBAR ＝ 紙面の機能バー（sticky・ink罫で締める）
    =========================================================== */
 .toolbar{
-  position:sticky;top:0;z-index:30;
+  position:relative;   /* 固定表示をやめ、一覧を見やすく（詳細ビルダーが縦に長いため） */
   background:rgba(224,232,242,.96);   /* 薄水色（profile-panelと連続） */
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   padding:6px 0 14px;
 }
 .controls{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
@@ -309,16 +308,16 @@ img{max-width:100%}
 .theme-chip:hover{border-color:var(--accent);color:var(--ink)}
 .theme-chip.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700}
 /* 絞り込みセレクタ（地域・業種・並び替え）をボタンと同じ大きさ・体裁に */
-#category,#city,#perspective,#sort{
+.controls-filter select,.controls-action select{
   padding:10px 34px 10px 13px;border:1.5px solid var(--ink);border-radius:0;background:var(--card);
   font-family:var(--sans);font-size:14px;color:var(--ink);min-height:44px;min-width:158px;cursor:pointer;
   -webkit-appearance:none;appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23132a44' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
   background-repeat:no-repeat;background-position:right 11px center;background-size:15px;transition:box-shadow .14s,border-color .14s;
 }
-#category:hover,#city:hover,#perspective:hover,#sort:hover{border-color:var(--accent)}
-#category:focus,#city:focus,#perspective:focus,#sort:focus{outline:none;border-color:var(--accent);box-shadow:3px 3px 0 0 var(--accent)}
-#city:disabled{opacity:.5;cursor:not-allowed;background-color:var(--paper-deep)}
+.controls-filter select:hover,.controls-action select:hover{border-color:var(--accent)}
+.controls-filter select:focus,.controls-action select:focus{outline:none;border-color:var(--accent);box-shadow:3px 3px 0 0 var(--accent)}
+.controls-filter select:disabled{opacity:.5;cursor:not-allowed;background-color:var(--paper-deep)}
 .action-gap{display:inline-block;width:1px;align-self:stretch;background:var(--hair);margin:0 6px}
 .only-detail[hidden]{display:none}
 a.btn{text-decoration:none;display:inline-flex;align-items:center}
@@ -543,7 +542,7 @@ main.wrap{padding-top:38px;padding-bottom:20px}
   .chk{grid-column:1/-1;min-height:42px;border:1.5px dashed var(--hair);justify-content:center}
   .controls-action{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
   .action-gap{display:none}
-  #category,#city,#perspective,#sort{width:100%;min-width:0}
+  .controls-filter select,.controls-action select{width:100%;min-width:0}
   .btn{width:100%;min-width:0;justify-content:center}
   .status-bar{flex-direction:column;align-items:flex-start;gap:10px}
 
