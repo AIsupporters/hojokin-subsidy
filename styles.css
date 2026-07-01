@@ -11,46 +11,46 @@
   --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;
   --mono:"Roboto Mono","Zen Kaku Gothic New",ui-monospace,SFMono-Regular,Menlo,monospace;
 
-  /* newsprint canvas + ink */
-  --paper:#f4efe6;        /* 新聞紙のような暖色クリーム */
-  --paper-deep:#ece5d7;   /* セクション帯・沈み色 */
-  --card:#fffdf8;         /* 紙白カード */
-  --ink:#1c1a17;          /* 主役の濃インク（黒に寄せない） */
-  --ink-soft:#4a463f;     /* 本文 */
-  --muted:#79736a;        /* 補助テキスト */
-  --faint:#a39c90;        /* ラベル */
-  --rule:#1c1a17;         /* 罫線（特集の構造線） */
-  --hair:#d8cfbf;         /* ヘアライン */
+  /* 青×白基調（cool white canvas + navy ink） */
+  --paper:#eef3f9;        /* 冷たい白基調（ごく淡い青みグレー） */
+  --paper-deep:#e0e8f2;   /* セクション帯・沈み色 */
+  --card:#ffffff;         /* 白カード */
+  --ink:#132a44;          /* 主役の濃紺インク */
+  --ink-soft:#38495e;     /* 本文 */
+  --muted:#6b7a8c;        /* 補助テキスト */
+  --faint:#9aa8b8;        /* ラベル */
+  --rule:#132a44;         /* 罫線（構造線） */
+  --hair:#cdd9e6;         /* ヘアライン */
 
-  /* 一点の自信あるアクセント＝朱 */
-  --accent:#d4361f;       /* vermilion */
-  --accent-deep:#a8240f;
-  --accent-soft:#f6e0d8;
+  /* イメージカラー＝ブルー */
+  --accent:#1f6fb2;       /* blue */
+  --accent-deep:#155187;
+  --accent-soft:#daeaf8;
 
-  /* 重要度の視覚序列 S>A>B>C（カラーブロッキング用の不透明ブロック色） */
-  --rank-s:#c62a14;       /* 朱＝最重要 */
-  --rank-s-ink:#fffaf6;
-  --rank-a:#1f4e79;       /* 濃紺＝高 */
-  --rank-a-ink:#fffdf8;
+  /* 重要度の視覚序列 S>A>B>C（クールな配色で統一） */
+  --rank-s:#0d4f9e;       /* 濃い鮮青＝最重要 */
+  --rank-s-ink:#ffffff;
+  --rank-a:#3a7bbf;       /* 青＝高 */
+  --rank-a-ink:#ffffff;
   --rank-b:#2f6b4a;       /* 深緑＝中 */
-  --rank-b-ink:#fffdf8;
-  --rank-c:#6c6358;       /* セピアグレー＝低 */
-  --rank-c-ink:#fffdf8;
+  --rank-b-ink:#ffffff;
+  --rank-c:#5c6a7a;       /* スレートグレー＝低 */
+  --rank-c-ink:#ffffff;
 
-  --osaka:#9a5b00;        /* 大阪＝琥珀インク */
+  --osaka:#9a5b00;        /* 大阪＝琥珀（地域の識別色として保持） */
   --osaka-bg:#f6e6c7;
-  --kuni:#1f4e79;         /* 国＝濃紺インク */
+  --kuni:#1f4e79;         /* 国＝濃紺 */
   --kuni-bg:#dde7f1;
 
-  --urgent:#c62a14;
-  --urgent-bg:#f6ddd6;
+  --urgent:#c0392b;       /* 締切間近＝赤（機能色として保持） */
+  --urgent-bg:#f7ded9;
   --soon:#9a5b00;
   --soon-bg:#f6e6c7;
   --new:#1d6b3d;
   --new-bg:#dcecdd;
 
   --maxw:1080px;
-  --shadow:0 1px 0 rgba(28,26,23,.04),0 14px 30px -22px rgba(28,26,23,.45);
+  --shadow:0 1px 0 rgba(19,42,68,.04),0 14px 30px -22px rgba(19,42,68,.4);
 }
 
 *{box-sizing:border-box}
@@ -61,7 +61,7 @@ body{
   font-feature-settings:"palt" 1;overflow-x:clip;
   /* 紙の質感：極薄のグリッド点を敷いて“設計された地”を作る（単色べた塗り回避） */
   background-image:
-    radial-gradient(rgba(28,26,23,.035) 1px,transparent 1.4px);
+    radial-gradient(rgba(19,42,68,.035) 1px,transparent 1.4px);
   background-size:22px 22px;background-position:-1px -1px;
 }
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
@@ -83,7 +83,7 @@ img{max-width:100%}
 /* hero-grid ＝ 紙面の段組ルールを思わせる縦罫（ギミックでなく“構造”として） */
 .hero-grid{
   position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background-image:linear-gradient(90deg,rgba(244,239,230,.06) 1px,transparent 1px);
+  background-image:linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
   background-size:calc(100% / 12) 100%;
   mask-image:linear-gradient(180deg,transparent,#000 22%);
 }
@@ -96,7 +96,7 @@ img{max-width:100%}
 }
 .hero-sweep::after{
   content:"";position:absolute;inset:0;
-  background:repeating-linear-gradient(180deg,rgba(28,26,23,.10) 0 2px,transparent 2px 9px);
+  background:repeating-linear-gradient(180deg,rgba(19,42,68,.10) 0 2px,transparent 2px 9px);
 }
 .hero-inner{position:relative;padding:62px 0 40px;max-width:var(--maxw)}
 
@@ -124,26 +124,26 @@ img{max-width:100%}
   margin:0 0 18px;max-width:13em;text-wrap:balance;
 }
 .hero .lede{
-  margin:0 0 30px;color:#e6ddcf;font-size:clamp(15px,1.7vw,18px);
+  margin:0 0 30px;color:#d3e0ef;font-size:clamp(15px,1.7vw,18px);
   line-height:1.75;max-width:42em;font-weight:400;
-  padding-left:18px;border-left:2px solid rgba(244,239,230,.3);
+  padding-left:18px;border-left:2px solid rgba(255,255,255,.3);
 }
 
 /* ----- SCOREBOARD ＝ 大きなタブラー数字の見出しユニット ----- */
 .scoreboard{
   display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0 0 26px;
-  border-top:1px solid rgba(244,239,230,.22);
-  border-left:1px solid rgba(244,239,230,.22);
+  border-top:1px solid rgba(255,255,255,.22);
+  border-left:1px solid rgba(255,255,255,.22);
 }
 .score{
   appearance:none;cursor:pointer;font-family:var(--sans);text-align:left;
-  background:rgba(244,239,230,.03);color:var(--paper);
-  border:0;border-right:1px solid rgba(244,239,230,.22);
-  border-bottom:1px solid rgba(244,239,230,.22);
+  background:rgba(255,255,255,.03);color:var(--paper);
+  border:0;border-right:1px solid rgba(255,255,255,.22);
+  border-bottom:1px solid rgba(255,255,255,.22);
   padding:16px 16px 14px;position:relative;transition:background .18s ease;
   display:flex;flex-direction:column;gap:8px;min-height:104px;justify-content:space-between;
 }
-.score:hover{background:rgba(244,239,230,.10)}
+.score:hover{background:rgba(255,255,255,.10)}
 .score::before{
   content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:var(--rank-c);
 }
@@ -160,7 +160,7 @@ img{max-width:100%}
 .score.b .dot{background:var(--rank-b)}
 .score.c .dot{background:var(--rank-c)}
 /* レター（S/A/B/C テキストノード）の見せ方：ラベル行 */
-.score{font-size:12px;letter-spacing:.18em;font-weight:700;color:#cfc6b6}
+.score{font-size:12px;letter-spacing:.18em;font-weight:700;color:#b9c6d6}
 .score b{
   font-family:var(--mono);font-size:40px;font-weight:500;line-height:.9;
   color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em;
@@ -168,10 +168,10 @@ img{max-width:100%}
 
 .meta{
   margin:0;display:flex;gap:0;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;
-  color:#cfc6b6;letter-spacing:.04em;
+  color:#b9c6d6;letter-spacing:.04em;
 }
 .meta span{padding:4px 16px 4px 0}
-.meta span+span{padding-left:16px;border-left:1px solid rgba(244,239,230,.22)}
+.meta span+span{padding-left:16px;border-left:1px solid rgba(255,255,255,.22)}
 #new-summary{color:#fff;font-weight:500}
 
 .scope{margin-top:20px;font-size:13px;max-width:62em}
@@ -184,20 +184,20 @@ img{max-width:100%}
 .scope summary::before{content:"＋";color:var(--accent);font-weight:700}
 .scope[open] summary::before{content:"－"}
 .scope-body{
-  margin-top:12px;padding:16px 18px;background:rgba(244,239,230,.05);
+  margin-top:12px;padding:16px 18px;background:rgba(255,255,255,.05);
   border-left:3px solid var(--accent);
 }
-.scope-body p{margin:7px 0;color:#ddd3c4;font-size:12.5px;line-height:1.7}
-.uncovered{color:#f0c9a8}
-.disclaimer{padding-top:10px;margin-top:10px!important;border-top:1px solid rgba(244,239,230,.18);
-  font-size:11.5px;color:#bdb4a6}
+.scope-body p{margin:7px 0;color:#cdd9e6;font-size:12.5px;line-height:1.7}
+.uncovered{color:#e9c79b}
+.disclaimer{padding-top:10px;margin-top:10px!important;border-top:1px solid rgba(255,255,255,.18);
+  font-size:11.5px;color:#9fb0c2}
 
 /* ===========================================================
    TOOLBAR ＝ 紙面の機能バー（sticky・ink罫で締める）
    =========================================================== */
 .toolbar{
   position:sticky;top:0;z-index:30;
-  background:rgba(244,239,230,.93);
+  background:rgba(255,255,255,.93);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-bottom:2px solid var(--rule);
   padding:14px 0;
@@ -227,7 +227,7 @@ img{max-width:100%}
 }
 .controls select{
   cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:34px;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231c1a17' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23132a44' stroke-width='2.4' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");
   background-repeat:no-repeat;background-position:right 11px center;background-size:15px;
 }
 .chk{
@@ -345,7 +345,7 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 .card.rank-A::before{background:var(--rank-a)}
 .card.rank-B::before{background:var(--rank-b)}
 .card.rank-C::before{background:var(--rank-c)}
-.card:hover{transform:translateY(-3px);box-shadow:0 2px 0 rgba(28,26,23,.06),0 26px 44px -26px rgba(28,26,23,.55)}
+.card:hover{transform:translateY(-3px);box-shadow:0 2px 0 rgba(19,42,68,.06),0 26px 44px -26px rgba(19,42,68,.55)}
 .card:focus-within{box-shadow:0 0 0 3px var(--accent)}
 
 .card-top{display:flex;align-items:flex-start;gap:14px}
@@ -445,14 +445,14 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 
 /* ----- footer ----- */
 .site-footer{
-  margin-top:56px;background:var(--ink);color:#cfc6b6;padding:30px 0;font-size:13px;
+  margin-top:56px;background:var(--ink);color:#b9c6d6;padding:30px 0;font-size:13px;
   border-top:6px solid var(--accent);
 }
 .site-footer p{margin:5px 0;line-height:1.7}
-.site-footer a{color:#e7c873;text-decoration:underline;text-underline-offset:2px}
+.site-footer a{color:#9cc2e8;text-decoration:underline;text-underline-offset:2px}
 .site-footer a:hover{color:#fff}
 .footer-links{font-size:12.5px}
-.tiny{font-size:12px;color:#9b9385;font-family:var(--mono);letter-spacing:.02em}
+.tiny{font-size:12px;color:#8698ac;font-family:var(--mono);letter-spacing:.02em}
 
 /* ----- card stagger（signature load motion） ----- */
 @keyframes cardRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -563,7 +563,7 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 .pp-register>summary::after{content:"＋";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:18px}
 .pp-register[open]>summary::after{content:"−"}
 .pp-reg-title{font-weight:700;font-size:15px}
-.pp-reg-sub{font-size:12px;color:#cfc6b6}
+.pp-reg-sub{font-size:12px;color:#b9c6d6}
 .reg-form{padding:18px}
 .reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .reg-row{display:flex;flex-direction:column;gap:5px}
@@ -582,9 +582,9 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 .reg-status{font-size:13px;margin:12px 0 0;min-height:18px}
 .reg-status.ok{color:var(--new);font-weight:700}
 .reg-status.err{color:var(--accent-deep);font-weight:700}
-.reg-soon{font-size:12px;color:#5c564d;margin:8px 0 0}
+.reg-soon{font-size:12px;color:#4a5666;margin:8px 0 0}
 /* 注記のコントラスト改善（AA確保） */
-.pp-note,.reg-priv{color:#5c564d}
+.pp-note,.reg-priv{color:#4a5666}
 /* 未選択エラー時の赤枠（業種・規模セレクト） */
 .pp-field.error select{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
 .pp-field.error label{color:var(--accent-deep)}
