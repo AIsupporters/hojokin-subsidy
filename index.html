@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=5">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 <header class="hero">
@@ -57,12 +57,11 @@
 <div class="toolbar">
   <div class="wrap">
     <div class="tabs" role="tablist" aria-label="検索モード">
-      <button class="tab" id="tab-detail" type="button" role="tab" aria-selected="false" aria-controls="panel-detail">① 詳細検索</button>
-      <button class="tab" id="tab-simple" type="button" role="tab" aria-selected="true" aria-controls="panel-simple">② 簡易検索</button>
+      <button class="tab" id="tab-detail" type="button" role="tab" aria-selected="false" aria-controls="panel-detail">① 詳細検索<span class="tab-sub">自社の登録内容</span></button>
+      <button class="tab" id="tab-simple" type="button" role="tab" aria-selected="true" aria-controls="panel-simple">② 簡易検索<span class="tab-sub">業種・地域</span></button>
     </div>
 
     <section class="tabpanel" id="panel-detail" role="tabpanel" aria-labelledby="tab-detail" hidden>
-      <p class="detail-lead">公式LINE「補助金調べるくん」の<b>登録内容</b>で絞り込んでいます。不要な条件は <b>×</b> で外せます。「絞り込みを保存」すると、次回このサイトを開いたときも同じ状態から始まります。</p>
       <div id="detail-conds" class="detail-conds" aria-label="絞り込み条件"></div>
     </section>
 
@@ -84,6 +83,7 @@
           <option value="">🔎 業種で絞り込み</option>
         </select>
       </div>
+      <div id="chips" class="chips" aria-label="適用中の絞り込み"></div>
     </section>
 
     <div class="controls-action">
@@ -93,15 +93,17 @@
         <option value="new">新着順</option>
         <option value="score">該当度が高い順</option>
       </select>
-      <button id="save" type="button" class="btn">絞り込みを保存</button>
+      <button id="save" type="button" class="btn btn-primary">絞り込みを保存</button>
+      <button id="clear-all" type="button" class="btn">すべて解除</button>
+      <button id="reset-detail" type="button" class="btn only-detail" hidden>絞り込み状態を初期化</button>
+      <span class="action-gap" aria-hidden="true"></span>
       <button id="copy" type="button" class="btn">URLをコピー</button>
       <button id="csv" type="button" class="btn">CSV</button>
-      <button id="clear-all" type="button" class="btn">すべて解除</button>
+      <a id="edit-reg" class="btn only-detail" hidden href="register.html" target="_blank" rel="noopener">登録情報を編集する</a>
     </div>
 
     <div class="status-bar">
       <p id="result-count" class="result-count" role="status" aria-live="polite" aria-atomic="true"></p>
-      <div id="chips" class="chips" aria-label="適用中の絞り込み"></div>
     </div>
   </div>
 </div>
@@ -127,6 +129,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>

@@ -70,6 +70,8 @@ let IMPROVES = [];   // 自社の「改善したいこと」（URL improve=）
 let SUPPORTS = [];   // 自社の「希望する支援」（URL support=）
 let SIZE = "";       // 自社の規模ID（URL size=・小規模向け制度の優先に使用）
 let MODE = "simple"; // "detail"=詳細検索(自社登録内容) / "simple"=簡易検索(業種×地域)
+let ORIG = null;     // 開いたときの登録内容スナップショット（「絞り込み状態を初期化」で復元）
+let EDIT_TOKEN = ""; // 登録情報を編集する用トークン（URL edit=）
 
 const els = {};
 let DATA = { items: [], total: 0 };
@@ -160,6 +162,7 @@ function readState() {
   SIZE = p.has("size") ? p.get("size") : (fromLine ? "" : (ls.size || ""));
   // モード: mode= 優先 → LINE由来なら詳細 → 保存 → 簡易
   MODE = p.has("mode") ? (p.get("mode") === "detail" ? "detail" : "simple") : (fromLine ? "detail" : (ls.mode === "detail" ? "detail" : "simple"));
+  if (p.has("edit")) EDIT_TOKEN = p.get("edit");
   const category = p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : (fromLine ? "" : (ls.category || "")));
   const q = p.has("q") ? p.get("q") : (fromLine ? "" : (ls.q || ""));
   const sort = p.has("sort") ? p.get("sort") : (ls.sort || "deadline");
@@ -263,7 +266,8 @@ const SIZE_LABELS = { s1_5: "1〜5人", s6_20: "6〜20人", s21_50: "21〜50人"
 
 function renderBanner() {
   const b = els.banner;
-  if (MODE === "detail") { b.className = "persp-banner set"; b.innerHTML = `📋 <b>詳細検索</b>：公式LINEの登録内容で絞り込み中です。条件は上の <b>×</b> で外せます。`; return; }
+  if (MODE === "detail") { b.innerHTML = ""; b.style.display = "none"; return; } // 詳細はパネル内で説明済み（重複バナー削除）
+  b.style.display = "";
   const persp = els.perspective.value, cat = els.category.value;
   if (!persp && !cat) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
   const parts = []; if (persp) parts.push(`業種「${esc(persp)}」`); if (cat) parts.push(`地域「${esc(cat)}」`);
@@ -321,8 +325,11 @@ function render() {
   els.tabSimple.setAttribute("aria-selected", MODE === "simple");
   els.panelDetail.hidden = MODE !== "detail";
   els.panelSimple.hidden = MODE !== "simple";
+  const isDetail = MODE === "detail";
+  if (els.resetDetail) els.resetDetail.hidden = !isDetail;
+  if (els.editReg) { els.editReg.hidden = !isDetail; els.editReg.href = EDIT_TOKEN ? ("register.html?t=" + encodeURIComponent(EDIT_TOKEN)) : "register.html"; }
   renderBanner();
-  if (MODE === "detail") { renderDetailConds(); els.chips.innerHTML = ""; }
+  if (isDetail) { renderDetailConds(); els.chips.innerHTML = ""; }
   else renderChips(s);
   const base = baseFilter(s);
   window.__visible = base;
@@ -381,6 +388,7 @@ function init() {
   els.tabDetail = $("tab-detail"); els.tabSimple = $("tab-simple");
   els.panelDetail = $("panel-detail"); els.panelSimple = $("panel-simple");
   els.detailConds = $("detail-conds"); els.clearAll = $("clear-all");
+  els.resetDetail = $("reset-detail"); els.editReg = $("edit-reg");
   fetch("data/subsidies.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
     DATA = data;
     LASTSEEN = (() => { try { return localStorage.getItem("sw-lastseen"); } catch { return null; } })();
@@ -392,6 +400,8 @@ function init() {
     try { localStorage.setItem("sw-lastseen", data.lastUpdated); } catch {}
     populateProfile();               // ★セレクタを30分類で埋めてから状態反映（順序重要）
     applyState(readState());
+    // 開いた時点の登録内容を保存（「絞り込み状態を初期化」で復元）
+    ORIG = { persp: els.perspective.value, category: els.category.value, size: SIZE, plans: PLANS.slice(), improves: IMPROVES.slice(), supports: SUPPORTS.slice() };
     els.q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(onChange, 160); });
     ["category", "perspective", "sort"].forEach((id) => els[id].addEventListener("change", onChange));
     els.tabDetail.addEventListener("click", () => setMode("detail"));
@@ -400,6 +410,12 @@ function init() {
     els.clearAll.addEventListener("click", () => {
       if (MODE === "detail") { els.perspective.value = ""; els.category.value = ""; SIZE = ""; PLANS = []; IMPROVES = []; SUPPORTS = []; }
       else { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
+      onChange();
+    });
+    els.resetDetail.addEventListener("click", () => {
+      if (!ORIG) return;
+      els.perspective.value = ORIG.persp; els.category.value = ORIG.category; SIZE = ORIG.size;
+      PLANS = ORIG.plans.slice(); IMPROVES = ORIG.improves.slice(); SUPPORTS = ORIG.supports.slice();
       onChange();
     });
     els.scoreboard.addEventListener("click", (e) => { const b = e.target.closest(".score"); if (!b) return; const g = b.dataset.g; if (g === restGroup(els.perspective.value)) showRest = true; render(); const sec = $("grp-" + g); if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
