@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会社情報の登録｜補助金調べるくん</title>
+<meta name="description" content="会社情報を登録すると、あなたの会社に合う補助金・助成金の新着をLINEでお届けします（運営：AIサポーターズ株式会社）。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .rf-wrap{max-width:760px;margin:0 auto;padding:0 16px 64px}
+  .rf-hero{padding:28px 0 12px}
+  .rf-hero h1{font-family:var(--display);font-size:clamp(26px,5vw,38px);color:var(--ink);margin:.2em 0 .3em;letter-spacing:.01em}
+  .rf-hero .rf-eyebrow{font-size:12px;letter-spacing:.14em;color:var(--accent-deep);font-weight:700}
+  .rf-hero .rf-lede{color:var(--ink-soft);font-size:15px;line-height:1.8;margin:.4em 0}
+  .rf-note-top{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--accent);border-radius:0;padding:12px 14px;color:var(--ink-soft);font-size:13.5px;line-height:1.7;margin:10px 0}
+  .rf-step{background:var(--card);border:1px solid var(--hair);border-radius:10px;padding:18px 18px 20px;margin:16px 0;box-shadow:var(--shadow)}
+  .rf-step > h2{font-family:var(--display);font-size:19px;color:var(--ink);margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+  .rf-step > h2 .rf-num{font-family:var(--mono);font-size:13px;color:#fffdf8;background:var(--ink);border-radius:4px;padding:2px 8px;letter-spacing:.05em}
+  .rf-step > .rf-desc{color:var(--muted);font-size:13px;margin:0 0 14px;line-height:1.6}
+  .rf-field{margin:0 0 14px}
+  .rf-field > label{display:block;font-weight:700;color:var(--ink);font-size:14px;margin:0 0 5px}
+  .rf-field .req{color:var(--accent-deep);font-size:11px;font-weight:700;border:1px solid var(--accent);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px}
+  .rf-field .opt{color:var(--muted);font-size:11px;font-weight:400;margin-left:6px}
+  .rf-field input[type=text],.rf-field input[type=email],.rf-field input[type=tel],.rf-field input[type=url],.rf-field input[type=number],.rf-field select{
+    width:100%;box-sizing:border-box;font:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--hair);border-radius:8px;padding:11px 12px;transition:border-color .15s}
+  .rf-field input:focus,.rf-field select:focus{outline:none;border-color:var(--accent)}
+  .rf-field .rf-hint{color:var(--muted);font-size:12px;margin:5px 0 0;line-height:1.6}
+  .rf-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rf-inline{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+  .rf-inline .rf-sep{color:var(--muted);font-size:13px}
+  @media(max-width:560px){.rf-two{grid-template-columns:1fr}}
+  .rf-checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:560px){.rf-checks{grid-template-columns:1fr}}
+  .rf-chk{display:flex;align-items:flex-start;gap:9px;background:#fff;border:1px solid var(--hair);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--ink-soft);cursor:pointer;line-height:1.4}
+  .rf-chk:hover{border-color:var(--accent)}
+  .rf-chk input{margin:2px 0 0;width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto}
+  .rf-chk.on{border-color:var(--accent);background:var(--accent-soft)}
+  .rf-suffix{display:flex;align-items:center;gap:8px}
+  .rf-suffix input{flex:1}
+  .rf-suffix .rf-unit{color:var(--muted);font-size:14px;white-space:nowrap}
+  .rf-consent{background:var(--paper-deep);border:1px solid var(--hair);border-radius:8px;padding:14px}
+  .rf-consent .rf-chk{background:#fff}
+  .rf-priv{color:var(--ink-soft);font-size:13px;line-height:1.7;margin:10px 0 0}
+  .rf-submit{width:100%;font:inherit;font-size:16px;font-weight:700;color:#fffaf6;background:var(--accent);border:none;border-radius:10px;padding:15px;margin:20px 0 0;cursor:pointer;letter-spacing:.03em;transition:background .15s}
+  .rf-submit:hover{background:var(--accent-deep)}
+  .rf-submit:disabled{opacity:.55;cursor:default}
+  .rf-status{text-align:center;font-size:14px;margin:12px 0 0;line-height:1.7;min-height:1.2em}
+  .rf-status.err{color:var(--accent-deep)}
+  .rf-status.ok{color:var(--new)}
+  .rf-gate{background:var(--card);border:1px solid var(--hair);border-left:4px solid var(--accent);border-radius:8px;padding:20px;margin:24px 0;color:var(--ink-soft);line-height:1.8}
+  .rf-done{text-align:center;padding:40px 20px}
+  .rf-done h2{font-family:var(--display);font-size:26px;color:var(--ink);margin:0 0 10px}
+  .rf-done p{color:var(--ink-soft);font-size:15px;line-height:1.8}
+  .rf-foot{text-align:center;color:var(--muted);font-size:12px;margin:28px 0 0;line-height:1.8}
+  .rf-foot a{color:var(--accent-deep)}
+</style>
+</head>
+<body class="register-page">
+<div class="rf-wrap">
+  <div class="rf-hero">
+    <p class="rf-eyebrow">補助金調べるくん ／ 会社情報の登録</p>
+    <h1>あなたの会社に合う補助金を、LINEで。</h1>
+    <p class="rf-lede">会社情報を登録すると、業種・規模・今後の予定に合わせて、該当しやすい補助金・助成金の新着だけをLINEでお届けします。入力は3分ほどです。</p>
+  </div>
+
+  <div id="rf-gate" class="rf-gate" hidden>
+    このページは、LINE公式アカウント「補助金調べるくん」から開いてください。<br>
+    トークで「登録」と送るか、メニューの「通知の登録・変更」から開くと、この登録フォームにつながります。
+  </div>
+
+  <form id="rf-form" hidden novalidate>
+    <div class="rf-note-top">入力いただいた会社情報は、あなたに合う補助金の判定・LINE通知のために利用します。取り扱いは<a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。</div>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 1</span>会社情報</h2>
+      <p class="rf-desc">まずは基本情報から。</p>
+      <div class="rf-field">
+        <label for="f-company">会社名（法人名・屋号）<span class="req">必須</span></label>
+        <input type="text" id="f-company" autocomplete="organization" placeholder="例）AIサポーターズ株式会社">
+      </div>
+      <div class="rf-field">
+        <label for="f-rep">代表者名<span class="req">必須</span></label>
+        <input type="text" id="f-rep" placeholder="例）山田 太郎">
+      </div>
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-email">メールアドレス<span class="req">必須</span></label>
+          <input type="email" id="f-email" autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="rf-field">
+          <label for="f-tel">電話番号<span class="req">必須</span></label>
+          <input type="tel" id="f-tel" autocomplete="tel" placeholder="06-1234-5678">
+        </div>
+      </div>
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-zip">郵便番号<span class="req">必須</span></label>
+          <input type="text" id="f-zip" inputmode="numeric" autocomplete="postal-code" placeholder="530-0001">
+        </div>
+        <div class="rf-field">
+          <label for="f-addr">住所<span class="req">必須</span></label>
+          <input type="text" id="f-addr" autocomplete="street-address" placeholder="大阪府大阪市…">
+        </div>
+      </div>
+      <div class="rf-field">
+        <label for="f-industry">業種<span class="req">必須</span></label>
+        <select id="f-industry"><option value="">業種を選択してください</option></select>
+      </div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 2</span>会社の規模</h2>
+      <p class="rf-desc">補助金の対象になるかの判定に使います。</p>
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-emp">従業員数<span class="req">必須</span></label>
+          <div class="rf-suffix"><input type="number" id="f-emp" min="0" inputmode="numeric" placeholder="10"><span class="rf-unit">人</span></div>
+        </div>
+        <div class="rf-field">
+          <label for="f-emp-ins">うち雇用保険加入者</label>
+          <div class="rf-suffix"><input type="number" id="f-emp-ins" min="0" inputmode="numeric" placeholder="8"><span class="rf-unit">人</span></div>
+        </div>
+      </div>
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-capital">資本金<span class="req">必須</span></label>
+          <div class="rf-suffix"><input type="number" id="f-capital" min="0" inputmode="numeric" placeholder="500"><span class="rf-unit">万円</span></div>
+        </div>
+        <div class="rf-field">
+          <label for="f-sales">年商<span class="req">必須</span></label>
+          <select id="f-sales"><option value="">選択してください</option></select>
+        </div>
+      </div>
+      <div class="rf-field">
+        <label for="f-profit">前期経常利益</label>
+        <div class="rf-suffix"><input type="number" id="f-profit" inputmode="numeric" placeholder="（1期目は0）"><span class="rf-unit">万円</span></div>
+      </div>
+      <div class="rf-two">
+        <div class="rf-field">
+          <label for="f-founded">創業年月</label>
+          <input type="month" id="f-founded">
+        </div>
+        <div class="rf-field">
+          <label for="f-fiscal">決算月</label>
+          <select id="f-fiscal"><option value="">選択してください</option></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 3</span>今後の予定</h2>
+      <p class="rf-desc">補助金判定でいちばん重要な項目です。あてはまるものをすべて選んでください（複数可）。</p>
+      <div class="rf-checks" id="f-plans"></div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 4</span>補助金で改善したいこと</h2>
+      <p class="rf-desc">あてはまるものをすべて選んでください（複数可）。</p>
+      <div class="rf-checks" id="f-improve"></div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 5</span>希望する支援</h2>
+      <p class="rf-desc">補助金以外にも気になる支援があれば選んでください（複数可）。</p>
+      <div class="rf-checks" id="f-support"></div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 6</span>会社案内・その他</h2>
+      <div class="rf-field">
+        <label for="f-hp">ホームページ</label>
+        <input type="url" id="f-hp" placeholder="https://…">
+      </div>
+      <div class="rf-field">
+        <label for="f-invest">今後1年以内の投資予定額</label>
+        <select id="f-invest"><option value="">選択してください</option></select>
+      </div>
+    </section>
+
+    <section class="rf-step">
+      <h2><span class="rf-num">STEP 7</span>同意</h2>
+      <div class="rf-consent">
+        <label class="rf-chk"><input type="checkbox" id="f-consent"> <span>新着補助金の通知を受け取ること、および入力情報を<a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に沿って取り扱うことに同意します。<span class="req">必須</span></span></label>
+        <p class="rf-priv">※ 該当度・重要度はAIによる参考情報です。補助額・補助率・締切・対象要件は各制度の公式情報でご確認ください。配信停止は、いつでもLINEアカウントのブロックで可能です。</p>
+      </div>
+      <button type="submit" class="rf-submit" id="rf-submit">この内容で登録する</button>
+      <p class="rf-status" id="rf-status" role="status" aria-live="polite"></p>
+    </section>
+  </form>
+
+  <div id="rf-done" class="rf-done" hidden>
+    <h2>登録ありがとうございました</h2>
+    <p>あなたの会社に合う新着補助金が出たら、LINEにお届けします。<br>このページを閉じてLINEにお戻りください。</p>
+  </div>
+
+  <p class="rf-foot">運営：AIサポーターズ株式会社 ／ <a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a> ／ <a href="https://ai-supporters.com/contact/" target="_blank" rel="noopener noreferrer">お問い合わせ</a></p>
+</div>
+<script src="register.js?v=1"></script>
+</body>
+</html>
