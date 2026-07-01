@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 <header class="hero">
@@ -38,8 +38,8 @@
 <section class="profile-panel" id="profile-panel" aria-labelledby="pp-title">
   <div class="wrap">
     <div class="pp-head">
-      <h2 id="pp-title">会社情報を入れると、自社に合う補助金が見えます</h2>
-      <p class="pp-lede">業種と従業員規模を選ぶと、対象になりやすい制度と「補助上限の目安」を表示します。一覧もあなたの業種で絞り込まれます。</p>
+      <h2 id="pp-title">業種・従業員規模で、自社に合う補助金を見る</h2>
+      <p class="pp-lede">公式LINE「補助金調べるくん」の<b>「補助金の一覧」</b>を開くと、登録済みの内容で自動的に絞り込まれます。ここで業種・従業員規模を選べば、登録内容以外の条件でも見られます。</p>
     </div>
     <div class="pp-body">
       <div class="pp-inputs">
@@ -55,30 +55,7 @@
       </div>
       <div class="pp-result" id="pp-result" aria-live="polite"></div>
     </div>
-    <details class="pp-register" id="pp-register">
-      <summary><span class="pp-reg-title">会社情報を登録して新着を受け取る（無料）</span><span class="pp-reg-sub">業種・規模に合う新着補助金をお届けします</span></summary>
-      <form id="reg-form" class="reg-form" novalidate>
-        <div class="reg-grid">
-          <div class="reg-row">
-            <label for="reg-email">メールアドレス <span class="req">必須</span></label>
-            <input type="email" id="reg-email" required autocomplete="email" placeholder="you@example.com">
-          </div>
-          <div class="reg-row">
-            <label for="reg-company">会社名・屋号 <span class="req">必須</span></label>
-            <input type="text" id="reg-company" required autocomplete="organization" placeholder="株式会社○○">
-          </div>
-        </div>
-        <p class="reg-picknote" id="reg-picknote">業種・従業員規模は上で選んだ内容で登録します。</p>
-        <div class="reg-consents">
-          <label class="reg-chk"><input type="checkbox" id="reg-consent1" required> 新着補助金の通知・お役立ち情報をメールで受け取る（送信者：AIサポーターズ株式会社）<span class="req">必須</span></label>
-          <label class="reg-chk"><input type="checkbox" id="reg-consent2"> AIサポーターズのサービス・ご提案のご案内メールも受け取る（任意）</label>
-        </div>
-        <p class="reg-priv">ご入力情報の取り扱いは<a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。業種・規模は、あなたに合った補助金の表示・通知のために利用します。</p>
-        <button type="submit" class="reg-submit">登録する（無料）</button>
-        <p class="reg-status" id="reg-status" role="status" aria-live="polite"></p>
-        <p class="reg-soon">※ メールでの新着通知は現在準備中です。受付開始の準備が整い次第ご案内します（この時点では送信は行われません）。</p>
-      </form>
-    </details>
+    <p class="pp-linenote">🔔 新着補助金の通知（無料）は、公式LINE「補助金調べるくん」からご登録ください。登録すると、あなたの会社に合う新着だけがLINEに届きます。</p>
   </div>
 </section>
 
@@ -97,19 +74,9 @@
           <option value="兵庫">兵庫</option>
           <option value="その他">その他</option>
         </select>
-        <label class="visually-hidden" for="perspective">相性の視点（業種/自社）</label>
-        <select id="perspective" aria-label="相性の視点">
-          <option value="">🔎 視点：未設定（業種を選ぶ）</option>
-          <option value="jisha">AIサポーターズ（自社の精密採点）</option>
-          <option value="製造・ものづくり">製造・ものづくり</option>
-          <option value="IT・DX・AI">IT・DX・AI</option>
-          <option value="雇用・労務・人材">雇用・労務・人材</option>
-          <option value="創業・起業">創業・起業</option>
-          <option value="省力化・自動化">省力化・自動化</option>
-          <option value="環境・脱炭素・省エネ">環境・脱炭素・省エネ</option>
-          <option value="観光・飲食・小売">観光・飲食・小売</option>
-          <option value="医療・介護・福祉">医療・介護・福祉</option>
-          <option value="農林・水産">農林・水産</option>
+        <label class="visually-hidden" for="perspective">業種で絞り込み</label>
+        <select id="perspective" aria-label="業種で絞り込み">
+          <option value="">🔎 業種で絞り込み</option>
         </select>
         <label class="visually-hidden" for="sort">並び替え</label>
         <select id="sort">
@@ -154,7 +121,7 @@
   </div>
 </footer>
 
-<script src="eligibility.js?v=1"></script>
-<script src="app.js?v=7"></script>
+<script src="eligibility.js?v=2"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>

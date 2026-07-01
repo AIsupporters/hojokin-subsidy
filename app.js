@@ -6,18 +6,55 @@
 const RANK_LIST = ["S", "A", "B", "C"];
 const REL_LIST = ["高", "中", "対象外"];
 const PAGE = 40;
-// 業種＝キーワード判定（目安）。dataに業種フィールドが無いため本文テキストの部分一致。
+// 業種一覧（登録フォーム register.js と同じ30分類）
+const INDUSTRIES_30 = ["建設・工事業", "製造業", "卸売業", "小売業", "飲食業", "宿泊・観光業", "運送・物流業", "IT・システム開発", "Web制作・デザイン", "広告・マーケティング", "通信業", "不動産業", "建物管理・清掃業", "金融業", "保険業", "医療業", "介護・福祉業", "教育・研修業", "士業", "コンサルティング業", "人材サービス業", "美容・健康業", "自動車関連業", "農業・林業", "水産・漁業", "エネルギー・環境業", "娯楽・イベント業", "冠婚葬祭・生活サービス業", "貿易・輸出入業", "その他サービス業"];
+// 業種＝キーワード判定（目安・本文テキストの部分一致）。src/relevance.mjs の INDUSTRY_MAP_30 と一致。
 const INDUSTRY_MAP = {
-  "製造・ものづくり": ["ものづくり", "製造", "設備", "機械", "工場", "生産"],
-  "IT・DX・AI": ["IT", "デジタル", "DX", "ソフト", "システム", "AI", "情報通信"],
-  "雇用・労務・人材": ["雇用", "労務", "人材", "働き方", "賃金", "賃上げ", "処遇", "育成", "研修"],
-  "創業・起業": ["創業", "起業", "スタートアップ", "開業"],
-  "省力化・自動化": ["省力化", "自動化", "ロボット", "効率化"],
-  "環境・脱炭素・省エネ": ["環境", "脱炭素", "省エネ", "カーボン", "再エネ", "CO2", "二酸化炭素"],
-  "観光・飲食・小売": ["観光", "飲食", "小売", "宿泊", "商店", "サービス業"],
-  "医療・介護・福祉": ["医療", "介護", "福祉", "保育", "ヘルス"],
-  "農林・水産": ["農", "林業", "水産", "漁"],
+  "建設・工事業": ["建設", "工事", "建築", "土木", "電気", "水道", "内装", "リフォーム"],
+  "製造業": ["製造", "ものづくり", "工場", "機械", "食品", "金属", "化学", "印刷", "生産"],
+  "卸売業": ["卸", "商社", "卸売"],
+  "小売業": ["小売", "店舗", "EC", "販売", "商店", "スーパー"],
+  "飲食業": ["飲食", "レストラン", "居酒屋", "カフェ", "飲食店"],
+  "宿泊・観光業": ["宿泊", "観光", "ホテル", "旅館", "旅行"],
+  "運送・物流業": ["運送", "物流", "配送", "倉庫", "運輸", "トラック"],
+  "IT・システム開発": ["IT", "システム", "ソフト", "SaaS", "アプリ", "デジタル", "DX", "情報通信", "AI"],
+  "Web制作・デザイン": ["Web", "デザイン", "制作", "動画", "クリエイティブ", "ホームページ"],
+  "広告・マーケティング": ["広告", "マーケティング", "SNS", "PR", "販促", "集客"],
+  "通信業": ["通信", "インターネット", "ネットワーク"],
+  "不動産業": ["不動産", "賃貸", "仲介", "住宅"],
+  "建物管理・清掃業": ["管理", "清掃", "メンテナンス", "クリーニング"],
+  "金融業": ["金融", "銀行", "証券", "リース", "ファイナンス"],
+  "保険業": ["保険"],
+  "医療業": ["医療", "病院", "クリニック", "歯科", "薬局", "診療"],
+  "介護・福祉業": ["介護", "福祉", "障害", "高齢者", "保育"],
+  "教育・研修業": ["教育", "学校", "塾", "スクール", "研修", "学習"],
+  "士業": ["士業", "税理士", "行政書士", "社労士", "司法書士", "弁護士", "会計"],
+  "コンサルティング業": ["コンサル", "経営", "支援"],
+  "人材サービス業": ["人材", "派遣", "採用", "紹介", "求人"],
+  "美容・健康業": ["美容", "エステ", "ネイル", "整体", "ジム", "健康", "理容"],
+  "自動車関連業": ["自動車", "整備", "車両", "カー", "鈑金"],
+  "農業・林業": ["農", "林業", "園芸", "農業"],
+  "水産・漁業": ["水産", "漁", "養殖"],
+  "エネルギー・環境業": ["エネルギー", "電力", "ガス", "太陽光", "再エネ", "環境", "リサイクル", "脱炭素", "省エネ"],
+  "娯楽・イベント業": ["イベント", "スポーツ", "ゲーム", "娯楽", "エンタメ"],
+  "冠婚葬祭・生活サービス業": ["冠婚葬祭", "ブライダル", "葬祭", "写真", "ペット"],
+  "貿易・輸出入業": ["貿易", "輸出", "輸入", "海外", "越境"],
+  "その他サービス業": ["サービス"],
 };
+// 「今後の予定」→キーワード（登録フォームの予定と一致）。URLの plans= で渡る。
+const PLAN_MAP = {
+  "新しい設備を購入予定": ["設備", "導入", "ものづくり", "省力化", "設備投資"], "車両購入予定": ["車両", "自動車", "EV", "トラック"],
+  "店舗改装": ["店舗", "改装", "リニューアル", "内装"], "工場新設": ["工場", "新設", "設備投資", "生産"],
+  "IT導入": ["IT導入", "IT", "デジタル", "システム", "DX"], "AI導入": ["AI", "人工知能", "DX"],
+  "ECサイト": ["EC", "ネットショップ", "オンライン", "越境EC", "販路"], "ホームページ制作": ["ホームページ", "Web", "サイト", "販路"],
+  "DX化": ["DX", "デジタル", "効率化", "デジタル化"], "人材採用": ["採用", "雇用", "人材", "求人"],
+  "人材育成": ["育成", "研修", "能力開発", "スキル", "人材開発"], "海外展開": ["海外", "輸出", "越境", "グローバル", "展示会"],
+  "新商品開発": ["新商品", "商品開発", "製品開発", "研究開発"], "新サービス開発": ["新サービス", "サービス開発", "新事業", "新分野"],
+  "脱炭素": ["脱炭素", "カーボン", "CO2", "再エネ", "省エネ"], "省エネ設備": ["省エネ", "省エネルギー", "エネルギー", "脱炭素"],
+  "事業承継": ["事業承継", "承継", "後継"], "M&A": ["M&A", "買収", "譲渡", "統合"],
+};
+let PLANS = [];        // 自社の「今後の予定」（URL plans= から）
+let SIZE_PARAM = "";   // 自社の規模ID（URL size= から。pp-size初期化に使用）
 
 const els = {};
 let DATA = { items: [], total: 0 };
@@ -37,18 +74,25 @@ function todayStr() { const j = new Date(Date.now() + 9 * 3600 * 1000); return j
 // ---- 相性（視点に応じて算出） ----
 function relevanceFor(it, persp) {
   if (persp === "jisha") return { kind: "jisha", level: it.rank };
-  if (INDUSTRY_MAP[persp]) {
-    const kws = INDUSTRY_MAP[persp];
-    const hay = it.name + " " + it.reason + " " + it.requirements + " " + it.rate + " " + it.organization;
-    const matched = kws.filter((k) => hay.includes(k));
-    const level = matched.length >= 2 ? "高" : matched.length === 1 ? "中" : "対象外";
-    return { kind: "industry", level, matched };
-  }
-  return null; // 未設定
+  const hasInd = !!INDUSTRY_MAP[persp];
+  if (!hasInd && PLANS.length === 0) return null; // 業種も予定も無い＝未設定
+  const hay = it.name + " " + it.reason + " " + it.requirements + " " + it.rate + " " + it.organization;
+  // 業種の相性
+  let matched = [];
+  let indLevel = null;
+  if (hasInd) { matched = INDUSTRY_MAP[persp].filter((k) => hay.includes(k)); indLevel = matched.length >= 2 ? "高" : matched.length === 1 ? "中" : "対象外"; }
+  // 「今後の予定」の相性（1つでも合致＝高）
+  let planMatched = [];
+  let planLevel = null;
+  if (PLANS.length) { planMatched = PLANS.filter((pl) => PLAN_MAP[pl] && PLAN_MAP[pl].some((k) => hay.includes(k))); planLevel = planMatched.length >= 1 ? "高" : "対象外"; }
+  // 合成＝高い方
+  const rank = { "高": 2, "中": 1, "対象外": 0 };
+  const level = [indLevel, planLevel].filter(Boolean).reduce((a, b) => (rank[b] > rank[a] ? b : a), "対象外");
+  return { kind: "industry", level, matched, planMatched };
 }
 function groupsFor(persp) {
   if (persp === "jisha") return RANK_LIST;
-  if (INDUSTRY_MAP[persp]) return REL_LIST;
+  if (INDUSTRY_MAP[persp] || PLANS.length) return REL_LIST;
   return null;
 }
 function restGroup(persp) { return persp === "jisha" ? "C" : "対象外"; }
@@ -80,9 +124,14 @@ function readState() {
   const p = new URLSearchParams(location.search);
   const ls = (() => { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } })();
   const get = (k, d) => (p.has(k) ? p.get(k) : (ls[k] != null ? ls[k] : d));
-  let persp = p.has("v") ? p.get("v") : (localStorage.getItem("sw-perspective") || "");
+  // 業種: ?v（従来）優先 → ?ind（公式LINEから）→ 記憶
+  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : (localStorage.getItem("sw-perspective") || ""));
   if (persp !== "" && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
-  return { q: get("q", ""), category: get("category", ""), sort: get("sort", "deadline"), newonly: String(get("newonly", "")) === "1", perspective: persp };
+  // 今後の予定・規模（公式LINEから）。地域は ?category 優先 → ?region
+  if (p.has("plans")) PLANS = p.get("plans").split(",").map((s) => s.trim()).filter((s) => PLAN_MAP[s]);
+  if (p.has("size")) SIZE_PARAM = p.get("size");
+  const category = p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : (ls.category != null ? ls.category : ""));
+  return { q: get("q", ""), category, sort: get("sort", "deadline"), newonly: String(get("newonly", "")) === "1", perspective: persp };
 }
 function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.newonly.checked = s.newonly; els.perspective.value = s.perspective; }
 function currentState() { return { q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, newonly: els.newonly.checked, perspective: els.perspective.value }; }
@@ -93,6 +142,8 @@ function syncUrl(s) {
   if (s.sort && s.sort !== "deadline") p.set("sort", s.sort);
   if (s.newonly) p.set("newonly", "1");
   if (s.perspective) p.set("v", s.perspective);
+  if (PLANS.length) p.set("plans", PLANS.join(","));
+  if (SIZE_PARAM) p.set("size", SIZE_PARAM);
   const qs = p.toString();
   history.replaceState(null, "", qs ? "?" + qs : location.pathname);
 }
@@ -128,9 +179,12 @@ function moneyBlock(it) {
 function relLine(it, persp, rel) {
   if (!rel) return "";
   if (rel.kind === "jisha") return it.reason ? `<p class="reason">${esc(it.reason)}</p>` : "";
-  // industry: 相性テキストを本文に出す（視点に追従）
-  const detail = rel.matched.length ? `該当：${esc(rel.matched.join("・"))}` : "該当キーワードなし";
-  return `<p class="reason rel-${rel.level === "高" ? "high" : rel.level === "中" ? "mid" : "low"}">「${esc(persp)}」との相性：<b>${rel.level}</b> ／ ${detail}<span class="rel-note">（キーワード判定の目安）</span></p>`;
+  const bits = [];
+  if (persp && INDUSTRY_MAP[persp]) bits.push(rel.matched && rel.matched.length ? `業種該当：${esc(rel.matched.join("・"))}` : "業種キーワードなし");
+  if (rel.planMatched && rel.planMatched.length) bits.push(`予定に合致：${esc(rel.planMatched.join("・"))}`);
+  const cls = rel.level === "高" ? "high" : rel.level === "中" ? "mid" : "low";
+  const label = persp && INDUSTRY_MAP[persp] ? `「${esc(persp)}」との相性` : "あなたの予定との相性";
+  return `<p class="reason rel-${cls}">${label}：<b>${esc(rel.level)}</b> ／ ${bits.join(" ／ ") || "該当なし"}<span class="rel-note">（目安）</span></p>`;
 }
 function badge(persp, rel) {
   if (!rel) return `<span class="badge none" aria-hidden="true">·</span>`;
@@ -169,22 +223,24 @@ const GROUP_LABEL = { S: "重要度 S（自社該当度）", A: "重要度 A", B
 
 function renderBanner(persp) {
   const b = els.banner;
-  if (!persp) {
+  if (!persp && !PLANS.length) {
     b.className = "persp-banner unset";
-    b.innerHTML = `🔎 <b>視点が未設定です。</b>上の「視点」で<b>あなたの業種</b>を選ぶと、各補助金に「御社との相性」が表示されます（選択は記憶されます）。`;
+    b.innerHTML = `🔎 <b>業種・従業員規模を選ぶ</b>と、あなたに合う補助金が該当度つきで表示されます。<span class="rel-note">（公式LINEの「補助金の一覧」からは、登録内容で自動的に絞り込まれます）</span>`;
     return;
   }
-  const label = persp === "jisha" ? "AIサポーターズ（自社の精密採点）" : `${persp}（キーワード判定の目安）`;
+  const parts = [];
+  if (persp) parts.push(`業種「${esc(persp)}」`);
+  if (PLANS.length) parts.push(`今後の予定 ${PLANS.length}件`);
   b.className = "persp-banner set";
-  b.innerHTML = `相性の視点：<b>${esc(label)}</b> <button type="button" class="link-btn" id="persp-clear">解除</button>`;
+  b.innerHTML = `あなたの条件：<b>${parts.join(" ／ ") || "登録内容"}</b>で絞り込み中 <button type="button" class="link-btn" id="persp-clear">条件を解除</button>`;
   const c = $("persp-clear");
-  if (c) c.addEventListener("click", () => { els.perspective.value = ""; onChange(); });
+  if (c) c.addEventListener("click", () => { els.perspective.value = ""; PLANS = []; SIZE_PARAM = ""; const ps = $("pp-size"); if (ps) ps.value = ""; const pi = $("pp-industry"); if (pi) pi.value = ""; onChange(); });
 }
 
 function renderScoreboard(persp, buckets, total) {
   const sb = els.scoreboard;
-  if (!persp) {
-    sb.innerHTML = `<div class="score-msg">全 <b>${total}</b> 件 ／ <span class="muted">業種を選んで相性を見る</span></div>`;
+  if (!persp && !PLANS.length) {
+    sb.innerHTML = `<div class="score-msg">全 <b>${total}</b> 件 ／ <span class="muted">業種・規模を選んで相性を見る</span></div>`;
     return;
   }
   const groups = groupsFor(persp);
@@ -262,10 +318,11 @@ function onChange() { showRest = false; page = PAGE; render(); }
 // ---- 会社プロフィール & 登録（業種×規模で出し分け・メール送信は後日。今は入力保存まで） ----
 function statusCls(st) { if (st === "要確認") return "warn"; if (st === "非該当" || (st && st.indexOf("非該当") === 0)) return "no"; if (st && st.indexOf("該当") >= 0) return "ok"; return "warn"; }
 function populateProfile() {
-  if (!window.ELIGIBILITY) return;
-  const ind = $("pp-industry"), sz = $("pp-size");
-  if (ind && ind.options.length <= 1) ELIGIBILITY.INDUSTRY_OPTIONS.forEach((o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; ind.appendChild(op); });
-  if (sz && sz.options.length <= 1) ELIGIBILITY.SIZE_OPTIONS.forEach((o) => { const op = document.createElement("option"); op.value = o.id; op.textContent = o.label; sz.appendChild(op); });
+  const mkOpts = (sel, arr) => { if (sel && sel.options.length <= 1) arr.forEach((o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); }); };
+  mkOpts($("pp-industry"), INDUSTRIES_30);
+  mkOpts(els.perspective, INDUSTRIES_30); // 視点セレクタも30分類に
+  const sz = $("pp-size");
+  if (sz && window.ELIGIBILITY && sz.options.length <= 1) ELIGIBILITY.SIZE_OPTIONS.forEach((o) => { const op = document.createElement("option"); op.value = o.id; op.textContent = o.label; sz.appendChild(op); });
 }
 function renderEligibility() {
   const box = $("pp-result"); if (!box || !window.ELIGIBILITY) return;
@@ -280,44 +337,9 @@ function renderEligibility() {
     `<div class="pp-judges">${judge("小規模事業者", r.shoukibo)}${judge("中小企業", r.chusho)}</div>` +
     `<div class="pp-ceil"><h3>あなたの規模での補助上限の目安</h3><ul class="pp-ceil-list">${ceil}${gated}</ul></div>` +
     `<p class="pp-caveat">${r.caveats.map(esc).join("<br>")}</p>` +
-    `<p class="pp-cta-line">下の一覧は「${esc(industry)}」で絞り込み中。<button type="button" class="link-btn" id="pp-open-reg">この内容で登録して新着を受け取る →</button></p>`;
-  const ob = $("pp-open-reg"); if (ob) ob.addEventListener("click", () => { const d = $("pp-register"); if (d) { d.open = true; d.scrollIntoView({ behavior: "smooth", block: "center" }); } });
+    `<p class="pp-cta-line">下の一覧を「${esc(industry)}」で絞り込み中です。新着の通知は、公式LINE「補助金調べるくん」からご登録ください。</p>`;
 }
-function syncIndustryToList(industry) { if (industry && INDUSTRY_MAP[industry]) { els.perspective.value = industry; onChange(); } }
-function focusField(el) { if (!el) return; el.scrollIntoView({ behavior: "smooth", block: "center" }); try { el.focus({ preventScroll: true }); } catch { try { el.focus(); } catch {} } }
-function markPpError(on) { ["pp-industry", "pp-size"].forEach((id) => { const f = $(id); if (f && f.parentElement) f.parentElement.classList.toggle("error", !!on && !f.value); }); }
-function updatePicknote() {
-  const el = $("reg-picknote"); if (!el) return;
-  const ind = $("pp-industry").value, sz = $("pp-size"); const szText = sz && sz.value ? sz.options[sz.selectedIndex].text : "";
-  if (ind && szText) { el.className = "reg-picknote ok"; el.textContent = "登録内容 — 業種：" + ind + " ／ 従業員規模：" + szText; }
-  else { el.className = "reg-picknote warn"; el.textContent = "業種・従業員規模が未選択です。上の選択欄でお選びください。"; }
-}
-function submitRegistration(e) {
-  e.preventDefault();
-  const email = $("reg-email").value.trim(), company = $("reg-company").value.trim();
-  const industry = $("pp-industry").value, sizeId = $("pp-size").value;
-  const c1 = $("reg-consent1").checked, c2 = $("reg-consent2").checked;
-  const st = $("reg-status");
-  const fail = (m, focusEl) => { st.className = "reg-status err"; st.textContent = m; if (focusEl) focusField(focusEl); else { st.setAttribute("tabindex", "-1"); try { st.focus(); } catch {} } };
-  if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail("メールアドレスをご確認ください。", $("reg-email"));
-  if (!company || company.length > 200) return fail("会社名・屋号をご入力ください（200文字以内）。", $("reg-company"));
-  if (!industry || !sizeId) { markPpError(true); updatePicknote(); return fail("上の「業種」「従業員規模」をお選びください。", !industry ? $("pp-industry") : $("pp-size")); }
-  if (!c1) return fail("メール受信の同意（必須）にチェックしてください。", $("reg-consent1"));
-  markPpError(false);
-  const rec = { email, company, industry, size: sizeId, consentNotify: c1, consentSales: c2, ts: todayStr(), source: "補助金調べるくん登録" };
-  let ok = false;
-  try {
-    let a = JSON.parse(localStorage.getItem("sw-registrations") || "[]");
-    a = (Array.isArray(a) ? a : []).filter((x) => x && x.email !== email); // 同一メールは最新で置換
-    a.push(rec); if (a.length > 50) a = a.slice(-50);                       // 蓄積上限
-    localStorage.setItem("sw-registrations", JSON.stringify(a)); ok = true;
-  } catch {}
-  if (!ok) return fail("お使いのブラウザで保存できませんでした（容量超過やプライベートモード等）。お手数ですが時間をおいて再度お試しください。");
-  st.className = "reg-status ok";
-  st.textContent = "ご入力ありがとうございます。メールでの新着通知は現在準備中で、受付開始までお待ちください（この時点ではまだ送信は行われません）。";
-  st.setAttribute("tabindex", "-1"); try { st.focus(); } catch {}
-  $("reg-email").value = ""; $("reg-company").value = ""; $("reg-consent1").checked = false; $("reg-consent2").checked = false;
-}
+function syncIndustryToList(industry) { els.perspective.value = INDUSTRY_MAP[industry] ? industry : ""; onChange(); }
 
 function init() {
   ["q", "category", "perspective", "sort", "newonly", "save", "copy", "csv", "ics", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
@@ -331,6 +353,7 @@ function init() {
     $("sources").textContent = "監視ソース: " + (data.sources || []).join(" / ");
     $("uncovered").textContent = data.uncovered || "";
     try { localStorage.setItem("sw-lastseen", data.lastUpdated); } catch {}
+    populateProfile();               // ★セレクタを30分類で埋めてから状態反映（順序重要）
     applyState(readState());
     els.q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(onChange, 160); });
     ["category", "perspective", "sort", "newonly"].forEach((id) => els[id].addEventListener("change", onChange));
@@ -348,16 +371,14 @@ function init() {
     els.copy.addEventListener("click", () => { try { navigator.clipboard.writeText(location.href); } catch {} toast(els.copy, "コピーしました ✓", "URLをコピー"); });
     els.csv.addEventListener("click", exportCsv);
     els.ics.addEventListener("click", exportIcs);
-    // 会社プロフィール & 登録（業種×規模の出し分け・登録）
-    populateProfile();
-    const pi = $("pp-industry"), ps = $("pp-size"), rf = $("reg-form"), reg = $("pp-register");
+    // 会社プロフィール（業種×規模で探索。新着通知の登録は公式LINE側）
+    const pi = $("pp-industry"), ps = $("pp-size");
     if (pi && INDUSTRY_MAP[els.perspective.value]) pi.value = els.perspective.value;
-    if (pi) pi.addEventListener("change", () => { markPpError(false); renderEligibility(); updatePicknote(); syncIndustryToList(pi.value); });
-    if (ps) ps.addEventListener("change", () => { markPpError(false); renderEligibility(); updatePicknote(); });
-    els.perspective.addEventListener("change", () => { if (pi) { pi.value = INDUSTRY_MAP[els.perspective.value] ? els.perspective.value : ""; renderEligibility(); updatePicknote(); } });
-    if (rf) rf.addEventListener("submit", submitRegistration);
-    if (reg) reg.addEventListener("toggle", () => { if (reg.open) updatePicknote(); });
-    renderEligibility(); updatePicknote();
+    if (ps && SIZE_PARAM) ps.value = SIZE_PARAM;
+    if (pi) pi.addEventListener("change", () => { renderEligibility(); syncIndustryToList(pi.value); });
+    if (ps) ps.addEventListener("change", () => { SIZE_PARAM = ps.value; renderEligibility(); render(); });
+    els.perspective.addEventListener("change", () => { if (pi) { pi.value = INDUSTRY_MAP[els.perspective.value] ? els.perspective.value : ""; renderEligibility(); } });
+    renderEligibility();
     render();
   }).catch(() => { els.empty.hidden = false; els.empty.textContent = "データを読み込めませんでした。再読み込みしてください。"; });
 }

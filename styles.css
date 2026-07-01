@@ -555,6 +555,7 @@ main.wrap{padding-top:38px;padding-bottom:20px}
 .pp-c-note{font-size:11px;color:var(--muted);line-height:1.5}
 .pp-caveat{font-size:11px;color:var(--muted);line-height:1.6;margin:14px 0 0;border-top:1px dashed var(--hair);padding-top:10px}
 .pp-cta-line{font-size:13px;color:var(--ink-soft);margin:12px 0 0}
+.pp-linenote{margin:18px 0 0;padding:14px 16px;background:var(--kuni-bg);border:1px solid #b7cbe6;border-radius:10px;color:var(--ink-soft);font-size:13.5px;line-height:1.7}
 
 /* 登録フォーム */
 .pp-register{margin-top:18px;border:1px solid var(--rule);border-radius:12px;background:var(--card);overflow:hidden}
