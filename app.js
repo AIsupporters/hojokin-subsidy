@@ -60,8 +60,16 @@ const IMPROVE_MAP = {
   "SNS": ["SNS", "デジタル", "マーケティング"], "AI活用": ["AI", "DX", "デジタル"], "業務効率化": ["効率化", "省力化", "生産性", "IT", "DX"],
   "システム化": ["システム", "IT", "デジタル", "DX"], "コスト削減": ["省エネ", "効率化", "コスト", "省力化"],
 };
+// 「希望する支援」→キーワード（補助金/助成金は全件対象なので無指定）。
+const SUPPORT_MAP = {
+  "補助金": [], "助成金": [], "融資": ["融資", "資金"], "税金相談": ["税"], "節税": ["税", "節税"],
+  "M&A": ["M&A", "事業承継", "承継", "譲渡"], "保険": ["保険"], "不動産": ["不動産"], "DX支援": ["DX", "デジタル"], "AI導入": ["AI"],
+};
 let PLANS = [];      // 自社の「今後の予定」（URL plans=）
 let IMPROVES = [];   // 自社の「改善したいこと」（URL improve=）
+let SUPPORTS = [];   // 自社の「希望する支援」（URL support=）
+let SIZE = "";       // 自社の規模ID（URL size=・小規模向け制度の優先に使用）
+let MODE = "simple"; // "detail"=詳細検索(自社登録内容) / "simple"=簡易検索(業種×地域)
 
 const els = {};
 let DATA = { items: [], total: 0 };
@@ -81,29 +89,34 @@ function todayStr() { const j = new Date(Date.now() + 9 * 3600 * 1000); return j
 // ---- 相性（視点に応じて算出） ----
 function relevanceFor(it, persp) {
   if (persp === "jisha") return { kind: "jisha", level: it.rank };
+  const detail = MODE === "detail";
   const hasInd = !!INDUSTRY_MAP[persp];
-  const hasTheme = PLANS.length > 0 || IMPROVES.length > 0;
-  if (!hasInd && !hasTheme) return null; // 業種もテーマも無い＝未設定
+  const hasTheme = detail && (PLANS.length || IMPROVES.length || SUPPORTS.length);
+  const small = detail && (SIZE === "s1_5" || SIZE === "s6_20"); // 小規模向け制度の優先
+  if (!hasInd && !hasTheme && !small) return null; // 条件なし＝未設定
   const hay = it.name + " " + it.reason + " " + it.requirements + " " + it.rate + " " + it.organization;
   // 業種の相性
   let matched = [];
   let indLevel = null;
   if (hasInd) { matched = INDUSTRY_MAP[persp].filter((k) => hay.includes(k)); indLevel = matched.length >= 2 ? "高" : matched.length === 1 ? "中" : "対象外"; }
-  // テーマ（今後の予定＋改善したいこと）の相性（1つでも合致＝高）
+  // テーマ（今後の予定＋改善したいこと＋希望する支援）の相性（1つでも合致＝高）
   let themeMatched = [];
   let themeLevel = null;
   if (hasTheme) {
-    const themes = PLANS.map((p) => [p, PLAN_MAP[p]]).concat(IMPROVES.map((m) => [m, IMPROVE_MAP[m]]));
-    for (const [name, kws] of themes) if (kws && kws.some((k) => hay.includes(k))) themeMatched.push(name);
+    const themes = PLANS.map((p) => [p, PLAN_MAP[p]]).concat(IMPROVES.map((m) => [m, IMPROVE_MAP[m]])).concat(SUPPORTS.map((s) => [s, SUPPORT_MAP[s]]));
+    for (const [name, kws] of themes) if (kws && kws.length && kws.some((k) => hay.includes(k))) themeMatched.push(name);
     themeLevel = themeMatched.length >= 1 ? "高" : "対象外";
   }
+  // 小規模事業者向けの主要制度は、小規模の会社に優先表示
+  const smallHit = small && /小規模事業者/.test(hay);
   const rank = { "高": 2, "中": 1, "対象外": 0 };
-  const level = [indLevel, themeLevel].filter(Boolean).reduce((a, b) => (rank[b] > rank[a] ? b : a), "対象外");
-  return { kind: "industry", level, matched, themeMatched };
+  const level = [indLevel, themeLevel, smallHit ? "高" : null].filter(Boolean).reduce((a, b) => (rank[b] > rank[a] ? b : a), "対象外");
+  return { kind: "industry", level, matched, themeMatched, smallHit };
 }
 function groupsFor(persp) {
   if (persp === "jisha") return RANK_LIST;
-  if (INDUSTRY_MAP[persp] || PLANS.length || IMPROVES.length) return REL_LIST;
+  const detail = MODE === "detail";
+  if (INDUSTRY_MAP[persp] || (detail && (PLANS.length || IMPROVES.length || SUPPORTS.length || SIZE === "s1_5" || SIZE === "s6_20"))) return REL_LIST;
   return null;
 }
 function restGroup(persp) { return persp === "jisha" ? "C" : "対象外"; }
@@ -131,39 +144,52 @@ function isRecent(it) {
 }
 
 // ---- 状態 ----
+function savedView() { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } }
 function readState() {
   const p = new URLSearchParams(location.search);
-  const ls = (() => { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } })();
-  const get = (k, d) => (p.has(k) ? p.get(k) : (ls[k] != null ? ls[k] : d));
-  // 業種: ?v（従来）優先 → ?ind（公式LINEから）→ 記憶
-  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : (localStorage.getItem("sw-perspective") || ""));
-  if (persp !== "" && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
-  // 今後の予定・規模（公式LINEから）。地域は ?category 優先 → ?region
-  if (p.has("plans")) PLANS = p.get("plans").split(",").map((s) => s.trim()).filter((s) => PLAN_MAP[s]);
-  if (p.has("improve")) IMPROVES = p.get("improve").split(",").map((s) => s.trim()).filter((s) => IMPROVE_MAP[s]);
-  const category = p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : (ls.category != null ? ls.category : ""));
-  return { q: get("q", ""), category, sort: get("sort", "deadline"), newonly: String(get("newonly", "")) === "1", perspective: persp };
+  const ls = savedView();
+  const fromLine = p.has("ind") || p.has("plans") || p.has("improve") || p.has("support") || p.has("size");
+  const arrOf = (key, map, saved) => p.has(key) ? p.get(key).split(",").map((s) => s.trim()).filter((s) => map[s]) : (fromLine ? [] : (Array.isArray(saved) ? saved.filter((x) => map[x]) : []));
+  // 業種: ?v 優先 → ?ind（公式LINE）→ 保存
+  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : (fromLine ? "" : (ls.persp || "")));
+  if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
+  // 詳細条件（URL優先→なければ保存から復元）
+  PLANS = arrOf("plans", PLAN_MAP, ls.plans);
+  IMPROVES = arrOf("improve", IMPROVE_MAP, ls.improves);
+  SUPPORTS = arrOf("support", SUPPORT_MAP, ls.supports);
+  SIZE = p.has("size") ? p.get("size") : (fromLine ? "" : (ls.size || ""));
+  // モード: mode= 優先 → LINE由来なら詳細 → 保存 → 簡易
+  MODE = p.has("mode") ? (p.get("mode") === "detail" ? "detail" : "simple") : (fromLine ? "detail" : (ls.mode === "detail" ? "detail" : "simple"));
+  const category = p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : (fromLine ? "" : (ls.category || "")));
+  const q = p.has("q") ? p.get("q") : (fromLine ? "" : (ls.q || ""));
+  const sort = p.has("sort") ? p.get("sort") : (ls.sort || "deadline");
+  return { q, category, sort, perspective: persp };
 }
-function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.newonly.checked = s.newonly; els.perspective.value = s.perspective; }
-function currentState() { return { q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, newonly: els.newonly.checked, perspective: els.perspective.value }; }
+function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.perspective.value = s.perspective; }
+function currentState() { return { q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, perspective: els.perspective.value }; }
+function saveView() {
+  const v = { mode: MODE, q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, persp: els.perspective.value, plans: PLANS, improves: IMPROVES, supports: SUPPORTS, size: SIZE };
+  try { localStorage.setItem("sw-view", JSON.stringify(v)); } catch {}
+}
 function syncUrl(s) {
   const p = new URLSearchParams();
-  if (s.q) p.set("q", s.q);
+  if (MODE === "detail") p.set("mode", "detail");
+  if (s.q && MODE === "simple") p.set("q", s.q);
   if (s.category) p.set("category", s.category);
   if (s.sort && s.sort !== "deadline") p.set("sort", s.sort);
-  if (s.newonly) p.set("newonly", "1");
   if (s.perspective) p.set("v", s.perspective);
   if (PLANS.length) p.set("plans", PLANS.join(","));
   if (IMPROVES.length) p.set("improve", IMPROVES.join(","));
+  if (SUPPORTS.length) p.set("support", SUPPORTS.join(","));
+  if (SIZE) p.set("size", SIZE);
   const qs = p.toString();
   history.replaceState(null, "", qs ? "?" + qs : location.pathname);
 }
 
 function baseFilter(s) {
-  const words = s.q.toLowerCase().split(/\s+/).filter(Boolean);
+  const words = (MODE === "simple" ? s.q : "").toLowerCase().split(/\s+/).filter(Boolean);
   return DATA.items.filter((it) => {
     if (s.category && it.category !== s.category) return false;
-    if (s.newonly && !isRecent(it)) return false;
     if (words.length) {
       const hay = (it.name + " " + it.organization + " " + it.region + " " + it.reason).toLowerCase();
       if (!words.every((w) => hay.includes(w))) return false;
@@ -193,6 +219,7 @@ function relLine(it, persp, rel) {
   const bits = [];
   if (persp && INDUSTRY_MAP[persp]) bits.push(rel.matched && rel.matched.length ? `業種該当：${esc(rel.matched.join("・"))}` : "業種キーワードなし");
   if (rel.themeMatched && rel.themeMatched.length) bits.push(`ご要望に合致：${esc(rel.themeMatched.join("・"))}`);
+  if (rel.smallHit) bits.push("小規模事業者向け制度");
   const cls = rel.level === "高" ? "high" : rel.level === "中" ? "mid" : "low";
   const label = persp && INDUSTRY_MAP[persp] ? `「${esc(persp)}」との相性` : "あなたの登録内容との相性";
   return `<p class="reason rel-${cls}">${label}：<b>${esc(rel.level)}</b> ／ ${bits.join(" ／ ") || "該当なし"}<span class="rel-note">（目安）</span></p>`;
@@ -232,28 +259,45 @@ function card(it, persp, rel) {
 
 const GROUP_LABEL = { S: "重要度 S（自社該当度）", A: "重要度 A", B: "重要度 B", C: "重要度 C", "高": "相性 高", "中": "相性 中", "対象外": "対象外（キーワード不一致）" };
 
-function renderBanner(persp) {
+const SIZE_LABELS = { s1_5: "1〜5人", s6_20: "6〜20人", s21_50: "21〜50人", s51_100: "51〜100人", s101: "101人以上" };
+
+function renderBanner() {
   const b = els.banner;
-  if (!persp && !PLANS.length && !IMPROVES.length) {
-    b.className = "persp-banner unset";
-    b.innerHTML = `🔎 上の<b>「業種」「地域」</b>を選ぶと、かんたんに絞り込めます。<span class="rel-note">（公式LINEの「補助金の一覧」からは、登録済みの詳しい内容で自動的に絞り込まれます）</span>`;
-    return;
-  }
-  const detailed = PLANS.length || IMPROVES.length; // LINE登録内容による詳細絞り込み
-  const parts = [];
-  if (persp) parts.push(`業種「${esc(persp)}」`);
-  if (PLANS.length) parts.push(`今後の予定 ${PLANS.length}件`);
-  if (IMPROVES.length) parts.push(`改善したいこと ${IMPROVES.length}件`);
-  b.className = "persp-banner set";
-  b.innerHTML = `${detailed ? "📋 <b>あなたの登録内容</b>で絞り込み中" : "🔎 <b>業種</b>で絞り込み中"}：${esc(parts.join(" ／ ") || "登録内容")} <button type="button" class="link-btn" id="persp-clear">条件を解除</button>`;
-  const c = $("persp-clear");
-  if (c) c.addEventListener("click", () => { els.perspective.value = ""; PLANS = []; IMPROVES = []; onChange(); });
+  if (MODE === "detail") { b.className = "persp-banner set"; b.innerHTML = `📋 <b>詳細検索</b>：公式LINEの登録内容で絞り込み中です。条件は上の <b>×</b> で外せます。`; return; }
+  const persp = els.perspective.value, cat = els.category.value;
+  if (!persp && !cat) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
+  const parts = []; if (persp) parts.push(`業種「${esc(persp)}」`); if (cat) parts.push(`地域「${esc(cat)}」`);
+  b.className = "persp-banner set"; b.innerHTML = `🔎 <b>簡易検索</b>：${parts.join(" ／ ")}で絞り込み中`;
 }
+
+// 詳細検索の条件チップ（×で個別に外せる）
+function renderDetailConds() {
+  const box = els.detailConds; if (!box) return;
+  const chips = [];
+  const persp = els.perspective.value, cat = els.category.value;
+  if (persp && INDUSTRY_MAP[persp]) chips.push(["persp", `業種：${persp}`]);
+  if (cat) chips.push(["category", `地域：${cat}`]);
+  if (SIZE && SIZE_LABELS[SIZE]) chips.push(["size", `規模：${SIZE_LABELS[SIZE]}`]);
+  PLANS.forEach((p) => chips.push(["plan:" + p, `予定：${p}`]));
+  IMPROVES.forEach((m) => chips.push(["improve:" + m, `改善：${m}`]));
+  SUPPORTS.forEach((s) => chips.push(["support:" + s, `希望：${s}`]));
+  if (!chips.length) { box.innerHTML = `<p class="detail-empty">絞り込み条件がありません。公式LINEの「補助金の一覧」から開くと、登録内容で自動的に絞り込まれます。</p>`; return; }
+  box.innerHTML = chips.map(([k, l]) => `<button class="chip" data-dk="${attr(k)}">${esc(l)}</button>`).join("");
+}
+function removeDetailCond(k) {
+  if (k === "persp") els.perspective.value = "";
+  else if (k === "category") els.category.value = "";
+  else if (k === "size") SIZE = "";
+  else if (k.indexOf("plan:") === 0) PLANS = PLANS.filter((x) => x !== k.slice(5));
+  else if (k.indexOf("improve:") === 0) IMPROVES = IMPROVES.filter((x) => x !== k.slice(8));
+  else if (k.indexOf("support:") === 0) SUPPORTS = SUPPORTS.filter((x) => x !== k.slice(8));
+}
+function setMode(m) { MODE = m === "detail" ? "detail" : "simple"; onChange(); }
 
 function renderScoreboard(persp, buckets, total) {
   const sb = els.scoreboard;
-  if (!persp && !PLANS.length && !IMPROVES.length) {
-    sb.innerHTML = `<div class="score-msg">全 <b>${total}</b> 件 ／ <span class="muted">業種・地域を選んで相性を見る</span></div>`;
+  if (!groupsFor(persp)) {
+    sb.innerHTML = `<div class="score-msg">全 <b>${total}</b> 件 ／ <span class="muted">${MODE === "detail" ? "上の条件で絞り込み" : "業種・地域を選んで相性を見る"}</span></div>`;
     return;
   }
   const groups = groupsFor(persp);
@@ -263,19 +307,23 @@ function renderScoreboard(persp, buckets, total) {
 
 function renderChips(s) {
   const chips = [];
-  if (s.perspective) chips.push(["v", `視点：${s.perspective === "jisha" ? "自社" : s.perspective}`]);
+  if (s.perspective) chips.push(["v", `業種：${s.perspective === "jisha" ? "自社" : s.perspective}`]);
   if (s.category) chips.push(["category", `地域：${s.category}`]);
   if (s.q) chips.push(["q", `「${s.q}」`]);
-  if (s.newonly) chips.push(["newonly", "新着のみ"]);
   els.chips.innerHTML = chips.map(([k, l]) => `<button class="chip" data-k="${k}">${esc(l)}</button>`).join("") + (chips.length ? `<button class="chip clear" data-k="__all">すべて解除</button>` : "");
 }
 
 function render() {
   const s = currentState();
-  try { localStorage.setItem("sw-perspective", s.perspective); } catch {}
   syncUrl(s);
-  renderBanner(s.perspective);
-  renderChips(s);
+  // タブ・パネルの表示切替
+  els.tabDetail.setAttribute("aria-selected", MODE === "detail");
+  els.tabSimple.setAttribute("aria-selected", MODE === "simple");
+  els.panelDetail.hidden = MODE !== "detail";
+  els.panelSimple.hidden = MODE !== "simple";
+  renderBanner();
+  if (MODE === "detail") { renderDetailConds(); els.chips.innerHTML = ""; }
+  else renderChips(s);
   const base = baseFilter(s);
   window.__visible = base;
   els.resultCount.textContent = `${base.length} 件${DATA.total ? ` / 全 ${DATA.total} 件` : ""}`;
@@ -318,13 +366,6 @@ function exportCsv() {
   const body = rows.map((it) => [it.rank, it.score, it.name, it.maxLimit, it.rate, it.deadline, it.organization, it.region, it.url, it.detectedDate].map(cell).join(","));
   downloadFile("subsidies.csv", "﻿" + [head.map(cell).join(","), ...body].join("\r\n"), "text/csv");
 }
-function exportIcs() {
-  const rows = (window.__visible || []).filter((it) => isISO(it.deadline));
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//subsidy-watch//JP"];
-  for (const it of rows) lines.push("BEGIN:VEVENT", `DTSTART;VALUE=DATE:${it.deadline.replace(/-/g, "")}`, `SUMMARY:【締切】${String(it.name).replace(/\r?\n/g, " ")}`, `DESCRIPTION:${String(it.url || "").replace(/\r?\n/g, " ")}`, "END:VEVENT");
-  lines.push("END:VCALENDAR");
-  downloadFile("subsidy-deadlines.ics", lines.join("\r\n"), "text/calendar");
-}
 function toast(btn, msg, orig) { btn.textContent = msg; setTimeout(() => (btn.textContent = orig), 1500); }
 function onChange() { showRest = false; page = PAGE; render(); }
 
@@ -335,8 +376,11 @@ function populateProfile() {
 }
 
 function init() {
-  ["q", "category", "perspective", "sort", "newonly", "save", "copy", "csv", "ics", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
+  ["q", "category", "perspective", "sort", "save", "copy", "csv", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
   els.resultCount = $("result-count"); els.banner = $("persp-banner"); els.scoreboard = $("scoreboard");
+  els.tabDetail = $("tab-detail"); els.tabSimple = $("tab-simple");
+  els.panelDetail = $("panel-detail"); els.panelSimple = $("panel-simple");
+  els.detailConds = $("detail-conds"); els.clearAll = $("clear-all");
   fetch("data/subsidies.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
     DATA = data;
     LASTSEEN = (() => { try { return localStorage.getItem("sw-lastseen"); } catch { return null; } })();
@@ -349,23 +393,27 @@ function init() {
     populateProfile();               // ★セレクタを30分類で埋めてから状態反映（順序重要）
     applyState(readState());
     els.q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(onChange, 160); });
-    ["category", "perspective", "sort", "newonly"].forEach((id) => els[id].addEventListener("change", onChange));
+    ["category", "perspective", "sort"].forEach((id) => els[id].addEventListener("change", onChange));
+    els.tabDetail.addEventListener("click", () => setMode("detail"));
+    els.tabSimple.addEventListener("click", () => setMode("simple"));
+    els.detailConds.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (!c) return; removeDetailCond(c.dataset.dk); onChange(); });
+    els.clearAll.addEventListener("click", () => {
+      if (MODE === "detail") { els.perspective.value = ""; els.category.value = ""; SIZE = ""; PLANS = []; IMPROVES = []; SUPPORTS = []; }
+      else { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
+      onChange();
+    });
     els.scoreboard.addEventListener("click", (e) => { const b = e.target.closest(".score"); if (!b) return; const g = b.dataset.g; if (g === restGroup(els.perspective.value)) showRest = true; render(); const sec = $("grp-" + g); if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
     els.chips.addEventListener("click", (e) => {
       const c = e.target.closest(".chip"); if (!c) return; const k = c.dataset.k;
-      if (k === "__all") { els.q.value = ""; els.category.value = ""; els.newonly.checked = false; els.perspective.value = ""; }
+      if (k === "__all") { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
       else if (k === "v") els.perspective.value = "";
       else if (k === "category") els.category.value = "";
       else if (k === "q") els.q.value = "";
-      else if (k === "newonly") els.newonly.checked = false;
       onChange();
     });
-    els.save.addEventListener("click", () => { try { localStorage.setItem("sw-view", JSON.stringify(currentState())); } catch {} toast(els.save, "保存しました ✓", "絞り込みを保存"); });
+    els.save.addEventListener("click", () => { saveView(); toast(els.save, "保存しました ✓", "絞り込みを保存"); });
     els.copy.addEventListener("click", () => { try { navigator.clipboard.writeText(location.href); } catch {} toast(els.copy, "コピーしました ✓", "URLをコピー"); });
     els.csv.addEventListener("click", exportCsv);
-    els.ics.addEventListener("click", exportIcs);
-    // 簡易検索の業種セレクタは populateProfile で30分類化済み（地域はツールバーの絞り込み）。
-    // 新着通知の登録・詳細な自社条件は公式LINE側（URLパラメータで反映）。
     render();
   }).catch(() => { els.empty.hidden = false; els.empty.textContent = "データを読み込めませんでした。再読み込みしてください。"; });
 }

@@ -271,6 +271,17 @@ img{max-width:100%}
 .chip.clear::after{content:""}
 .chip.clear:hover{background:none;color:var(--accent)}
 
+/* 検索モードのタブ */
+.tabs{display:flex;gap:6px;margin:0 0 14px;border-bottom:1px solid var(--hair)}
+.tab{font-family:var(--sans);font-size:14.5px;font-weight:700;color:var(--muted);background:transparent;border:none;border-bottom:3px solid transparent;padding:10px 18px 9px;cursor:pointer;letter-spacing:.02em;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab:hover{color:var(--ink)}
+.tabpanel{margin:0 0 12px}
+.tabpanel[hidden]{display:none}
+.detail-lead{font-size:13px;color:var(--ink-soft);line-height:1.7;margin:0 0 12px;background:var(--paper-deep);border-radius:8px;padding:12px 14px}
+.detail-conds{display:flex;gap:8px;flex-wrap:wrap}
+.detail-empty{color:var(--muted);font-size:13.5px;margin:0}
+
 /* ===========================================================
    GROUPS ＝ 特集の章見出し（大きなブロック番付）
    =========================================================== */
