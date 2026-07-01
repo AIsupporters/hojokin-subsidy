@@ -102,9 +102,13 @@
           <input type="text" id="f-zip" inputmode="numeric" autocomplete="postal-code" placeholder="530-0001">
         </div>
         <div class="rf-field">
-          <label for="f-addr">住所<span class="req">必須</span></label>
-          <input type="text" id="f-addr" autocomplete="street-address" placeholder="大阪府大阪市…">
+          <label for="f-pref">都道府県<span class="req">必須</span></label>
+          <select id="f-pref"><option value="">選択してください</option></select>
         </div>
+      </div>
+      <div class="rf-field">
+        <label for="f-addr">住所（市区町村以降）<span class="req">必須</span></label>
+        <input type="text" id="f-addr" autocomplete="address-level2" placeholder="大阪市北区…">
       </div>
       <div class="rf-field">
         <label for="f-industry">業種<span class="req">必須</span></label>
