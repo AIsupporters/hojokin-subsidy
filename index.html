@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 <header class="hero">
@@ -38,22 +38,17 @@
 <section class="profile-panel" id="profile-panel" aria-labelledby="pp-title">
   <div class="wrap">
     <div class="pp-head">
-      <h2 id="pp-title">業種・従業員規模で、自社に合う補助金を見る</h2>
-      <p class="pp-lede">公式LINE「補助金調べるくん」の<b>「補助金の一覧」</b>を開くと、登録済みの内容で自動的に絞り込まれます。ここで業種・従業員規模を選べば、登録内容以外の条件でも見られます。</p>
-    </div>
-    <div class="pp-body">
-      <div class="pp-inputs">
-        <div class="pp-field">
-          <label for="pp-industry">業種</label>
-          <select id="pp-industry"><option value="">業種を選択</option></select>
+      <h2 id="pp-title">2つの調べ方</h2>
+      <div class="pp-ways">
+        <div class="pp-way">
+          <span class="pp-way-badge">① 詳しく</span>
+          <p><b>自社の登録内容で調べる</b><br>公式LINE「補助金調べるくん」の<b>「補助金の一覧」</b>を開くと、登録済みの業種・地域・<b>今後の予定・改善したいこと</b>をもとに、自社に合う補助金を該当度つきで表示します。</p>
         </div>
-        <div class="pp-field">
-          <label for="pp-size">従業員規模</label>
-          <select id="pp-size"><option value="">規模を選択</option></select>
+        <div class="pp-way">
+          <span class="pp-way-badge alt">② かんたん</span>
+          <p><b>業種と地域で簡易的に調べる</b><br>下の絞り込みで<b>「業種」「地域」</b>を選ぶと、その場でかんたんに一覧を絞り込めます（登録不要）。</p>
         </div>
-        <p class="pp-note">※「常時使用する従業員数（役員・同居親族・日雇い・試用期間中を除く）」でお選びください。</p>
       </div>
-      <div class="pp-result" id="pp-result" aria-live="polite"></div>
     </div>
     <p class="pp-linenote">🔔 新着補助金の通知（無料）は、公式LINE「補助金調べるくん」からご登録ください。登録すると、あなたの会社に合う新着だけがLINEに届きます。</p>
   </div>
@@ -121,7 +116,6 @@
   </div>
 </footer>
 
-<script src="eligibility.js?v=2"></script>
-<script src="app.js?v=9"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
