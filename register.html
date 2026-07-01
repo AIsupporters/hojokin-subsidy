@@ -57,6 +57,13 @@
   .rf-done p{color:var(--ink-soft);font-size:15px;line-height:1.8}
   .rf-foot{text-align:center;color:var(--muted);font-size:12px;margin:28px 0 0;line-height:1.8}
   .rf-foot a{color:var(--accent-deep)}
+  .rf-invite{background:#eef4fb;border:1px solid #cfe0f2;border-radius:12px;padding:14px 16px;margin:0 0 16px}
+  .rf-invite label{display:block;font-weight:700;color:var(--ink);font-size:14px;margin:0 0 6px}
+  .rf-invite input{width:100%;box-sizing:border-box;font:inherit;font-size:16px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--hair);border-radius:8px;padding:11px 12px;background:#fff}
+  .rf-invite input:focus{outline:none;border-color:#2f6fb0}
+  .rf-invite .opt{color:var(--muted);font-size:11px;font-weight:400;margin-left:6px}
+  .rf-invite .rf-hint{color:var(--muted);font-size:12px;margin:6px 0 0;line-height:1.6}
+  .rf-mycode-box{background:var(--paper-deep);border:1px solid var(--hair);border-radius:12px;padding:18px;margin:18px 0}
 </style>
 </head>
 <body class="register-page">
@@ -74,6 +81,12 @@
 
   <form id="rf-form" hidden novalidate>
     <div class="rf-note-top">入力いただいた会社情報は、あなたに合う補助金の判定・LINE通知のために利用します。取り扱いは<a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>をご確認ください。</div>
+
+    <div class="rf-invite">
+      <label for="f-invite">招待コード<span class="opt">お持ちの方のみ・任意</span></label>
+      <input type="text" id="f-invite" maxlength="12" autocapitalize="characters" placeholder="例）ABC123">
+      <p class="rf-hint">お知り合いから招待コードをもらった方は入力してください。</p>
+    </div>
 
     <section class="rf-step">
       <h2><span class="rf-num">STEP 1</span>会社情報</h2>
@@ -198,7 +211,13 @@
 
   <div id="rf-done" class="rf-done" hidden>
     <h2>登録ありがとうございました</h2>
-    <p>あなたの会社に合う新着補助金が出たら、LINEにお届けします。<br>このページを閉じてLINEにお戻りください。</p>
+    <p>あなたの会社に合う新着補助金が出たら、LINEにお届けします。</p>
+    <div class="rf-mycode-box">
+      <p style="margin:0 0 6px;font-size:14px;color:var(--ink-soft)">あなたの招待コード</p>
+      <b id="rf-mycode" style="font-size:30px;letter-spacing:.18em;color:var(--accent-deep)">—</b>
+      <p style="margin:8px 0 0;font-size:13px;color:var(--muted)">お知り合いを紹介するときに使えます（LINEメニュー「友だちに紹介」からも確認できます）。</p>
+    </div>
+    <p>このページを閉じてLINEにお戻りください。</p>
   </div>
 
   <p class="rf-foot">運営：AIサポーターズ株式会社 ／ <a href="https://ai-supporters.com/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a> ／ <a href="https://ai-supporters.com/contact/" target="_blank" rel="noopener noreferrer">お問い合わせ</a></p>

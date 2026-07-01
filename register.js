@@ -114,6 +114,7 @@
       salesBand: val("f-sales"), prevProfit: val("f-profit"), foundedYm: val("f-founded"), fiscalMonth: val("f-fiscal"),
       plans: checkedValues("plan"), improve: checkedValues("improve"), support: checkedValues("support"),
       hp: val("f-hp"), investBand: val("f-invest"),
+      referredByCode: (val("f-invite") || "").toUpperCase(), // 紹介者の招待コード（任意）
     };
 
     var btn = $("rf-submit");
@@ -124,7 +125,8 @@
     }).then(function (r) {
       if (!r.ok) return r.text().then(function (t) { throw new Error("(" + r.status + ") " + t.slice(0, 120)); });
       return r.json();
-    }).then(function () {
+    }).then(function (res) {
+      if (res && res.inviteCode) { var el = $("rf-mycode"); if (el) el.textContent = res.inviteCode; }
       $("rf-form").hidden = true; $("rf-done").hidden = false;
       window.scrollTo({ top: 0, behavior: "smooth" });
     }).catch(function (err) {
