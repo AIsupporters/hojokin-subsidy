@@ -65,34 +65,43 @@ const SUPPORT_MAP = {
   "補助金": [], "助成金": [], "融資": ["融資", "資金"], "税金相談": ["税"], "節税": ["税", "節税"],
   "M&A": ["M&A", "事業承継", "承継", "譲渡"], "保険": ["保険"], "不動産": ["不動産"], "DX支援": ["DX", "デジタル"], "AI導入": ["AI"],
 };
-let PLANS = [];      // 自社の「今後の予定」（URL plans=）
-let IMPROVES = [];   // 自社の「改善したいこと」（URL improve=）
-let SUPPORTS = [];   // 自社の「希望する支援」（URL support=）
-let SIZE = "";       // 自社の規模ID（URL size=・小規模向け制度の優先に使用）
-let MODE = "simple"; // "detail"=詳細検索(自社登録内容) / "simple"=簡易検索(業種×地域)
-let ORIG = null;     // 開いたときの登録内容スナップショット（「絞り込み状態を初期化」で復元）
-let EDIT_TOKEN = ""; // 登録情報を編集する用トークン（URL edit=）
+let PLANS = [];      // 今後の予定（URL plans=）
+let IMPROVES = [];   // 改善したいこと（URL improve=）
+let SUPPORTS = [];   // 希望する支援（URL support=）
+let SIZE = "";       // 規模ID（URL size=）
+let MODE = "simple"; // "detail"=詳細検索 / "simple"=簡易検索
+let ORIG = null;     // 登録内容スナップショット（「絞り込み状態を初期化」で復元）
+let EDIT_TOKEN = ""; // 登録編集トークン（URL edit=）＝サーバー保存の本人確認にも使う
+let KUNI = false;    // 国（全国）の制度を表示（URL kuni=1）※都道府県とは独立して選べる
+let PREF = "";       // 都道府県（URL pref=／旧 region=・category=）※normPref済みで保持
 let CITY = "";       // 市区町村（URL city=・都道府県の下位）
+let PERSP = "";      // 業種（URL v=／旧 ind=）＝相性判定の視点
+let QUERY = "";      // キーワード（簡易のみ・URL q=）
+let SORT = "deadline";
 let REGION_CITIES = { "大阪府": [], "京都府": [], "兵庫県": [] }; // 補助金データに実在する市区町村（検索用・init時に生成）
+const SAVE_ENDPOINT = "https://hojokin-line-webhook.ai-supporters.workers.dev/save-view";
 
 // 都道府県の表記ゆれを正規化（旧値 大阪/京都/兵庫・全国 → 大阪府/京都府/兵庫県・国）。その他は絞り込みなし扱い。
 function normPref(v) {
   v = String(v || "").trim();
   if (!v) return "";
-  if (v === "国" || v === "全国") return "国";
+  if (v === "国" || v === "全国") return "国"; // 旧UI互換（国は今はKUNIチェックへ移行）
   if (v.startsWith("大阪")) return "大阪府";
   if (v.startsWith("京都")) return "京都府";
   if (v.startsWith("兵庫")) return "兵庫県";
   return ""; // その他・未対応都道府県 → すべて表示
 }
-// 補助金1件が「都道府県／市区町村」の絞り込みに合致するか（region文字列を階層で判定・捏造なし）
-function regionMatch(it, pref, city) {
-  pref = normPref(pref);
-  if (!pref) return true;
+// 補助金1件が現在の地域絞り込み（国チェック＋都道府県＋市区町村）に合致するか（region文字列を階層判定・捏造なし）
+function regionMatch(it) {
+  if (!KUNI && !PREF) return true; // 地域指定なし＝全件
   const parts = String(it.region || "").split(/\s*\/\s*/).map((x) => x.trim()).filter(Boolean);
-  if (pref === "国") return parts.some((x) => x === "国" || x.startsWith("全国"));
-  if (city) return parts.some((x) => x === pref + city || x.startsWith(pref + city));
-  return parts.some((x) => x.startsWith(pref));
+  const isNational = parts.some((x) => x === "国" || x.startsWith("全国"));
+  if (KUNI && isNational) return true;
+  if (PREF && PREF !== "国") {
+    if (CITY) return parts.some((x) => x === PREF + CITY || x.startsWith(PREF + CITY));
+    return parts.some((x) => x.startsWith(PREF));
+  }
+  return false;
 }
 // 検索用の市区町村リストを補助金データから生成（結果が必ず存在する市区町村だけ）
 function deriveRegionCities() {
@@ -105,16 +114,18 @@ function deriveRegionCities() {
   }
   REGION_CITIES = { "大阪府": [...m["大阪府"]].sort(), "京都府": [...m["京都府"]].sort(), "兵庫県": [...m["兵庫県"]].sort() };
 }
-// 市区町村セレクトを、選択中の都道府県に応じて詰め替える（カスケード）
-function populateCity(prefRaw) {
+// 市区町村セレクトを、都道府県に応じて詰め替える（カスケード）。sは "s"(簡易)/"d"(詳細)。
+function fillCity(sel, prefRaw) {
+  if (!sel) return;
   const pref = normPref(prefRaw);
-  const sel = els.city; if (!sel) return;
   const cur = sel.value;
   const cities = (pref && pref !== "国" && REGION_CITIES[pref]) ? REGION_CITIES[pref] : [];
   sel.innerHTML = `<option value="">市区町村: すべて</option>` + cities.map((c) => `<option value="${attr(c)}">${esc(c)}</option>`).join("");
   sel.disabled = cities.length === 0;
   sel.value = [...sel.options].some((o) => o.value === cur) ? cur : "";
 }
+// unicode安全なbase64（初期化用の登録内容ブロブ o= のデコード）
+function decodeBlob(s) { try { return JSON.parse(decodeURIComponent(escape(atob(String(s || ""))))); } catch { return null; } }
 
 const els = {};
 let DATA = { items: [], total: 0 };
@@ -191,84 +202,93 @@ function isRecent(it) {
 // ---- 状態 ----
 function savedView() { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } }
 function savedOrig() { try { return JSON.parse(localStorage.getItem("sw-orig") || "null"); } catch { return null; } }
+const arrCsv = (str, map) => String(str || "").split(",").map((s) => s.trim()).filter((s) => map[s]);
+
+// URLパラメータ(URLSearchParams) or 保存オブジェクト から業種/地域/規模/テーマ等のグローバル状態を設定。
+function applyFrom(src) {
+  const g = (k) => (src.get ? (src.has(k) ? src.get(k) : "") : (src[k] != null ? src[k] : ""));
+  let persp = g("v") || g("ind"); // 旧ind互換
+  if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
+  PERSP = persp;
+  PREF = normPref(g("pref") || g("region") || g("category")); // 旧region/category互換
+  CITY = g("city") || "";
+  KUNI = String(g("kuni")) === "1" || String(g("kuni")) === "true";
+  SIZE = g("size") || "";
+  PLANS = arrCsv(g("plans"), PLAN_MAP);
+  IMPROVES = arrCsv(g("improve"), IMPROVE_MAP);
+  SUPPORTS = arrCsv(g("support"), SUPPORT_MAP);
+  QUERY = g("q") || "";
+  const m = g("mode"); if (m === "detail" || m === "simple") MODE = m;
+  const sort = g("sort"); if (sort) SORT = sort;
+}
+
 function readState() {
   const p = new URLSearchParams(location.search);
-  const lineOpen = p.has("ind") || p.has("edit"); // 公式LINEが発行したパーソナライズURL
+  const lineOpen = p.has("ind") || p.has("v") || p.has("edit"); // 公式LINE由来のパーソナライズURL
   if (p.has("edit")) EDIT_TOKEN = p.get("edit");
-  const arrFromUrl = (key, map) => p.has(key) ? p.get(key).split(",").map((s) => s.trim()).filter((s) => map[s]) : [];
+  const hasParams = ["v", "ind", "pref", "region", "category", "city", "kuni", "size", "plans", "improve", "support", "q", "mode"].some((k) => p.has(k));
 
-  // 登録内容スナップショット（「絞り込み状態を初期化」で復元する原本）をLINE URLから取得し永続化
-  if (lineOpen) {
-    let oPersp = p.has("ind") ? p.get("ind") : "";
-    if (oPersp && oPersp !== "jisha" && !INDUSTRY_MAP[oPersp]) oPersp = "";
-    const orig = {
-      persp: oPersp,
-      category: normPref(p.has("region") ? p.get("region") : ""),
-      city: p.has("city") ? p.get("city") : "",
-      size: p.has("size") ? p.get("size") : "",
-      plans: arrFromUrl("plans", PLAN_MAP),
-      improves: arrFromUrl("improve", IMPROVE_MAP),
-      supports: arrFromUrl("support", SUPPORT_MAP),
-    };
-    try { localStorage.setItem("sw-orig", JSON.stringify(orig)); } catch {}
+  // 初期化用の登録内容スナップショット原本: o=blob（保存ビューで開いた場合）→ URLパラメータ自体 → localStorage
+  let origRaw = null;
+  if (p.has("o")) origRaw = decodeBlob(p.get("o"));
+  else if (lineOpen) origRaw = { v: p.get("v") || p.get("ind") || "", pref: p.get("pref") || p.get("region") || "", city: p.get("city") || "", kuni: p.get("kuni") || "", size: p.get("size") || "", plans: p.get("plans") || "", improve: p.get("improve") || "", support: p.get("support") || "" };
+
+  if (hasParams) {
+    MODE = lineOpen ? "detail" : "simple"; // 既定。mode= があれば applyFrom が上書き
+    applyFrom(p);
+  } else {
+    const ls = savedView();
+    if (ls && Object.keys(ls).length) applyFrom(ls); // パラメータ無し（直接アクセス）は保存ビューを復元
   }
 
-  // ① 明示保存されたビューを最優先で復元（＝公式LINEから開いても「保存した絞り込み」を尊重）。
-  //    登録内容へ戻したいときは「絞り込み状態を初期化」ボタンを使う。
-  const savedRaw = (() => { try { return localStorage.getItem("sw-view"); } catch { return null; } })();
-  if (savedRaw) {
-    let ls; try { ls = JSON.parse(savedRaw); } catch { ls = {}; }
-    let persp = ls.persp || "";
-    if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
-    PLANS = Array.isArray(ls.plans) ? ls.plans.filter((x) => PLAN_MAP[x]) : [];
-    IMPROVES = Array.isArray(ls.improves) ? ls.improves.filter((x) => IMPROVE_MAP[x]) : [];
-    SUPPORTS = Array.isArray(ls.supports) ? ls.supports.filter((x) => SUPPORT_MAP[x]) : [];
-    SIZE = ls.size || "";
-    CITY = ls.city || "";
-    MODE = ls.mode === "detail" ? "detail" : "simple";
-    return { q: ls.q || "", category: normPref(ls.category || ""), sort: ls.sort || "deadline", perspective: persp };
-  }
-
-  // ② 保存が無いとき: URL（公式LINE由来 or 共有リンク）から復元
-  let persp = p.has("v") ? p.get("v") : (p.has("ind") ? p.get("ind") : "");
-  if (persp && persp !== "jisha" && !INDUSTRY_MAP[persp]) persp = "";
-  PLANS = arrFromUrl("plans", PLAN_MAP);
-  IMPROVES = arrFromUrl("improve", IMPROVE_MAP);
-  SUPPORTS = arrFromUrl("support", SUPPORT_MAP);
-  SIZE = p.has("size") ? p.get("size") : "";
-  CITY = p.has("city") ? p.get("city") : "";
-  MODE = p.has("mode") ? (p.get("mode") === "detail" ? "detail" : "simple") : (lineOpen ? "detail" : "simple");
-  const category = normPref(p.has("category") ? p.get("category") : (p.has("region") ? p.get("region") : ""));
-  const q = p.has("q") ? p.get("q") : "";
-  const sort = p.has("sort") ? p.get("sort") : "deadline";
-  return { q, category, sort, perspective: persp };
+  if (origRaw) {
+    ORIG = { persp: (origRaw.v && INDUSTRY_MAP[origRaw.v]) ? origRaw.v : "", pref: normPref(origRaw.pref), city: origRaw.city || "", kuni: String(origRaw.kuni) === "1" || String(origRaw.kuni) === "true", size: origRaw.size || "", plans: arrCsv(origRaw.plans, PLAN_MAP), improves: arrCsv(origRaw.improve, IMPROVE_MAP), supports: arrCsv(origRaw.support, SUPPORT_MAP) };
+    try { localStorage.setItem("sw-orig", JSON.stringify(ORIG)); } catch {}
+  } else { ORIG = savedOrig(); }
 }
-function applyState(s) { els.q.value = s.q; els.category.value = s.category; els.sort.value = s.sort; els.perspective.value = s.perspective; populateCity(s.category); if (els.city) els.city.value = CITY; }
-function currentState() { return { q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, perspective: els.perspective.value }; }
+// 現在の絞り込みをURLパラメータ相当のオブジェクトに（保存・共有用。文字列ベースでapplyFromと相互運用）。
+function currentView() {
+  return { v: PERSP, pref: PREF, city: CITY, kuni: KUNI ? "1" : "", size: SIZE, plans: PLANS.join(","), improve: IMPROVES.join(","), support: SUPPORTS.join(","), mode: MODE, q: QUERY, sort: SORT };
+}
+// グローバル状態を両パネルのコントロールへ反映
+function syncControls() {
+  if (els.q) els.q.value = QUERY;
+  ["s", "d"].forEach((pfx) => {
+    const kuni = $(pfx + "-kuni"); if (kuni) kuni.checked = KUNI;
+    const pref = $(pfx + "-pref"); if (pref) pref.value = PREF;
+    const city = $(pfx + "-city"); if (city) { fillCity(city, PREF); city.value = CITY; }
+    const ind = $(pfx + "-industry"); if (ind) ind.value = PERSP;
+  });
+  const size = $("d-size"); if (size) size.value = SIZE;
+  const sort = $("sort"); if (sort) sort.value = SORT;
+}
 function saveView() {
-  const v = { mode: MODE, q: els.q.value.trim(), category: els.category.value, sort: els.sort.value, persp: els.perspective.value, city: CITY, plans: PLANS, improves: IMPROVES, supports: SUPPORTS, size: SIZE };
+  const v = currentView();
   try { localStorage.setItem("sw-view", JSON.stringify(v)); } catch {}
+  // サーバー保存（LINEの「補助金の一覧」に反映）。編集トークンで本人確認。無ければローカルのみ。
+  if (EDIT_TOKEN) fetch(SAVE_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: EDIT_TOKEN, view: v }) }).catch(() => {});
 }
-function syncUrl(s) {
+function syncUrl() {
   const p = new URLSearchParams();
   if (MODE === "detail") p.set("mode", "detail");
-  if (s.q && MODE === "simple") p.set("q", s.q);
-  if (s.category) p.set("category", s.category);
+  if (QUERY && MODE === "simple") p.set("q", QUERY);
+  if (KUNI) p.set("kuni", "1");
+  if (PREF) p.set("pref", PREF);
   if (CITY) p.set("city", CITY);
-  if (s.sort && s.sort !== "deadline") p.set("sort", s.sort);
-  if (s.perspective) p.set("v", s.perspective);
+  if (PERSP) p.set("v", PERSP);
+  if (SIZE) p.set("size", SIZE);
   if (PLANS.length) p.set("plans", PLANS.join(","));
   if (IMPROVES.length) p.set("improve", IMPROVES.join(","));
   if (SUPPORTS.length) p.set("support", SUPPORTS.join(","));
-  if (SIZE) p.set("size", SIZE);
+  if (SORT && SORT !== "deadline") p.set("sort", SORT);
   const qs = p.toString();
   history.replaceState(null, "", qs ? "?" + qs : location.pathname);
 }
 
-function baseFilter(s) {
-  const words = (MODE === "simple" ? s.q : "").toLowerCase().split(/\s+/).filter(Boolean);
+function baseFilter() {
+  const words = (MODE === "simple" ? QUERY : "").toLowerCase().split(/\s+/).filter(Boolean);
   return DATA.items.filter((it) => {
-    if (!regionMatch(it, s.category, CITY)) return false;
+    if (!regionMatch(it)) return false;
     if (words.length) {
       const hay = (it.name + " " + it.organization + " " + it.region + " " + it.reason).toLowerCase();
       if (!words.every((w) => hay.includes(w))) return false;
@@ -342,34 +362,56 @@ const SIZE_LABELS = { s1_5: "1〜5人", s6_20: "6〜20人", s21_50: "21〜50人"
 
 function renderBanner() {
   const b = els.banner;
-  if (MODE === "detail") { b.innerHTML = ""; b.style.display = "none"; return; } // 詳細はパネル内で説明済み（重複バナー削除）
+  if (MODE === "detail") { b.innerHTML = ""; b.style.display = "none"; return; } // 詳細はパネル内で説明済み
   b.style.display = "";
-  const persp = els.perspective.value, cat = els.category.value;
-  if (!persp && !cat && !CITY) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
-  const parts = []; if (persp) parts.push(`業種「${esc(persp)}」`);
-  if (cat) parts.push(`地域「${esc(cat === "国" ? "国（全国）" : cat)}${CITY ? " " + esc(CITY) : ""}」`);
+  if (!PERSP && !PREF && !CITY && !KUNI) { b.className = "persp-banner unset"; b.innerHTML = `🔎 <b>簡易検索</b>：上の「業種」「地域」を選ぶと絞り込めます。<span class="rel-note">（公式LINE「補助金の一覧」からは登録内容で自動絞り込み）</span>`; return; }
+  const parts = []; if (PERSP) parts.push(`業種「${esc(PERSP)}」`);
+  const region = []; if (KUNI) region.push("国（全国）"); if (PREF) region.push(esc(PREF) + (CITY ? " " + esc(CITY) : ""));
+  if (region.length) parts.push(`地域「${region.join("・")}」`);
   b.className = "persp-banner set"; b.innerHTML = `🔎 <b>簡易検索</b>：${parts.join(" ／ ")}で絞り込み中`;
 }
 
-// 詳細検索の条件チップ（×で個別に外せる）
-function renderDetailConds() {
-  const box = els.detailConds; if (!box) return;
+// 詳細検索：現在の絞り込み条件（×で解除）
+function renderDetailActive() {
+  const box = $("detail-active"); if (!box) return;
   const chips = [];
-  const persp = els.perspective.value, cat = els.category.value;
-  if (persp && INDUSTRY_MAP[persp]) chips.push(["persp", `業種：${persp}`]);
-  if (cat) chips.push(["category", `都道府県：${cat === "国" ? "国（全国）" : cat}`]);
+  if (KUNI) chips.push(["kuni", "国（全国）"]);
+  if (PREF) chips.push(["pref", `都道府県：${PREF}`]);
   if (CITY) chips.push(["city", `市区町村：${CITY}`]);
+  if (PERSP && INDUSTRY_MAP[PERSP]) chips.push(["persp", `業種：${PERSP}`]);
   if (SIZE && SIZE_LABELS[SIZE]) chips.push(["size", `規模：${SIZE_LABELS[SIZE]}`]);
   PLANS.forEach((p) => chips.push(["plan:" + p, `予定：${p}`]));
   IMPROVES.forEach((m) => chips.push(["improve:" + m, `改善：${m}`]));
   SUPPORTS.forEach((s) => chips.push(["support:" + s, `希望：${s}`]));
-  if (!chips.length) { box.innerHTML = `<p class="detail-empty">絞り込み条件がありません。公式LINEの「補助金の一覧」から開くと、登録内容で自動的に絞り込まれます。</p>`; return; }
-  box.innerHTML = chips.map(([k, l]) => `<button class="chip" data-dk="${attr(k)}">${esc(l)}</button>`).join("");
+  if (!chips.length) { box.innerHTML = `<p class="detail-empty">絞り込み条件がありません。上の項目や下の「追加できる条件」から、自由に条件を足せます。</p>`; return; }
+  box.innerHTML = `<span class="pool-label">絞り込み中（クリックで解除）</span>` + chips.map(([k, l]) => `<button class="chip active" data-dk="${attr(k)}">${esc(l)}</button>`).join("");
+}
+// 詳細検索：追加できるテーマ条件（今後の予定／改善／希望する支援）。クリックで足し引き。
+function renderThemePool() {
+  const box = $("theme-pool"); if (!box) return;
+  const group = (title, map, active, kind) => {
+    const chips = Object.keys(map).map((k) => {
+      const on = active.indexOf(k) >= 0;
+      return `<button class="theme-chip${on ? " on" : ""}" data-tk="${kind}:${attr(k)}">${on ? "✓ " : "＋ "}${esc(k)}</button>`;
+    }).join("");
+    return `<div class="theme-group"><span class="pool-label">${title}</span><div class="theme-chips">${chips}</div></div>`;
+  };
+  box.innerHTML = `<span class="pool-title">追加できる条件（クリックで追加／解除）</span>` +
+    group("今後の予定", PLAN_MAP, PLANS, "plan") +
+    group("改善したいこと", IMPROVE_MAP, IMPROVES, "improve") +
+    group("希望する支援", SUPPORT_MAP, SUPPORTS, "support");
+}
+function toggleTheme(tk) {
+  const i = tk.indexOf(":"); const kind = tk.slice(0, i), val = tk.slice(i + 1);
+  if (kind === "plan") PLANS = PLANS.indexOf(val) >= 0 ? PLANS.filter((x) => x !== val) : PLANS.concat([val]);
+  else if (kind === "improve") IMPROVES = IMPROVES.indexOf(val) >= 0 ? IMPROVES.filter((x) => x !== val) : IMPROVES.concat([val]);
+  else if (kind === "support") SUPPORTS = SUPPORTS.indexOf(val) >= 0 ? SUPPORTS.filter((x) => x !== val) : SUPPORTS.concat([val]);
 }
 function removeDetailCond(k) {
-  if (k === "persp") els.perspective.value = "";
-  else if (k === "category") { els.category.value = ""; CITY = ""; populateCity(""); }
-  else if (k === "city") { CITY = ""; if (els.city) els.city.value = ""; }
+  if (k === "kuni") KUNI = false;
+  else if (k === "pref") { PREF = ""; CITY = ""; }
+  else if (k === "city") CITY = "";
+  else if (k === "persp") PERSP = "";
   else if (k === "size") SIZE = "";
   else if (k.indexOf("plan:") === 0) PLANS = PLANS.filter((x) => x !== k.slice(5));
   else if (k.indexOf("improve:") === 0) IMPROVES = IMPROVES.filter((x) => x !== k.slice(8));
@@ -388,18 +430,20 @@ function renderScoreboard(persp, buckets, total) {
   sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("");
 }
 
-function renderChips(s) {
+function renderChips() {
   const chips = [];
-  if (s.perspective) chips.push(["v", `業種：${s.perspective === "jisha" ? "自社" : s.perspective}`]);
-  if (s.category) chips.push(["category", `都道府県：${s.category === "国" ? "国（全国）" : s.category}`]);
+  if (PERSP) chips.push(["v", `業種：${PERSP === "jisha" ? "自社" : PERSP}`]);
+  if (KUNI) chips.push(["kuni", "国（全国）"]);
+  if (PREF) chips.push(["pref", `都道府県：${PREF}`]);
   if (CITY) chips.push(["city", `市区町村：${CITY}`]);
-  if (s.q) chips.push(["q", `「${s.q}」`]);
+  if (QUERY) chips.push(["q", `「${QUERY}」`]);
   els.chips.innerHTML = chips.map(([k, l]) => `<button class="chip" data-k="${k}">${esc(l)}</button>`).join("") + (chips.length ? `<button class="chip clear" data-k="__all">すべて解除</button>` : "");
 }
 
 function render() {
-  const s = currentState();
-  syncUrl(s);
+  syncUrl();
+  syncControls();
+  const persp = PERSP, sort = SORT;
   // タブ・パネルの表示切替
   els.tabDetail.setAttribute("aria-selected", MODE === "detail");
   els.tabSimple.setAttribute("aria-selected", MODE === "simple");
@@ -409,19 +453,19 @@ function render() {
   if (els.resetDetail) els.resetDetail.hidden = !isDetail;
   if (els.editReg) { els.editReg.hidden = !isDetail; els.editReg.href = EDIT_TOKEN ? ("register.html?t=" + encodeURIComponent(EDIT_TOKEN)) : "register.html"; }
   renderBanner();
-  if (isDetail) { renderDetailConds(); els.chips.innerHTML = ""; }
-  else renderChips(s);
-  const base = baseFilter(s);
+  if (isDetail) { renderDetailActive(); renderThemePool(); els.chips.innerHTML = ""; }
+  else renderChips();
+  const base = baseFilter();
   window.__visible = base;
   els.resultCount.textContent = `${base.length} 件${DATA.total ? ` / 全 ${DATA.total} 件` : ""}`;
   els.empty.hidden = base.length > 0;
-  if (!base.length) { els.list.innerHTML = ""; els.empty.textContent = "この条件に合う補助金はありません。条件をゆるめてください。"; renderScoreboard(s.perspective, {}, 0); return; }
+  if (!base.length) { els.list.innerHTML = ""; els.empty.textContent = "この条件に合う補助金はありません。条件をゆるめてください。"; renderScoreboard(persp, {}, 0); return; }
 
-  const groups = groupsFor(s.perspective);
+  const groups = groupsFor(persp);
   if (!groups) {
     // 未設定: フラット・締切順・ページング・相性なし
     renderScoreboard("", {}, DATA.total);
-    const arr = sortWithin(base, s.sort);
+    const arr = sortWithin(base, sort);
     const shown = arr.slice(0, page);
     els.list.innerHTML = `<ul class="cards">${shown.map((it) => card(it, "", null)).join("")}</ul>` + (arr.length > page ? `<button class="more" id="more-flat">残り ${arr.length - page} 件を表示</button>` : "");
     const m = $("more-flat"); if (m) m.addEventListener("click", () => { page += PAGE; render(); });
@@ -429,17 +473,17 @@ function render() {
   }
   // 視点あり: 相性でグルーピング
   const buckets = {}; groups.forEach((g) => (buckets[g] = []));
-  for (const it of base) { const rel = relevanceFor(it, s.perspective); (buckets[rel.level] || buckets[restGroup(s.perspective)]).push({ it, rel }); }
-  renderScoreboard(s.perspective, buckets, base.length);
-  const rest = restGroup(s.perspective);
+  for (const it of base) { const rel = relevanceFor(it, persp); (buckets[rel.level] || buckets[restGroup(persp)]).push({ it, rel }); }
+  renderScoreboard(persp, buckets, base.length);
+  const rest = restGroup(persp);
   let html = "";
   for (const g of groups) {
     let arr = buckets[g]; if (!arr.length) continue;
-    arr = arr.map((x) => x.it); const sorted = sortWithin(arr, s.sort);
-    const pairs = sorted.map((it) => ({ it, rel: relevanceFor(it, s.perspective) }));
+    arr = arr.map((x) => x.it); const sorted = sortWithin(arr, sort);
+    const pairs = sorted.map((it) => ({ it, rel: relevanceFor(it, persp) }));
     let view = pairs, more = "";
     if (g === rest && !showRest) { view = pairs.slice(0, 8); if (pairs.length > 8) more = `<button class="more" id="more-rest">${rest === "C" ? "重要度C" : "対象外"} を${pairs.length}件表示</button>`; }
-    html += `<section class="group" id="grp-${esc(g)}"><h2 class="group-head g-${g === "高" ? "rh" : g === "中" ? "rm" : g === "対象外" ? "rl" : g.toLowerCase()}"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2><ul class="cards">${view.map((x) => card(x.it, s.perspective, x.rel)).join("")}</ul>${more}</section>`;
+    html += `<section class="group" id="grp-${esc(g)}"><h2 class="group-head g-${g === "高" ? "rh" : g === "中" ? "rm" : g === "対象外" ? "rl" : g.toLowerCase()}"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2><ul class="cards">${view.map((x) => card(x.it, persp, x.rel)).join("")}</ul>${more}</section>`;
   }
   els.list.innerHTML = html;
   const mr = $("more-rest"); if (mr) mr.addEventListener("click", () => { showRest = true; render(); });
@@ -456,19 +500,20 @@ function exportCsv() {
 function toast(btn, msg, orig) { btn.textContent = msg; setTimeout(() => (btn.textContent = orig), 1500); }
 function onChange() { showRest = false; page = PAGE; render(); }
 
-// ---- 会社プロフィール & 登録（業種×規模で出し分け・メール送信は後日。今は入力保存まで） ----
+// ---- 会社プロフィール（業種セレクタを両パネルに展開） ----
 function populateProfile() {
-  const sel = els.perspective; // 視点＝簡易検索の業種セレクタ（30分類）
-  if (sel && sel.options.length <= 1) INDUSTRIES_30.forEach((o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); });
+  ["s-industry", "d-industry"].forEach((id) => {
+    const sel = $(id);
+    if (sel && sel.options.length <= 1) INDUSTRIES_30.forEach((o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; sel.appendChild(op); });
+  });
 }
 
 function init() {
-  ["q", "category", "city", "perspective", "sort", "save", "copy", "csv", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
+  ["q", "sort", "save", "copy", "csv", "list", "empty", "chips"].forEach((id) => (els[id] = $(id)));
   els.resultCount = $("result-count"); els.banner = $("persp-banner"); els.scoreboard = $("scoreboard");
   els.tabDetail = $("tab-detail"); els.tabSimple = $("tab-simple");
   els.panelDetail = $("panel-detail"); els.panelSimple = $("panel-simple");
-  els.detailConds = $("detail-conds"); els.clearAll = $("clear-all");
-  els.resetDetail = $("reset-detail"); els.editReg = $("edit-reg");
+  els.clearAll = $("clear-all"); els.resetDetail = $("reset-detail"); els.editReg = $("edit-reg");
   fetch("data/subsidies.json", { cache: "no-store" }).then((r) => r.json()).then((data) => {
     DATA = data;
     LASTSEEN = (() => { try { return localStorage.getItem("sw-lastseen"); } catch { return null; } })();
@@ -478,41 +523,46 @@ function init() {
     $("sources").textContent = "監視ソース: " + (data.sources || []).join(" / ");
     $("uncovered").textContent = data.uncovered || "";
     try { localStorage.setItem("sw-lastseen", data.lastUpdated); } catch {}
-    populateProfile();               // ★セレクタを30分類で埋めてから状態反映（順序重要）
-    deriveRegionCities();            // ★市区町村リストを実データから生成（都道府県セレクトのカスケード用）
-    applyState(readState());
-    // 開いた時点の登録内容を保存（「絞り込み状態を初期化」で復元）
-    ORIG = savedOrig() || { persp: els.perspective.value, category: els.category.value, size: SIZE, plans: PLANS.slice(), improves: IMPROVES.slice(), supports: SUPPORTS.slice() };
-    els.q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(onChange, 160); });
-    ["perspective", "sort"].forEach((id) => els[id].addEventListener("change", onChange));
-    // 都道府県を変えたら市区町村を詰め替え（カスケード）＋市区町村選択をリセット
-    els.category.addEventListener("change", () => { CITY = ""; populateCity(els.category.value); onChange(); });
-    if (els.city) els.city.addEventListener("change", () => { CITY = els.city.value; onChange(); });
+    populateProfile();               // ★業種セレクタを30分類で埋める
+    deriveRegionCities();            // ★市区町村リストを実データから生成（カスケード用）
+    readState();                     // ★グローバル状態＋ORIG（初期化用）を設定。反映はrender内syncControls
+
+    els.q.addEventListener("input", () => { clearTimeout(searchTimer); QUERY = els.q.value; searchTimer = setTimeout(onChange, 160); });
+    els.sort.addEventListener("change", () => { SORT = els.sort.value; onChange(); });
+    // 両パネル共通コントロール（s=簡易 / d=詳細）。国は都道府県と独立。都道府県変更で市区町村リセット。
+    ["s", "d"].forEach((pfx) => {
+      const kuni = $(pfx + "-kuni"); if (kuni) kuni.addEventListener("change", () => { KUNI = kuni.checked; onChange(); });
+      const pref = $(pfx + "-pref"); if (pref) pref.addEventListener("change", () => { PREF = normPref(pref.value); CITY = ""; onChange(); });
+      const city = $(pfx + "-city"); if (city) city.addEventListener("change", () => { CITY = city.value; onChange(); });
+      const ind = $(pfx + "-industry"); if (ind) ind.addEventListener("change", () => { PERSP = ind.value; onChange(); });
+    });
+    const dsize = $("d-size"); if (dsize) dsize.addEventListener("change", () => { SIZE = dsize.value; onChange(); });
+
     els.tabDetail.addEventListener("click", () => setMode("detail"));
     els.tabSimple.addEventListener("click", () => setMode("simple"));
-    els.detailConds.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (!c) return; removeDetailCond(c.dataset.dk); onChange(); });
+    const da = $("detail-active"); if (da) da.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (!c) return; removeDetailCond(c.dataset.dk); onChange(); });
+    const tp = $("theme-pool"); if (tp) tp.addEventListener("click", (e) => { const c = e.target.closest(".theme-chip"); if (!c) return; toggleTheme(c.dataset.tk); onChange(); });
+
     els.clearAll.addEventListener("click", () => {
-      if (MODE === "detail") { els.perspective.value = ""; els.category.value = ""; SIZE = ""; PLANS = []; IMPROVES = []; SUPPORTS = []; }
-      else { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; }
-      CITY = ""; populateCity("");
-      try { localStorage.removeItem("sw-view"); } catch {} // 「すべて解除」は保存した絞り込みも消して次回以降も解除状態に
+      PERSP = ""; PREF = ""; CITY = ""; KUNI = false; SIZE = ""; PLANS = []; IMPROVES = []; SUPPORTS = []; QUERY = "";
+      try { localStorage.removeItem("sw-view"); } catch {} // 保存も消して次回以降も解除状態に
       onChange();
     });
     els.resetDetail.addEventListener("click", () => {
       if (!ORIG) return;
-      els.perspective.value = ORIG.persp; els.category.value = normPref(ORIG.category); SIZE = ORIG.size;
-      CITY = ORIG.city || ""; populateCity(els.category.value); if (els.city) els.city.value = CITY;
-      PLANS = ORIG.plans.slice(); IMPROVES = ORIG.improves.slice(); SUPPORTS = ORIG.supports.slice();
+      PERSP = ORIG.persp || ""; PREF = normPref(ORIG.pref || ""); CITY = ORIG.city || ""; KUNI = !!ORIG.kuni; SIZE = ORIG.size || "";
+      PLANS = (ORIG.plans || []).slice(); IMPROVES = (ORIG.improves || []).slice(); SUPPORTS = (ORIG.supports || []).slice();
       onChange();
     });
-    els.scoreboard.addEventListener("click", (e) => { const b = e.target.closest(".score"); if (!b) return; const g = b.dataset.g; if (g === restGroup(els.perspective.value)) showRest = true; render(); const sec = $("grp-" + g); if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
+    els.scoreboard.addEventListener("click", (e) => { const b = e.target.closest(".score"); if (!b) return; const g = b.dataset.g; if (g === restGroup(PERSP)) showRest = true; render(); const sec = $("grp-" + g); if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" }); });
     els.chips.addEventListener("click", (e) => {
       const c = e.target.closest(".chip"); if (!c) return; const k = c.dataset.k;
-      if (k === "__all") { els.q.value = ""; els.category.value = ""; els.perspective.value = ""; CITY = ""; populateCity(""); }
-      else if (k === "v") els.perspective.value = "";
-      else if (k === "category") { els.category.value = ""; CITY = ""; populateCity(""); }
-      else if (k === "city") { CITY = ""; if (els.city) els.city.value = ""; }
-      else if (k === "q") els.q.value = "";
+      if (k === "__all") { PERSP = ""; PREF = ""; CITY = ""; KUNI = false; QUERY = ""; try { localStorage.removeItem("sw-view"); } catch {} }
+      else if (k === "v") PERSP = "";
+      else if (k === "kuni") KUNI = false;
+      else if (k === "pref") { PREF = ""; CITY = ""; }
+      else if (k === "city") CITY = "";
+      else if (k === "q") QUERY = "";
       onChange();
     });
     els.save.addEventListener("click", () => { saveView(); toast(els.save, "保存しました ✓", "絞り込みを保存"); });
