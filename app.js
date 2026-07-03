@@ -1,5 +1,5 @@
 // 公開Web一覧フロント（静的・ページ内JS）。subsidies.json を読み、「相性の視点」を切り替えて表示。
-// ★視点モデル: 既定=未設定（相性を出さない＝固定の誤解を避ける）／"jisha"=AIサポーターズ自社（既存のエンジン採点S/A/B/Cを相性として使用）／業種=キーワード判定の相性(高/中/対象外・💰0円)。
+// ★視点モデル: 既定=未設定（相性を出さない＝固定の誤解を避ける）／"jisha"=AIサポーターズ自社（既存のエンジン採点S/A/B/Cを相性として使用）／業種=相性v2判定のS/A/B/C（負のゲート→加点→絶対閾値・💰0円）。
 // バッジも本文の相性テキストも視点に追従。視点はlocalStorageに登録（記憶）。データ値は素通し（捏造なし）。
 "use strict";
 
@@ -8,63 +8,118 @@ const REL_LIST = ["S", "A", "B", "C"]; // 相性もSABC（Sほど重要）
 const PAGE = 40;
 // 業種一覧（登録フォーム register.js と同じ30分類）
 const INDUSTRIES_30 = ["建設・工事業", "製造業", "卸売業", "小売業", "飲食業", "宿泊・観光業", "運送・物流業", "IT・システム開発", "Web制作・デザイン", "広告・マーケティング", "通信業", "不動産業", "建物管理・清掃業", "金融業", "保険業", "医療業", "介護・福祉業", "教育・研修業", "士業", "コンサルティング業", "人材サービス業", "美容・健康業", "自動車関連業", "農業・林業", "水産・漁業", "エネルギー・環境業", "娯楽・イベント業", "冠婚葬祭・生活サービス業", "貿易・輸出入業", "その他サービス業"];
-// 業種＝キーワード判定（目安・本文テキストの部分一致）。src/relevance.mjs の INDUSTRY_MAP_30 と一致。
+// ===== 相性判定v2（2026-07 3専門家レビューで再設計） =====
+// 設計: ①負のゲート（対象外の根拠があるものだけC）→②加点（業種名指し/テーマ/規模）→③絶対閾値 S≥5/A≥3/B=それ以外。
+// 根拠はすべてアイテムのテキスト由来（捏造なし）。reasonの運営自社視点の判定文は除去してから使う。
+
+// ASCII語の境界付きマッチ（"AI"が機関名等に部分一致する誤ヒット対策・lookbehind不使用で旧Safariも安全）
+const RB = (w) => new RegExp("(?:^|[^A-Za-z0-9])" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?![A-Za-z0-9])");
+// reason から運営（AIサポーターズ）視点の判定文を除去し、「何が対象か」の説明だけ残す
+const SELF_MARK = /当社|自社|AIコンサル|非該当|対象外|非直結|無関係|関心|該当(?:性)?(?:は)?(?:低|薄|し(?:ない|にくい)|可)/;
+function cleanReason(r) {
+  return String(r || "").split("。").map((s) => {
+    const m = s.search(SELF_MARK);
+    if (m === 0) return "";
+    if (m > 0) s = s.slice(0, m).replace(/(?:で|には|に|は|が|と|だが|ため)$/, "");
+    return s;
+  }).filter(Boolean).join("。");
+}
+// 負のゲート（＝Cの根拠。実データ651件の言い回しから抽出）
+const JUNK_RE = /会計年度任用職員|職員.{0,12}募集|アルバイト/;                              // 求人
+const NONPROG_NAME_RE = /受賞|表彰|採択(?:者|結果)|募集結果|入札|委託事業者|積算基準/;         // 制度でない情報
+const NOTGRANT_REASON_RE = /補助金?では?な/;                                                // 検知メモ「補助金でない」
+const EVENT_NAME_RE = /見学会|セミナー|講座|説明会|シンポジウム|フォーラム|交流会|相談会|プレゼンテーション/;
+const GRANT_NAME_RE = /補助金|助成金|補助し|支援金|給付金/;
+const PUBLIC_RE = /地方公共団体|地方自治体|官公庁|市町村(?:等)?(?:向け|が対象|を対象|に限|のみ)/;
+const PERSON_RE = /(?:個人|市民|住民|世帯)向け|住宅(?:向け|等に対して)|奨学金|NPO向け|市民公益活動|ボランティア団体/;
+const GROUP_ONLY_RE = /(?:事業協同組合|商工組合|振興組合|協議会)(?:等)?(?:向け|限定|が対象|を対象)|組合限定|団体向け|民間連携体向け/;
+// 包含シグナル
+const SME_RE = /中小企業|小規模|個人事業主/;      // 民間中小向けの明示（+1）
+const STARTUP_RE = /創業|起業|開業|スタートアップ/; // 創業者向け（B床のみ）
+const SMALL_RE = /小規模|持続化/;                  // 小規模事業者向け（規模1〜20人のとき+1）
+
+// 業種辞書v2: t=対象業種の「名指し」（強・他業種の排他判定にも使用）/ a=関連語（弱・正のみ）
 const INDUSTRY_MAP = {
-  "建設・工事業": ["建設", "工事", "建築", "土木", "電気", "水道", "内装", "リフォーム"],
-  "製造業": ["製造", "ものづくり", "工場", "機械", "食品", "金属", "化学", "印刷", "生産"],
-  "卸売業": ["卸", "商社", "卸売"],
-  "小売業": ["小売", "店舗", "EC", "販売", "商店", "スーパー"],
-  "飲食業": ["飲食", "レストラン", "居酒屋", "カフェ", "飲食店"],
-  "宿泊・観光業": ["宿泊", "観光", "ホテル", "旅館", "旅行"],
-  "運送・物流業": ["運送", "物流", "配送", "倉庫", "運輸", "トラック"],
-  "IT・システム開発": ["IT", "システム", "ソフト", "SaaS", "アプリ", "デジタル", "DX", "情報通信", "AI"],
-  "Web制作・デザイン": ["Web", "デザイン", "制作", "動画", "クリエイティブ", "ホームページ"],
-  "広告・マーケティング": ["広告", "マーケティング", "SNS", "PR", "販促", "集客"],
-  "通信業": ["通信", "インターネット", "ネットワーク"],
-  "不動産業": ["不動産", "賃貸", "仲介", "住宅"],
-  "建物管理・清掃業": ["管理", "清掃", "メンテナンス", "クリーニング"],
-  "金融業": ["金融", "銀行", "証券", "リース", "ファイナンス"],
-  "保険業": ["保険"],
-  "医療業": ["医療", "病院", "クリニック", "歯科", "薬局", "診療"],
-  "介護・福祉業": ["介護", "福祉", "障害", "高齢者", "保育"],
-  "教育・研修業": ["教育", "学校", "塾", "スクール", "研修", "学習"],
-  "士業": ["士業", "税理士", "行政書士", "社労士", "司法書士", "弁護士", "会計"],
-  "コンサルティング業": ["コンサル", "経営", "支援"],
-  "人材サービス業": ["人材", "派遣", "採用", "紹介", "求人"],
-  "美容・健康業": ["美容", "エステ", "ネイル", "整体", "ジム", "健康", "理容"],
-  "自動車関連業": ["自動車", "整備", "車両", "カー", "鈑金"],
-  "農業・林業": ["農", "林業", "園芸", "農業"],
-  "水産・漁業": ["水産", "漁", "養殖"],
-  "エネルギー・環境業": ["エネルギー", "電力", "ガス", "太陽光", "再エネ", "環境", "リサイクル", "脱炭素", "省エネ"],
-  "娯楽・イベント業": ["イベント", "スポーツ", "ゲーム", "娯楽", "エンタメ"],
-  "冠婚葬祭・生活サービス業": ["冠婚葬祭", "ブライダル", "葬祭", "写真", "ペット"],
-  "貿易・輸出入業": ["貿易", "輸出", "輸入", "海外", "越境"],
-  "その他サービス業": ["サービス"],
+  "建設・工事業": { t: [/建設業/, /工務店/, /建設事業者/, /施工業者/, /工事業/, /建設キャリアアップ/, /建設分野/, /建設現場/], a: [/建築物/, /土木/, /リフォーム/, /住宅/] },
+  "製造業": { t: [/製造業/, /町工場/, /(?:食品|金属|化学|機械|部品)(?:製造|加工)/], a: [/ものづくり/, /工場/, /生産設備/, /試作/, /加工/] },
+  "卸売業": { t: [/卸売業/, /卸売事業者/], a: [/商社/, /流通/] },
+  "小売業": { t: [/小売業?/, /商店街/, /新規出店/, /揮発油/], a: [/店舗/, RB("EC"), /通販/] },
+  "飲食業": { t: [/飲食/, /レストラン/, /食堂/, /カフェ/, /居酒屋/, /新規出店/, /生活衛生/], a: [/店舗/, /メニュー/, /食品/] },
+  "宿泊・観光業": { t: [/宿泊/, /ホテル/, /旅館/, /観光/, /インバウンド/, /生活衛生/], a: [/旅行/] },
+  "運送・物流業": { t: [/運送/, /運輸/, /物流/, /貨物/, /トラック/, /倉庫業/, /タクシー/, /バス事業/], a: [/配送/, /ドライバー/] },
+  "IT・システム開発": { t: [/情報通信業/, /情報サービス業/, /(?:ソフトウェア|システム|アプリ)開発/], a: [RB("AI"), RB("IT"), RB("DX"), /デジタル/, /ソフトウェア/, RB("SaaS"), RB("IoT")] },
+  "Web制作・デザイン": { t: [/デザイン業/, /クリエイティブ産業/, /映像制作/, /コンテンツ制作/], a: [/デザイン/, /動画/, /コンテンツ/, RB("Web")] },
+  "広告・マーケティング": { t: [/広告業/, /広告代理/], a: [/広告/, /プロモーション/, RB("SNS"), /マーケティング/] },
+  "通信業": { t: [/電気通信事業/, /通信業/], a: [/ネットワーク/, RB("5G")] },
+  "不動産業": { t: [/不動産業/, /宅地建物/, /賃貸住宅事業/, /住宅事業者/], a: [/不動産/, /空き家/] },
+  "建物管理・清掃業": { t: [/ビルメンテナンス/, /清掃業/, /警備業/, /生活衛生/], a: [/清掃/, /設備管理/] },
+  "金融業": { t: [/金融業/, /銀行業/, /貸金業/], a: [/ファンド/, /リース/] },
+  "保険業": { t: [/保険業/, /保険代理/], a: [] },
+  "医療業": { t: [/医療機関/, /病院/, /診療所/, /クリニック/, /歯科/, /薬局/, /医療法人/], a: [/医療/, /看護/] },
+  "介護・福祉業": { t: [/介護事業/, /介護施設/, /障害福祉サービス/, /福祉施設/, /社会福祉法人/, /保育(?:所|園|士|事業)/, /介護サービス/], a: [/介護/, /福祉/] },
+  "教育・研修業": { t: [/学校法人/, /専修学校/, /学習塾/, /教育機関/], a: [/教育/, /研修事業/, /eラーニング/] },
+  "士業": { t: [/士業/, /(?:税理士|行政書士|司法書士|社会保険労務士|社労士|弁護士|公認会計士|中小企業診断士)(?:事務所|法人)/], a: [/税理士|行政書士|司法書士|社会保険労務士|社労士|弁護士|公認会計士/] },
+  "コンサルティング業": { t: [/コンサルティング業/], a: [/コンサル/, /専門家派遣/, /伴走支援/] },
+  "人材サービス業": { t: [/人材派遣|職業紹介|人材紹介/], a: [/人材サービス/] },
+  "美容・健康業": { t: [/美容(?:院|室|業|所)/, /理美容/, /理容/, /エステ/, /生活衛生/], a: [/美容/, /フィットネス/] },
+  "自動車関連業": { t: [/自動車(?:整備|販売|部品)/, /整備工場/, /鈑金/, /揮発油/], a: [/自動車/] },
+  "農業・林業": { t: [/農業者/, /農業法人/, /認定農業者/, /農林漁業/, /営農/, /農地/, /畜産/, /酪農/, /林業/, /森林組合/, /農山漁村/, /(?:6|六)次産業/], a: [/農業/, /農産物/, /園芸/, /スマート農業/] },
+  "水産・漁業": { t: [/漁業/, /水産/, /養殖/, /漁協/, /漁村/], a: [/水産物/] },
+  "エネルギー・環境業": { t: [/エネルギー事業/, /電気事業者/, /ガス事業者/, /発電事業/, /廃棄物処理業/, /リサイクル業/, /資源循環事業/], a: [/再エネ/, /再生可能エネルギー/, /太陽光/, /蓄電/, /リサイクル/] },
+  "娯楽・イベント業": { t: [/興行/, /エンターテインメント/, /イベント事業者/, /スポーツ(?:施設|団体|事業)/], a: [/イベント/, /文化芸術/, /エンタメ/, /ゲーム/] },
+  "冠婚葬祭・生活サービス業": { t: [/冠婚葬祭/, /ブライダル/, /葬祭/, /クリーニング業/, /生活衛生/], a: [/ペット/, /写真館/] },
+  "貿易・輸出入業": { t: [/輸出(?:事業者|企業|業)/, /貿易/, /商社/], a: [/輸出/, /越境/, /海外/] },
+  "その他サービス業": { t: [/サービス業/], a: [] },
 };
-// 「今後の予定」→キーワード（登録フォームの予定と一致）。URLの plans= で渡る。
+// 「今後の予定」→パターン（登録フォームの選択肢と同キー）。URLの plans= で渡る。
 const PLAN_MAP = {
-  "新しい設備を購入予定": ["設備", "導入", "ものづくり", "省力化", "設備投資"], "車両購入予定": ["車両", "自動車", "EV", "トラック"],
-  "店舗改装": ["店舗", "改装", "リニューアル", "内装"], "工場新設": ["工場", "新設", "設備投資", "生産"],
-  "IT導入": ["IT導入", "IT", "デジタル", "システム", "DX"], "AI導入": ["AI", "人工知能", "DX"],
-  "ECサイト": ["EC", "ネットショップ", "オンライン", "越境EC", "販路"], "ホームページ制作": ["ホームページ", "Web", "サイト", "販路"],
-  "DX化": ["DX", "デジタル", "効率化", "デジタル化"], "人材採用": ["採用", "雇用", "人材", "求人"],
-  "人材育成": ["育成", "研修", "能力開発", "スキル", "人材開発"], "海外展開": ["海外", "輸出", "越境", "グローバル", "展示会"],
-  "新商品開発": ["新商品", "商品開発", "製品開発", "研究開発"], "新サービス開発": ["新サービス", "サービス開発", "新事業", "新分野"],
-  "脱炭素": ["脱炭素", "カーボン", "CO2", "再エネ", "省エネ"], "省エネ設備": ["省エネ", "省エネルギー", "エネルギー", "脱炭素"],
-  "事業承継": ["事業承継", "承継", "後継"], "M&A": ["M&A", "買収", "譲渡", "統合"],
+  "新しい設備を購入予定": [/設備/, /機械装置/, /省力化/, /設備投資/],
+  "車両購入予定": [/車両/, RB("EV"), /電気自動車/, /トラック/, /フォークリフト/],
+  "店舗改装": [/店舗/, /改装/, /内装/, /リニューアル/],
+  "工場新設": [/工場/, /新増設/, /生産拠点/, /立地/],
+  "IT導入": [RB("IT"), /ITツール/, /デジタル/, /システム/, RB("DX")],
+  "AI導入": [RB("AI"), /人工知能/],
+  "ECサイト": [RB("EC"), /ネットショップ/, /オンライン販売/, /通販/],
+  "ホームページ制作": [/ホームページ/, /ウェブサイト/, RB("Web")],
+  "DX化": [RB("DX"), /デジタル/],
+  "人材採用": [/採用/, /雇用/, /雇入れ/, /人材確保/, /求人/],
+  "人材育成": [/育成/, /研修/, /人材開発/, /能力開発/, /リスキリング/, /スキルアップ/],
+  "海外展開": [/海外/, /輸出/, /越境/, /グローバル/],
+  "新商品開発": [/新商品/, /商品開発/, /製品開発/, /研究開発/, /試作/, /新製品/],
+  "新サービス開発": [/新サービス/, /新事業/, /新分野/, /事業再構築/, /第二創業/],
+  "脱炭素": [/脱炭素/, /カーボンニュートラル/, /CO2|CO₂/, RB("GX"), /再エネ/, /再生可能エネルギー/],
+  "省エネ設備": [/省エネ/, /高効率/, /エネルギー使用合理化/],
+  "事業承継": [/事業承継/, /承継/, /後継者/],
+  "M&A": [/M&A|Ｍ＆Ａ/, /買収/, /譲渡/, /経営資源引継ぎ/],
 };
-// 「改善したいこと」→キーワード（登録フォームの improve と一致）。
+// 「改善したいこと」→パターン
 const IMPROVE_MAP = {
-  "売上を伸ばしたい": ["販路", "売上", "集客", "EC", "販売", "マーケティング"], "人手不足": ["省力化", "人手不足", "自動化", "効率化", "人材"],
-  "採用": ["採用", "雇用", "人材", "求人"], "資金繰り": ["資金", "融資", "運転資金"], "広告": ["広告", "販促", "PR", "集客"],
-  "SNS": ["SNS", "デジタル", "マーケティング"], "AI活用": ["AI", "DX", "デジタル"], "業務効率化": ["効率化", "省力化", "生産性", "IT", "DX"],
-  "システム化": ["システム", "IT", "デジタル", "DX"], "コスト削減": ["省エネ", "効率化", "コスト", "省力化"],
+  "売上を伸ばしたい": [/販路/, /売上/, /集客/, /販売促進/, /需要開拓/, /持続化/],
+  "人手不足": [/省力化/, /人手不足/, /自動化/, /人材確保/, /労働生産性/],
+  "採用": [/採用/, /雇用/, /雇入れ/, /求人/, /人材確保/],
+  "資金繰り": [/融資/, /資金繰り/, /運転資金/, /利子補給/, /信用保証/, /借換/],
+  "広告": [/広告/, /販促/, /プロモーション/, RB("PR")],
+  "SNS": [RB("SNS"), /情報発信/],
+  "AI活用": [RB("AI"), /人工知能/],
+  "業務効率化": [/効率化/, /省力化/, /生産性/, /業務改善/],
+  "システム化": [/システム/, RB("IT"), /デジタル/],
+  "コスト削減": [/省エネ/, /コスト削減/, /経費削減/],
 };
-// 「希望する支援」→キーワード（補助金/助成金は全件対象なので無指定）。
+// テーマの隣接語（弱ヒット+1のみ）
+const THEME_WEAK = { "店舗改装": [/改修/] };
+// 「希望する支援」→パターン（補助金/助成金は全件対象＝null。融資等は該当タイプの制度を持ち上げ＋「補助金でない」ゲートから救済）
 const SUPPORT_MAP = {
-  "補助金": [], "助成金": [], "融資": ["融資", "資金"], "税金相談": ["税"], "節税": ["税", "節税"],
-  "M&A": ["M&A", "事業承継", "承継", "譲渡"], "保険": ["保険"], "不動産": ["不動産"], "DX支援": ["DX", "デジタル"], "AI導入": ["AI"],
+  "補助金": null, "助成金": null,
+  "融資": [/融資/, /利子補給/, /信用保証/, /貸付/, /保証制度/, /貸与/, /資金繰り/],
+  "税金相談": [/税制/, /税額控除/, /固定資産税/],
+  "節税": [/税額控除/, /優遇税制/, /減税/],
+  "M&A": [/M&A|Ｍ＆Ａ/, /事業承継/, /承継/, /譲渡/],
+  "保険": [/共済/, /保険料/],
+  "不動産": [/不動産/, /空き家/],
+  "DX支援": [RB("DX"), /デジタル/],
+  "AI導入": [RB("AI")],
 };
+const anyHit = (text, pats) => pats.some((p) => p.test(text));
 let PLANS = [];      // 今後の予定（URL plans=）
 let IMPROVES = [];   // 改善したいこと（URL improve=）
 let SUPPORTS = [];   // 希望する支援（URL support=）
@@ -142,33 +197,75 @@ function present(v) { const s = String(v == null ? "" : v).trim(); return s !== 
 function safeUrl(u) { try { const x = new URL(String(u || ""), location.href); return (x.protocol === "http:" || x.protocol === "https:") ? x.href : ""; } catch { return ""; } }
 function todayStr() { const j = new Date(Date.now() + 9 * 3600 * 1000); return j.toISOString().slice(0, 10); }
 
-// ---- 相性（視点に応じて算出） ----
+// ---- 相性v2（視点に応じて算出。reasonsは根拠の開示用＝すべてテキスト由来） ----
 function relevanceFor(it, persp) {
   if (persp === "jisha") return { kind: "jisha", level: it.rank };
   const detail = MODE === "detail";
   const hasInd = !!INDUSTRY_MAP[persp];
-  const hasTheme = detail && (PLANS.length || IMPROVES.length || SUPPORTS.length);
-  const small = detail && (SIZE === "s1_5" || SIZE === "s6_20"); // 小規模向け制度の優先
-  if (!hasInd && !hasTheme && !small) return null; // 条件なし＝未設定
-  const hay = it.name + " " + it.reason + " " + it.requirements + " " + it.rate + " " + it.organization;
-  // 業種の相性（一致キーワード数でスコア）
-  let matched = [];
-  if (hasInd) matched = INDUSTRY_MAP[persp].filter((k) => hay.includes(k));
-  // テーマ（今後の予定＋改善したいこと＋希望する支援）の相性
-  let themeMatched = [];
-  if (hasTheme) {
-    const themes = PLANS.map((p) => [p, PLAN_MAP[p]]).concat(IMPROVES.map((m) => [m, IMPROVE_MAP[m]])).concat(SUPPORTS.map((s) => [s, SUPPORT_MAP[s]]));
-    for (const [name, kws] of themes) if (kws && kws.length && kws.some((k) => hay.includes(k))) themeMatched.push(name);
+  const plans = detail ? PLANS : [], improves = detail ? IMPROVES : [], supports = detail ? SUPPORTS : [];
+  const hasTheme = plans.length || improves.length || supports.length;
+  const small = detail && (SIZE === "s1_5" || SIZE === "s6_20");
+  if (!hasInd && !hasTheme && !small) return null; // 条件なし＝未設定（相性を出さない）
+
+  const name = String(it.name || "");
+  const req = String(it.requirements || "").trim().replace(/^-.*$/, "");
+  const rTgt = cleanReason(it.reason);        // reasonから運営自社視点の判定文を除去
+  const strong = name + " " + rTgt;           // 強シグナル判定用（名称＋対象説明）
+  const text = strong + " " + req;
+  const C = (reason) => ({ kind: "industry", level: "C", pts: 0, reasons: [reason], gated: true });
+
+  // 0) 補助金でない情報（求人・表彰・告知等）→ C。ただし希望支援タイプ（融資等）に合致すれば救済して通常採点
+  if (JUNK_RE.test(text)) return C("求人・お知らせ情報のため対象外の可能性が高い");
+  if (NONPROG_NAME_RE.test(name) && !GRANT_NAME_RE.test(name)) return C("表彰・採択結果などのお知らせ情報");
+  const supportRescue = supports.some((k) => SUPPORT_MAP[k] && anyHit(text, SUPPORT_MAP[k]));
+  if (!supportRescue) {
+    if (NOTGRANT_REASON_RE.test(String(it.reason || ""))) return C("補助金・助成金ではない情報");
+    if (EVENT_NAME_RE.test(name) && !GRANT_NAME_RE.test(name)) return C("セミナー・見学会などの告知");
   }
-  // 小規模事業者向けの主要制度は、小規模の会社に優先表示
-  const smallHit = small && /小規模事業者/.test(hay);
-  // 合計スコア → S/A/B/C（Sほど重要。複数軸で合致するほど上位）
-  let score = 0;
-  if (hasInd) score += matched.length >= 3 ? 3 : matched.length === 2 ? 2 : matched.length === 1 ? 1 : 0;
-  if (hasTheme) score += themeMatched.length >= 2 ? 2 : themeMatched.length === 1 ? 1 : 0;
-  if (smallHit) score += 1;
-  const level = score >= 3 ? "S" : score === 2 ? "A" : score === 1 ? "B" : "C";
-  return { kind: "industry", level, matched, themeMatched, smallHit };
+  // 1) 対象者の排他（自治体・個人・組合向け）。中小企業等の明示があれば併存とみなし残す
+  const sme = SME_RE.test(text);
+  if (PUBLIC_RE.test(text) && !sme) return C("対象が自治体・公的機関に限られる可能性");
+  if (PERSON_RE.test(text) && !sme) return C("個人・住民向けの情報の可能性");
+  if (GROUP_ONLY_RE.test(text) && !sme) return C("対象が組合・団体に限られる可能性");
+
+  let pts = 0; const reasons = []; let capB = false;
+  let matched = [], themeMatched = [];
+  // 2) 業種軸: 名指し（名称=4/説明=3）・関連語（=1）・他業種の名指し（排他）
+  if (hasInd) {
+    const d = INDUSTRY_MAP[persp];
+    const tName = anyHit(name, d.t), tText = anyHit(rTgt + " " + req, d.t), aAny = d.a.length && anyHit(text, d.a);
+    let indPts = tName ? 4 : tText ? 3 : aAny ? 1 : 0;
+    let foreign = "";
+    for (const o in INDUSTRY_MAP) { if (o !== persp && anyHit(strong, INDUSTRY_MAP[o].t)) { foreign = o; break; } }
+    if (indPts === 0 && foreign) return C(`説明文は「${foreign}」向けとみられます`);
+    if (indPts === 1 && foreign) capB = true;
+    if (indPts >= 3) { reasons.push(tName ? "制度名が御社の業種と重なります" : "対象の説明が御社の業種と重なります"); matched = ["業種名指し"]; }
+    else if (indPts === 1) { reasons.push("御社の業種に関連する言葉があります"); matched = ["関連語"]; }
+    pts += indPts;
+  }
+  // 3) テーマ軸: 選択テーマごとに名称=3/本文=1/隣接=1（テーマ計は上限4）。補助金・助成金(null)は全件対象
+  if (hasTheme) {
+    let themePts = 0;
+    const themes = plans.map((k) => [k, PLAN_MAP[k]]).concat(improves.map((k) => [k, IMPROVE_MAP[k]])).concat(supports.map((k) => [k, SUPPORT_MAP[k]]));
+    for (const [label, pats] of themes) {
+      if (!pats) continue;
+      if (anyHit(name, pats)) { themePts += 3; themeMatched.push(label); }
+      else if (anyHit(rTgt + " " + req, pats)) { themePts += 1; themeMatched.push(label); }
+      else if (THEME_WEAK[label] && anyHit(text, THEME_WEAK[label])) { themePts += 1; themeMatched.push(label); }
+    }
+    pts += Math.min(themePts, 4);
+    if (themeMatched.length) reasons.push("ご要望に合致：" + themeMatched.join("・"));
+  }
+  // 4) 規模・中小向け明示・創業（創業は加点せずB床のみ＝創業/既存が登録情報にないため）
+  const smallHit = small && SMALL_RE.test(text);
+  if (smallHit) { pts += 1; reasons.push("小規模事業者向けの記載あり"); }
+  if (sme) { pts += 1; reasons.push("中小企業向けと明示"); }
+  if (pts === 0 && STARTUP_RE.test(text)) { pts = 1; reasons.push("創業者向け（参考）"); }
+  // 5) 絶対閾値。シグナルなしはC でなく B（＝業種不問の一般制度の可能性。対象外の根拠があるものだけC）
+  let level = pts >= 5 ? "S" : pts >= 3 ? "A" : "B";
+  if (capB && level !== "B") { level = "B"; reasons.push("※主対象は他業種の可能性"); }
+  if (pts === 0) reasons.push("業種の限定は読み取れませんでした（業種を問わない一般制度の可能性）");
+  return { kind: "industry", level, pts, reasons, matched, themeMatched, smallHit };
 }
 function groupsFor(persp) {
   if (persp === "jisha") return RANK_LIST;
@@ -203,7 +300,7 @@ function isRecent(it) {
 // ---- 状態 ----
 function savedView() { try { return JSON.parse(localStorage.getItem("sw-view") || "{}"); } catch { return {}; } }
 function savedOrig() { try { return JSON.parse(localStorage.getItem("sw-orig") || "null"); } catch { return null; } }
-const arrCsv = (str, map) => String(str || "").split(",").map((s) => s.trim()).filter((s) => map[s]);
+const arrCsv = (str, map) => String(str || "").split(",").map((s) => s.trim()).filter((s) => s in map); // nullも有効キー（補助金/助成金=全件対象）
 
 // URLパラメータ(URLSearchParams) or 保存オブジェクト から業種/地域/規模/テーマ等のグローバル状態を設定。
 function applyFrom(src) {
@@ -316,13 +413,11 @@ function moneyBlock(it) {
 function relLine(it, persp, rel) {
   if (!rel) return "";
   if (rel.kind === "jisha") return it.reason ? `<p class="reason">${esc(it.reason)}</p>` : "";
-  const bits = [];
-  if (persp && INDUSTRY_MAP[persp]) bits.push(rel.matched && rel.matched.length ? `業種該当：${esc(rel.matched.join("・"))}` : "業種キーワードなし");
-  if (rel.themeMatched && rel.themeMatched.length) bits.push(`ご要望に合致：${esc(rel.themeMatched.join("・"))}`);
-  if (rel.smallHit) bits.push("小規模事業者向け制度");
+  // v2: 判定根拠（reasons）をそのまま開示。誤ヒット時も利用者が一目で棄却できるようにする
+  const bits = (rel.reasons || []).map(esc);
   const cls = (rel.level === "S" || rel.level === "A") ? "high" : rel.level === "B" ? "mid" : "low";
   const label = persp && INDUSTRY_MAP[persp] ? `「${esc(persp)}」との相性` : "あなたの登録内容との相性";
-  return `<p class="reason rel-${cls}">${label}：<b>${esc(rel.level)}</b> ／ ${bits.join(" ／ ") || "該当なし"}<span class="rel-note">（目安）</span></p>`;
+  return `<p class="reason rel-${cls}">${label}：<b>${esc(rel.level)}</b> ／ ${bits.join(" ／ ") || "判定材料なし"}<span class="rel-note">（文面からの目安）</span></p>`;
 }
 function badge(persp, rel) {
   if (!rel) return `<span class="badge none" aria-hidden="true">·</span>`;
@@ -354,7 +449,13 @@ function card(it, persp, rel) {
   </li>`;
 }
 
-const GROUP_LABEL = { S: "相性 S（最有力）", A: "相性 A", B: "相性 B", C: "相性 C（参考）" };
+const GROUP_LABEL = { S: "相性S｜業種・ご要望に合致（最有力）", A: "相性A｜有力候補（一部が合致）", B: "相性B｜業種を問わない一般制度の可能性", C: "相性C｜対象が異なる可能性（参考）" };
+const GROUP_NOTE = {
+  S: "タイトルや説明文に、御社の業種やご要望と重なる言葉が入っている制度です。",
+  A: "業種またはご要望のどちらかが部分的に重なる制度です。",
+  B: "文面から業種の限定が読み取れなかった制度です。「対象外」という意味ではありません。中小企業なら申請できる一般制度が多く含まれます。",
+  C: "説明文に他の業種や特定の対象（自治体など）向けの記載がある制度です。念のため残しています。",
+};
 
 const SIZE_LABELS = { s1_5: "1〜5人", s6_20: "6〜20人", s21_50: "21〜50人", s51_100: "51〜100人", s101: "101人以上" };
 
@@ -425,7 +526,8 @@ function renderScoreboard(persp, buckets, total) {
   }
   const groups = groupsFor(persp);
   const cls = (g) => g.toLowerCase();
-  sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("");
+  const legend = persp === "jisha" ? "" : `<div class="score-legend">S=業種・ご要望に合致 ／ A=一部合致 ／ B=業種を問わない一般制度の可能性 ／ C=対象が異なる可能性<br>※タイトル・説明文の言葉による自動の目安です。対象になるかは必ず公式ページでご確認ください。</div>`;
+  sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("") + legend;
 }
 
 function renderChips() {
@@ -475,13 +577,18 @@ function render() {
   renderScoreboard(persp, buckets, base.length);
   const rest = restGroup(persp);
   let html = "";
+  // Sが空のとき: 「全滅」に見せない前向きな案内（S恒常ゼロの業種があるため）
+  if (persp !== "jisha" && (!buckets.S || !buckets.S.length)) {
+    html += `<p class="empty-s-note">本日の時点で、御社の業種名に直撃する制度は見つかりませんでした。補助金の多くは業種を問いません。まず<b>相性A（有力候補）</b>と<b>相性B（一般制度）</b>をご覧ください。</p>`;
+  }
   for (const g of groups) {
     let arr = buckets[g]; if (!arr.length) continue;
     arr = arr.map((x) => x.it); const sorted = sortWithin(arr, sort);
     const pairs = sorted.map((it) => ({ it, rel: relevanceFor(it, persp) }));
     let view = pairs, more = "";
     if (g === rest && !showRest) { view = pairs.slice(0, 8); if (pairs.length > 8) more = `<button class="more" id="more-rest">相性C を${pairs.length}件表示</button>`; }
-    html += `<section class="group group-${g.toLowerCase()}" id="grp-${esc(g)}"><h2 class="group-head"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2><ul class="cards">${view.map((x) => card(x.it, persp, x.rel)).join("")}</ul>${more}</section>`;
+    const note = persp !== "jisha" && GROUP_NOTE[g] ? `<p class="group-note">${esc(GROUP_NOTE[g])}</p>` : "";
+    html += `<section class="group group-${g.toLowerCase()}" id="grp-${esc(g)}"><h2 class="group-head"><span class="gdot"></span>${esc(GROUP_LABEL[g] || g)} <span class="gcount">${pairs.length}件</span></h2>${note}<ul class="cards">${view.map((x) => card(x.it, persp, x.rel)).join("")}</ul>${more}</section>`;
   }
   els.list.innerHTML = html;
   const mr = $("more-rest"); if (mr) mr.addEventListener("click", () => { showRest = true; render(); });
