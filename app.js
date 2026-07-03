@@ -655,8 +655,9 @@ function init() {
     });
     const dsize = $("d-size"); if (dsize) dsize.addEventListener("change", () => { SIZE = dsize.value; onChange(); });
 
-    els.tabDetail.addEventListener("click", () => setMode("detail"));
-    els.tabSimple.addEventListener("click", () => setMode("simple"));
+    const gotoControls = () => { const t = document.querySelector(".toolbar"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); };
+    els.tabDetail.addEventListener("click", () => { setMode("detail"); gotoControls(); });
+    els.tabSimple.addEventListener("click", () => { setMode("simple"); gotoControls(); });
     const da = $("detail-active"); if (da) da.addEventListener("click", (e) => { const c = e.target.closest(".chip"); if (!c) return; removeDetailCond(c.dataset.dk); onChange(); });
     const tp = $("theme-pool"); if (tp) tp.addEventListener("click", (e) => { const c = e.target.closest(".theme-chip"); if (!c) return; toggleTheme(c.dataset.tk); onChange(); });
 
