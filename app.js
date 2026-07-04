@@ -25,7 +25,7 @@ function cleanReason(r) {
   }).filter(Boolean).join("。");
 }
 // 負のゲート（＝Cの根拠。実データ651件の言い回しから抽出）
-const JUNK_RE = /会計年度任用職員|職員.{0,12}募集|アルバイト/;                              // 求人
+const JUNK_RE = /会計年度任用職員|(?:職員|アルバイト|パート|スタッフ).{0,10}募集/;          // 求人（「アルバイト」単独では弾かない＝雇入れ助成金の誤爆防止）
 const NONPROG_NAME_RE = /受賞|表彰|採択(?:者|結果)|募集結果|入札|委託事業者|積算基準/;         // 制度でない情報
 const NOTGRANT_REASON_RE = /補助金?では?な/;                                                // 検知メモ「補助金でない」
 const EVENT_NAME_RE = /見学会|セミナー|講座|説明会|シンポジウム|フォーラム|交流会|相談会|プレゼンテーション/;
@@ -121,33 +121,49 @@ const SUPPORT_MAP = {
 };
 const anyHit = (text, pats) => pats.some((p) => p.test(text));
 
-// ===== 相性v3（2026-07-04）: 台帳/LINE配信(fit.mjs・staples.mjs)と同じ「定番ブースト＋掛け合わせ減点」をブラウザにも。 =====
+// ===== 相性v4（2026-07-05）: 台帳/LINE配信(fit.mjs・staples.mjs)と同じ「適格性フロア＋定番ブースト＋掛け合わせ減点」をブラウザにも。 =====
 // ★ガバナンス: 制度名パターンと対象軸だけを持ち、金額・補助率・締切は一切持たない（値はデータ側=一次情報が正）。
-//   plans の語彙は PLAN_MAP のキー、industries は INDUSTRIES_30 のキーに一致させる。src/staples.mjs のブラウザ用コピー（DRY債）。
+//   plans/improves の語彙は PLAN_MAP/IMPROVE_MAP のキー、industries は INDUSTRIES_30 のキーに一致させる。src/staples.mjs のブラウザ用コピー（DRY債）。
+//   floor=適格性フロア: 意図(予定/改善)チェックが無くても保証する最低ランク。cond small=小規模該当／emp=従業員あり（サイトは規模レンジ＝1人以上前提）。
 const STAPLES_V3 = [
-  { key: "jizokuka", label: "持続化補助金", re: /持続化補助金/, plans: ["ECサイト", "ホームページ制作", "店舗改装", "新商品開発", "新サービス開発", "海外展開"], smallOnly: true },
-  { key: "it", label: "IT導入補助金", re: /IT導入補助金/, plans: ["IT導入", "AI導入", "DX化"] },
+  { key: "jizokuka", label: "持続化補助金", re: /持続化補助金/, plans: ["ECサイト", "ホームページ制作", "店舗改装", "新商品開発", "新サービス開発", "海外展開"], improves: ["売上を伸ばしたい", "広告", "SNS"], smallOnly: true, floor: { level: "S", cond: "small" } },
+  { key: "it", label: "IT導入補助金", re: /IT導入補助金/, plans: ["IT導入", "AI導入", "DX化"], improves: ["業務効率化", "システム化", "AI活用"], floor: { level: "A", cond: "small" } },
   { key: "mono", label: "ものづくり補助金", re: /ものづくり.{0,15}補助金/, plans: ["新しい設備を購入予定", "工場新設", "新商品開発", "新サービス開発"], industries: ["製造業"] },
-  { key: "shoryoku", label: "省力化投資補助金", re: /省力化投資補助金/, plans: ["新しい設備を購入予定", "AI導入", "DX化"] },
+  { key: "shoryoku", label: "省力化投資補助金", re: /省力化投資補助金/, plans: ["新しい設備を購入予定", "AI導入", "DX化"], improves: ["人手不足", "業務効率化"] },
   { key: "shinjigyo", label: "新事業進出補助金", re: /新事業進出補助金/, plans: ["新サービス開発", "新商品開発", "海外展開"] },
   { key: "shokei", label: "事業承継・M&A補助金", re: /事業承継.{0,10}補助金|M&A補助金/, plans: ["事業承継", "M&A"] },
-  { key: "reskilling", label: "人材開発支援助成金（リスキリング）", re: /人材開発支援助成金.{0,20}リスキリング|事業展開等リスキリング/, plans: ["人材育成"], crossPlans: ["IT導入", "AI導入", "DX化", "新サービス開発", "新商品開発", "海外展開"] },
-  { key: "jinkaikin", label: "人材開発支援助成金", re: /人材開発支援助成金/, plans: ["人材育成"] },
-  { key: "careerup", label: "キャリアアップ助成金", re: /キャリアアップ助成金/, plans: ["人材採用", "人材育成"] },
-  { key: "gyomu", label: "業務改善助成金", re: /業務改善助成金/, plans: ["新しい設備を購入予定", "IT導入", "DX化"], combo: "賃上げ" },
-  { key: "hataraki", label: "働き方改革推進支援助成金", re: /働き方改革推進支援助成金/, plans: [], industries: ["運送・物流業", "建設・工事業", "医療業"] },
-  { key: "jinzai", label: "人材確保等支援助成金", re: /人材確保等支援助成金/, plans: ["人材採用"] },
-  { key: "shoene", label: "省エネ設備投資系補助金", re: /省エネ(ルギー)?.{0,20}(補助金|支援事業)/, plans: ["省エネ設備", "脱炭素"] },
+  { key: "reskilling", label: "人材開発支援助成金（リスキリング）", re: /人材開発支援助成金.{0,20}リスキリング|事業展開等リスキリング/, plans: ["人材育成"], crossPlans: ["IT導入", "AI導入", "DX化", "新サービス開発", "新商品開発", "海外展開"], floor: { level: "A", cond: "emp" } },
+  { key: "jinkaikin", label: "人材開発支援助成金", re: /人材開発支援助成金/, plans: ["人材育成"], floor: { level: "A", cond: "emp" } },
+  { key: "careerup", label: "キャリアアップ助成金", re: /キャリアアップ助成金/, plans: ["人材採用", "人材育成"], improves: ["採用"], floor: { level: "A", cond: "emp" } },
+  { key: "gyomu", label: "業務改善助成金", re: /業務改善助成金/, plans: ["新しい設備を購入予定", "IT導入", "DX化"], improves: ["業務効率化", "コスト削減"], combo: "賃上げ", floor: { level: "B", cond: "emp" } },
+  { key: "hataraki", label: "働き方改革推進支援助成金", re: /働き方改革推進支援助成金/, plans: [], industries: ["運送・物流業", "建設・工事業", "医療業"], floor: { level: "A", cond: "emp" } },
+  { key: "jinzai", label: "人材確保等支援助成金", re: /人材確保等支援助成金/, plans: ["人材採用"], improves: ["採用", "人手不足"], floor: { level: "B", cond: "emp" }, maxRank: "A" },
+  { key: "shoene", label: "省エネ設備投資系補助金", re: /省エネ(ルギー)?.{0,20}(補助金|支援事業)/, plans: ["省エネ設備", "脱炭素"], improves: ["コスト削減"] },
 ];
-// 制度名×選択プロフィール → 定番マッチ。via: "plans"(直結・S級)＞"cross"(間接・A級)＞"industry"(業種定番・A級)＞null。
-function matchStapleV3(name, plans, persp) {
+// 小規模事業者に該当するか（フロアcond=small用）。eligibility.jsの小規模区分をブラウザ用に近似。
+//  1〜5人=全業種該当／6〜20人=製造・建設・運送・宿泊・娯楽のみ該当／21人以上=非該当。
+const SMALL20_INDUSTRIES = ["製造業", "建設・工事業", "運送・物流業", "宿泊・観光業", "娯楽・イベント業"];
+function isSmallBizV3(persp, size) {
+  if (size === "s1_5") return true;
+  if (size === "s6_20") return SMALL20_INDUSTRIES.includes(persp);
+  return false; // s21_50以上 or 未選択
+}
+// 制度名×選択プロフィール → 定番マッチ。via: "plans"(直結・予定/改善・S級)＞"cross"(間接・A級)＞"industry"(業種定番・A級)＞null。
+function matchStapleV3(name, plans, improves, persp) {
   const e = STAPLES_V3.find((s) => s.re.test(name));
   if (!e) return null;
-  const P = new Set(plans);
-  if ((e.plans || []).some((p) => P.has(p))) return { e, via: "plans" };
+  const P = new Set(plans), I = new Set(improves);
+  if ((e.plans || []).some((p) => P.has(p)) || (e.improves || []).some((p) => I.has(p))) return { e, via: "plans" };
   if ((e.crossPlans || []).some((p) => P.has(p))) return { e, via: "cross" };
   if ((e.industries || []).includes(persp)) return { e, via: "industry" };
   return { e, via: null };
+}
+// 適格性フロア（v4）: 意図が無くても保証する最低ランク。small=小規模該当／emp=従業員あり（サイトは規模レンジ選択＝1人以上とみなす）。
+function floorLevelV3(entry, persp, size) {
+  if (!entry || !entry.floor || !size) return null; // 規模未選択ならフロアなし
+  if (entry.floor.cond === "small") return isSmallBizV3(persp, size) ? entry.floor.level : null;
+  if (entry.floor.cond === "emp") return entry.floor.level; // 規模レンジがある＝1人以上
+  return null;
 }
 // 掛け合わせ軸: 制度が別軸(賃上げ/脱炭素等)の取組を必須にするもの。coveredなら本人の狙いなので減点しない。
 const COMBO_V3 = [
@@ -327,14 +343,30 @@ function relevanceFor(it, persp) {
   if (capB && level !== "B") { level = "B"; reasons.push("※主対象は他業種の可能性"); }
   if (pts === 0) reasons.push("業種の限定は読み取れませんでした（業種を問わない一般制度の可能性）");
 
-  // 6) v3補正: 定番ブースト（持続化/IT導入/人材開発助成金等 × ご選択の予定）＋掛け合わせ減点（CO2・賃上げ等）。台帳/LINEと同ロジック。
-  const st = matchStapleV3(name, plans, persp);
-  if (st && st.via) {
-    const smallOK = !st.e.smallOnly || small; // 小規模限定の定番(持続化)は小規模選択時のみ昇格
-    if (smallOK) {
+  // 6) v4補正: 適格性フロア（場所×業種×規模で常に使える定番の最低ランク保証）＋定番ブースト（予定/改善）＋掛け合わせ減点。台帳/LINEと同ロジック。
+  const st = matchStapleV3(name, plans, improves, persp);
+  // ハード除外: 小規模限定の定番（持続化）で規模が非該当 → 対象外は隠さず理由付きC（レビュー: 黙ってB/非表示はツール不信）。
+  if (st && st.e.smallOnly && SIZE && !isSmallBizV3(persp, SIZE)) {
+    const line = (persp && SMALL20_INDUSTRIES.includes(persp)) ? "20人以下" : "5人以下（製造業・宿泊業等は20人以下）";
+    return C(`小規模事業者向けのため対象外の可能性：${persp || "この業種"}は従業員${line}が対象です。※従業員は「常時使用する従業員」で数えます（パート中心なら該当する場合あり）`);
+  }
+  if (st) {
+    const isSmall = st.e.smallOnly ? isSmallBizV3(persp, SIZE) : true;
+    // (a) フロア: 意図が無くても定番は最低ランクを保証（持続化=小規模でS常時／雇用系=従業員ありでA常時など）
+    const floor = floorLevelV3(st.e, persp, SIZE);
+    if (floor && REL_ORD[floor] > REL_ORD[level]) {
+      level = floor;
+      reasons.push(st.e.floor.cond === "small"
+        ? (st.e.key === "jizokuka" ? `小規模事業者なら目的を問わず使える定番（${st.e.label}）` : `小規模事業者の定番制度（${st.e.label}）`)
+        : `従業員がいれば対象になり得る定番の助成金（${st.e.label}）。着手前の手続きが必要`);
+    }
+    // (b) 意図ブースト: 予定/改善が直結すればS、間接/業種でA（小規模限定の定番は小規模のときだけ）
+    if (st.via && isSmall) {
       level = raiseLevel(level, st.via === "plans" ? "S" : "A");
       reasons.push(st.via === "industry" ? `${persp}で定番の制度（${st.e.label}）` : `定番の主要制度（${st.e.label}）がご要望に直結`);
     }
+    // (c) 制度ごとの上限（人材確保等など第一候補にしない定番はA止まり）
+    if (st.e.maxRank) level = capLevel(level, st.e.maxRank);
   }
   const combo = findComboV3(name, rTgt + " " + req, plans, st && st.e);
   if (combo.length) {
@@ -603,8 +635,13 @@ function renderScoreboard(persp, buckets, total) {
   }
   const groups = groupsFor(persp);
   const cls = (g) => g.toLowerCase();
-  const legend = persp === "jisha" ? "" : `<div class="score-legend">S=業種・ご要望に合致 ／ A=一部合致 ／ B=業種を問わない一般制度の可能性 ／ C=対象が異なる可能性<br>※タイトル・説明文の言葉による自動の目安です。対象になるかは必ず公式ページでご確認ください。</div>`;
-  sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("") + legend;
+  const legend = persp === "jisha" ? "" : `<div class="score-legend">S=まず見たい・条件に合致 ／ A=使える可能性が高い ／ B=条件が合えば対象 ／ C=対象外の可能性（各カードに理由）<br>※タイトル・説明文の言葉による自動の目安です。対象になるかは必ず公式ページでご確認ください。</div>`;
+  // 併用注意（レビュー: S/Aが複数あると「全部もらえる」と誤読される）。同一経費への重複受給は不可。
+  const topCount = (buckets.S || []).length + (buckets.A || []).length;
+  const comboNote = topCount >= 2
+    ? `<div class="score-legend">💡 同じ設備・経費に使える補助金は原則1つだけです（重複受給不可）。目的ごと（設備・IT・人材など）に使い分けるのが基本です。</div>`
+    : "";
+  sb.innerHTML = groups.map((g) => `<button class="score ${cls(g)}" data-g="${esc(g)}"><span class="dot"></span>${esc(g)} <b>${(buckets[g] || []).length}</b></button>`).join("") + legend + comboNote;
 }
 
 function renderChips() {
