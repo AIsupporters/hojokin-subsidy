@@ -120,6 +120,67 @@ const SUPPORT_MAP = {
   "AI導入": [RB("AI")],
 };
 const anyHit = (text, pats) => pats.some((p) => p.test(text));
+
+// ===== 相性v3（2026-07-04）: 台帳/LINE配信(fit.mjs・staples.mjs)と同じ「定番ブースト＋掛け合わせ減点」をブラウザにも。 =====
+// ★ガバナンス: 制度名パターンと対象軸だけを持ち、金額・補助率・締切は一切持たない（値はデータ側=一次情報が正）。
+//   plans の語彙は PLAN_MAP のキー、industries は INDUSTRIES_30 のキーに一致させる。src/staples.mjs のブラウザ用コピー（DRY債）。
+const STAPLES_V3 = [
+  { key: "jizokuka", label: "持続化補助金", re: /持続化補助金/, plans: ["ECサイト", "ホームページ制作", "店舗改装", "新商品開発", "新サービス開発", "海外展開"], smallOnly: true },
+  { key: "it", label: "IT導入補助金", re: /IT導入補助金/, plans: ["IT導入", "AI導入", "DX化"] },
+  { key: "mono", label: "ものづくり補助金", re: /ものづくり.{0,15}補助金/, plans: ["新しい設備を購入予定", "工場新設", "新商品開発", "新サービス開発"], industries: ["製造業"] },
+  { key: "shoryoku", label: "省力化投資補助金", re: /省力化投資補助金/, plans: ["新しい設備を購入予定", "AI導入", "DX化"] },
+  { key: "shinjigyo", label: "新事業進出補助金", re: /新事業進出補助金/, plans: ["新サービス開発", "新商品開発", "海外展開"] },
+  { key: "shokei", label: "事業承継・M&A補助金", re: /事業承継.{0,10}補助金|M&A補助金/, plans: ["事業承継", "M&A"] },
+  { key: "reskilling", label: "人材開発支援助成金（リスキリング）", re: /人材開発支援助成金.{0,20}リスキリング|事業展開等リスキリング/, plans: ["人材育成"], crossPlans: ["IT導入", "AI導入", "DX化", "新サービス開発", "新商品開発", "海外展開"] },
+  { key: "jinkaikin", label: "人材開発支援助成金", re: /人材開発支援助成金/, plans: ["人材育成"] },
+  { key: "careerup", label: "キャリアアップ助成金", re: /キャリアアップ助成金/, plans: ["人材採用", "人材育成"] },
+  { key: "gyomu", label: "業務改善助成金", re: /業務改善助成金/, plans: ["新しい設備を購入予定", "IT導入", "DX化"], combo: "賃上げ" },
+  { key: "hataraki", label: "働き方改革推進支援助成金", re: /働き方改革推進支援助成金/, plans: [], industries: ["運送・物流業", "建設・工事業", "医療業"] },
+  { key: "jinzai", label: "人材確保等支援助成金", re: /人材確保等支援助成金/, plans: ["人材採用"] },
+  { key: "shoene", label: "省エネ設備投資系補助金", re: /省エネ(ルギー)?.{0,20}(補助金|支援事業)/, plans: ["省エネ設備", "脱炭素"] },
+];
+// 制度名×選択プロフィール → 定番マッチ。via: "plans"(直結・S級)＞"cross"(間接・A級)＞"industry"(業種定番・A級)＞null。
+function matchStapleV3(name, plans, persp) {
+  const e = STAPLES_V3.find((s) => s.re.test(name));
+  if (!e) return null;
+  const P = new Set(plans);
+  if ((e.plans || []).some((p) => P.has(p))) return { e, via: "plans" };
+  if ((e.crossPlans || []).some((p) => P.has(p))) return { e, via: "cross" };
+  if ((e.industries || []).includes(persp)) return { e, via: "industry" };
+  return { e, via: null };
+}
+// 掛け合わせ軸: 制度が別軸(賃上げ/脱炭素等)の取組を必須にするもの。coveredなら本人の狙いなので減点しない。
+const COMBO_V3 = [
+  { key: "賃上げ", re: /賃上げ|賃金引上げ|賃金の引上げ|最低賃金/, covered: [] },
+  { key: "脱炭素・省エネ", re: /脱炭素|カーボン|CO2|CO₂|二酸化炭素|温室効果ガス|省エネ/, covered: ["脱炭素", "省エネ設備"] },
+  { key: "事業承継", re: /事業承継|後継者/, covered: ["事業承継", "M&A"] },
+];
+const OPT_NEAR_V3 = /特例|加算|加点|優遇|任意/;             // 「賃上げ特例で上限引上げ」等は任意＝減点しない
+const MAND_NEAR_V3 = /要件|必須|条件|義務|が必要|を満たす|に取り組む/;
+function hasMandatoryNearV3(text, re) {
+  const g = new RegExp(re.source, "g"); let m;
+  while ((m = g.exec(text))) {
+    const w = text.slice(Math.max(0, m.index - 20), m.index + m[0].length + 20);
+    if (OPT_NEAR_V3.test(w)) { if (m.index === g.lastIndex) g.lastIndex++; continue; }
+    if (MAND_NEAR_V3.test(w)) return true;
+    if (m.index === g.lastIndex) g.lastIndex++;
+  }
+  return false;
+}
+// 本人の予定でカバーされない掛け合わせ軸。level: "core"=名称レベル(主目的が別軸→最高B) / "condition"=本文の必須要件(→最高A)。
+function findComboV3(name, body, plans, stapleEntry) {
+  const P = new Set(plans); const out = [];
+  for (const ax of COMBO_V3) {
+    if (ax.covered.some((p) => P.has(p))) continue;
+    if (ax.re.test(name)) { out.push({ key: ax.key, level: "core" }); continue; }
+    if ((stapleEntry && stapleEntry.combo === ax.key) || hasMandatoryNearV3(body, ax.re)) out.push({ key: ax.key, level: "condition" });
+  }
+  return out;
+}
+const REL_ORD = { S: 3, A: 2, B: 1, C: 0 };
+const raiseLevel = (r, t) => (REL_ORD[t] > REL_ORD[r] ? t : r); // 昇格のみ
+const capLevel = (r, c) => (REL_ORD[c] < REL_ORD[r] ? c : r);   // 降格のみ
+
 let PLANS = [];      // 今後の予定（URL plans=）
 let IMPROVES = [];   // 改善したいこと（URL improve=）
 let SUPPORTS = [];   // 希望する支援（URL support=）
@@ -265,6 +326,22 @@ function relevanceFor(it, persp) {
   let level = pts >= 5 ? "S" : pts >= 3 ? "A" : "B";
   if (capB && level !== "B") { level = "B"; reasons.push("※主対象は他業種の可能性"); }
   if (pts === 0) reasons.push("業種の限定は読み取れませんでした（業種を問わない一般制度の可能性）");
+
+  // 6) v3補正: 定番ブースト（持続化/IT導入/人材開発助成金等 × ご選択の予定）＋掛け合わせ減点（CO2・賃上げ等）。台帳/LINEと同ロジック。
+  const st = matchStapleV3(name, plans, persp);
+  if (st && st.via) {
+    const smallOK = !st.e.smallOnly || small; // 小規模限定の定番(持続化)は小規模選択時のみ昇格
+    if (smallOK) {
+      level = raiseLevel(level, st.via === "plans" ? "S" : "A");
+      reasons.push(st.via === "industry" ? `${persp}で定番の制度（${st.e.label}）` : `定番の主要制度（${st.e.label}）がご要望に直結`);
+    }
+  }
+  const combo = findComboV3(name, rTgt + " " + req, plans, st && st.e);
+  if (combo.length) {
+    const capped = capLevel(level, combo.some((a) => a.level === "core") ? "B" : "A");
+    if (capped !== level) reasons.push(`※${combo.map((a) => a.key).join("・")}の要件との掛け合わせが前提（単独目的では使いにくい）`);
+    level = capped;
+  }
   return { kind: "industry", level, pts, reasons, matched, themeMatched, smallHit };
 }
 function groupsFor(persp) {

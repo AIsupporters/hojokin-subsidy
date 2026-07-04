@@ -1,11 +1,11 @@
 {
-  "lastUpdated": "2026-07-01",
-  "total": 651,
+  "lastUpdated": "2026-07-04",
+  "total": 663,
   "byRank": {
-    "S": 2,
-    "A": 20,
-    "B": 37,
-    "C": 592
+    "S": 26,
+    "A": 17,
+    "B": 31,
+    "C": 589
   },
   "sources": [
     "jGrants（国＋大阪・京都・兵庫）",
@@ -45,23 +45,6 @@
       "organization": "次世代革新炉の開発・建設に向けた技術開発・サプライチェーン構築支援事業",
       "region": "全国",
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDZI0MAP",
-      "detectedDate": "2026-06-09",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "令和８年度データセンターのゼロエミッション化・レジリエンス強化促進事業",
-      "rank": "C",
-      "score": 25,
-      "maxLimit": "",
-      "rate": "公募要領を参照",
-      "deadline": "2026-07-03",
-      "reason": "DCの脱炭素化が対象。デジタル文脈はあるが申請主体はDC事業者で非該当",
-      "requirements": "-",
-      "organization": "二酸化炭素排出抑制対策事業費等補助金",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDZHlMAP",
       "detectedDate": "2026-06-09",
       "status": "未確認",
       "category": "国",
@@ -323,57 +306,6 @@
       "isNew": false
     },
     {
-      "name": "令和８年度　ＦＳ調査事業　第２次公募　【　廃棄物処理施設を核とした地域循環共生圏構築促進事業　】",
-      "rank": "C",
-      "score": 8,
-      "maxLimit": "",
-      "rate": "原則、定額、ただし、算出された額が1,500万円を超える場合は、1,500万円",
-      "deadline": "2026-07-03",
-      "reason": "廃棄物処理施設の廃熱利用FS調査。当社と非直結",
-      "requirements": "-",
-      "organization": "二酸化炭素排出抑制対策事業費等補助金（廃棄物処理施設を核とした地域循環共生圏構築促進事業）",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYqvMAH",
-      "detectedDate": "2026-06-09",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "令和８年度　熱利活用事業（単年度事業分）　第２次公募　【　廃棄物処理施設を核とした地域循環共生圏構築促進事業　】",
-      "rank": "C",
-      "score": 6,
-      "maxLimit": "",
-      "rate": "補助対象経費の１／２(但し上限あり）公募要領参照",
-      "deadline": "2026-07-03",
-      "reason": "廃棄物処理施設の熱利活用設備。当社と非直結",
-      "requirements": "-",
-      "organization": "二酸化炭素排出抑制対策事業費等補助金（廃棄物処理施設を核とした地域循環共生圏構築促進事業）",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYqqMAH",
-      "detectedDate": "2026-06-09",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "令和８年度　電力利活用事業（単年度事業分）　第２次公募　【　廃棄物処理施設を核とした地域循環共生圏構築促進事業　】",
-      "rank": "C",
-      "score": 6,
-      "maxLimit": "",
-      "rate": "①EV収集車・船舶：価格との差額の３／４（ただし上限あり）、②EV収集以外の設備導入事業：補助対象経費の１／２（ただし上限あり）　　公募要領参照",
-      "deadline": "2026-07-03",
-      "reason": "廃棄物処理のEV収集車等導入。当社と非直結",
-      "requirements": "-",
-      "organization": "二酸化炭素排出抑制対策事業費等補助金（廃棄物処理施設を核とした地域循環共生圏構築促進事業）",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYqlMAH",
-      "detectedDate": "2026-06-09",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "高度安全機械等導入支援補助金",
       "rank": "C",
       "score": 8,
@@ -385,23 +317,6 @@
       "organization": "高度安全機械等導入支援補助金",
       "region": "全国",
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYq2MAH",
-      "detectedDate": "2026-06-09",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "【令和８年度】二酸化炭素排出抑制対策事業費等補助金 （国内資源循環体制構築に向けた再エネ関連製品及びベース素材の全体最適化実証事業）",
-      "rank": "C",
-      "score": 12,
-      "maxLimit": "278200000",
-      "rate": "（１）中小企業基本法第２条第１項に規定する中小企業者に補助する場合は１／２。（２）（１）で規定する者以外に補助する場合は１／３。",
-      "deadline": "2026-07-01",
-      "reason": "再エネ製品の国内リサイクル実証。当社と非直結",
-      "requirements": "-",
-      "organization": "令和８年度二酸化炭素排出抑制対策事業費等補助金 （国内資源循環体制構築に向けた再エネ関連製品及びベース素材の全体最適化実証事業）",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYknMAH",
       "detectedDate": "2026-06-09",
       "status": "未確認",
       "category": "国",
@@ -1530,23 +1445,6 @@
       "isNew": false
     },
     {
-      "name": "補助金・助成金：「医薬品安定供給支援事業 実施事業者の公募について（8次公募）」",
-      "rank": "C",
-      "score": 10,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-03",
-      "reason": "医薬品製造業向けで対象外",
-      "requirements": "-",
-      "organization": "全国",
-      "region": "全国",
-      "url": "https://j-net21.smrj.go.jp/snavi2/articles/184638",
-      "detectedDate": "2026-06-10",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "補助金・助成金：「中小物流事業者の労働生産性向上事業費補助金（標準仕様パレット利用促進支援事業）2次公募」",
       "rank": "C",
       "score": 15,
@@ -1700,23 +1598,6 @@
       "isNew": false
     },
     {
-      "name": "補助金・助成金：「先進的設備等を活用した放送コンテンツ製作促進事業 二次公募」",
-      "rank": "C",
-      "score": 25,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-02",
-      "reason": "放送番組制作会社向け。AI技術言及あるが業種外",
-      "requirements": "-",
-      "organization": "全国",
-      "region": "全国",
-      "url": "https://j-net21.smrj.go.jp/snavi2/articles/184188",
-      "detectedDate": "2026-06-10",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "補助金・助成金：「令和8年度予算 環境対応型石油製品販売業支援事業（5事業）」",
       "rank": "C",
       "score": 5,
@@ -1769,8 +1650,8 @@
     },
     {
       "name": "補助金・助成金：「小規模事業者持続化補助金＜創業型＞（第4回公募）」",
-      "rank": "A",
-      "score": 80,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "200万円（インボイス特例適用で+50万円＝250万円）",
       "rate": "2/3",
       "deadline": "2026-12-15",
@@ -1788,8 +1669,8 @@
     },
     {
       "name": "補助金・助成金：「商工会地区 小規模事業者持続化補助金 一般型・通常枠（第20回公募）」",
-      "rank": "A",
-      "score": 82,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "50万円",
       "rate": "2/3",
       "deadline": "2026-12-15",
@@ -1807,8 +1688,8 @@
     },
     {
       "name": "補助金・助成金：「商工会議所地区 小規模事業者持続化補助金＜一般型 通常枠＞（第20回公募）」",
-      "rank": "A",
-      "score": 82,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "50万円",
       "rate": "2/3（賃金引上げ特例のうち赤字事業者は3/4）",
       "deadline": "2026-12-15",
@@ -2446,8 +2327,8 @@
     },
     {
       "name": "補助金・助成金 ：「小規模事業者持続化補助金（一般型・通常枠）」",
-      "rank": "A",
-      "score": 82,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "50万円",
       "rate": "2/3（賃金引上げ特例の赤字事業者は3/4）",
       "deadline": "",
@@ -2639,8 +2520,8 @@
     },
     {
       "name": "補助金・助成金 ：「小規模事業者持続化補助金（創業型）」",
-      "rank": "A",
-      "score": 80,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "200万円",
       "rate": "2/3",
       "deadline": "2026-12-15",
@@ -2976,8 +2857,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（人材育成支援コース）」",
-      "rank": "B",
-      "score": 50,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "経費助成15万〜50万円/人(訓練時間別)・年度上限1,000万円/事業所",
       "rate": "中小45%(大企業30%)、賃金要件等充足で60%(45%)。有期実習型は75%→100%",
       "deadline": "",
@@ -2995,8 +2876,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（教育訓練休暇等付与コース）」",
-      "rank": "B",
-      "score": 45,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "30万〜36万円（賃金助成除く定額）",
       "rate": "定額（補助率なし）",
       "deadline": "",
@@ -3014,8 +2895,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（人への投資促進コース）」",
-      "rank": "B",
-      "score": 55,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "2500万円(1事業所1年度・枠別に300万〜1000万円)",
       "rate": "最大3/4(75%・枠別に45〜75%)",
       "deadline": "",
@@ -3033,8 +2914,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（事業展開等リスキリング支援コース）」",
-      "rank": "B",
-      "score": 55,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "経費助成 最大50万円/人(中小)・30万円/人(大)、1事業所1億円/年",
       "rate": "経費助成 中小3/4(75%)・大3/5(60%)、賃金助成 1000円/500円(1人1時間)",
       "deadline": "",
@@ -3311,8 +3192,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材確保等支援助成金（若年者及び女性に魅力ある職場づくり事業コース（建設分野））」",
-      "rank": "C",
-      "score": 10,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3328,8 +3209,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材確保等支援助成金（建設キャリアアップシステム等活用促進コース）」",
-      "rank": "C",
-      "score": 10,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3345,8 +3226,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（建設労働者認定訓練コース）」",
-      "rank": "C",
-      "score": 10,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3362,8 +3243,8 @@
     },
     {
       "name": "補助金・助成金 ：「人材開発支援助成金（建設労働者技能実習コース）」",
-      "rank": "C",
-      "score": 10,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3379,8 +3260,8 @@
     },
     {
       "name": "補助金・助成金 ： 「人材確保等支援助成金（雇用管理制度・雇用環境整備助成コース）」",
-      "rank": "B",
-      "score": 45,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "最大230万円(賃金要件達成時287.5万円)",
       "rate": "定額＋対象経費1/2(雇用環境整備、賃金要件で62.5/100・75/100)",
       "deadline": "",
@@ -3398,8 +3279,8 @@
     },
     {
       "name": "補助金・助成金：「人材確保等支援助成金（外国人労働者就労環境整備助成コース）」",
-      "rank": "C",
-      "score": 25,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3415,8 +3296,8 @@
     },
     {
       "name": "補助金・助成金：「人材確保等支援助成金（テレワークコース）」",
-      "rank": "B",
-      "score": 50,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "20万円（制度導入助成）＋10万〜15万円（目標達成助成）",
       "rate": "定額（補助率なし）",
       "deadline": "",
@@ -3468,8 +3349,8 @@
     },
     {
       "name": "補助金・助成金：「キャリアアップ助成金（正社員化コース）」",
-      "rank": "B",
-      "score": 50,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "80万円(1人当たり・最大)",
       "rate": "定額(助成率の定めなし。賃金総額が上限)",
       "deadline": "",
@@ -3487,8 +3368,8 @@
     },
     {
       "name": "補助金・助成金：「キャリアアップ助成金（障害者正社員化コース）」",
-      "rank": "C",
-      "score": 25,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3504,8 +3385,8 @@
     },
     {
       "name": "補助金・助成金 ：「キャリアアップ助成金（賃金規定等改定コース）」",
-      "rank": "C",
-      "score": 35,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3521,8 +3402,8 @@
     },
     {
       "name": "補助金・助成金 ：「キャリアアップ助成金（賃金規定等共通化コース）」",
-      "rank": "C",
-      "score": 30,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3538,8 +3419,8 @@
     },
     {
       "name": "補助金・助成金 ：「キャリアアップ助成金（賞与・退職金制度導入コース）」",
-      "rank": "C",
-      "score": 30,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3555,8 +3436,8 @@
     },
     {
       "name": "補助金・助成金 ：「キャリアアップ助成金（短時間労働者労働時間延長支援コース）」",
-      "rank": "C",
-      "score": 25,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "",
       "rate": "",
       "deadline": "",
@@ -3589,8 +3470,8 @@
     },
     {
       "name": "補助金・助成金 ：「中小企業省力化投資補助金（カタログ注文型）」",
-      "rank": "A",
-      "score": 76,
+      "rank": "S",
+      "score": 88,
       "maxLimit": "1,000万円（賃上げ要件達成時1,500万円）",
       "rate": "1/2以下",
       "deadline": "",
@@ -6125,23 +6006,6 @@
       "isNew": false
     },
     {
-      "name": "令和８年度日中経済交流等事業費補助金",
-      "rank": "C",
-      "score": 12,
-      "maxLimit": "20000000",
-      "rate": "定額",
-      "deadline": "2026-07-03",
-      "reason": "中国ビジネス交流向け。AI活用支援と無関係",
-      "requirements": "事業計画書等（要項参照）",
-      "organization": "日中経済交流等事業",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDamKMAT",
-      "detectedDate": "2026-06-14",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "【令和8年度】省CO2型システムへの改修支援事業",
       "rank": "C",
       "score": 12,
@@ -6170,23 +6034,6 @@
       "organization": "脱炭素技術等による工場・事業場の省CO2化加速事業（SHIFT事業）",
       "region": "全国",
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDaMLMA1",
-      "detectedDate": "2026-06-14",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "令和８年度「都市ガス分野の災害対応・レジリエンス強化に係る支援事業費補助金」（執行団体公募）",
-      "rank": "C",
-      "score": 8,
-      "maxLimit": "141502000",
-      "rate": "",
-      "deadline": "2026-07-01",
-      "reason": "ガス導管事業者の災害対応設備向け。対象外",
-      "requirements": "-",
-      "organization": "都市ガス分野の災害対応・レジリエンス強化に係る支援事業費補助金",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDa4CMAT",
       "detectedDate": "2026-06-14",
       "status": "未確認",
       "category": "国",
@@ -6257,23 +6104,6 @@
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYslMAH",
       "detectedDate": "2026-06-14",
       "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "「デコ活」（脱炭素につながる新しい豊かな暮らしを創る国民運動）推進事業（二次公募）",
-      "rank": "C",
-      "score": 10,
-      "maxLimit": "",
-      "rate": "公募要領を参照",
-      "deadline": "2026-07-01",
-      "reason": "脱炭素の国民運動推進事業。AI活用支援と無関係",
-      "requirements": "-",
-      "organization": "環境配慮行動普及促進事業費補助金及び二酸化炭素排出抑制対策事業費等補助金",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYsWMAX",
-      "detectedDate": "2026-06-14",
-      "status": "募集予定(開始2026-06-19)",
       "category": "国",
       "isNew": false
     },
@@ -6994,23 +6824,6 @@
       "isNew": false
     },
     {
-      "name": "令和7年度補正 デジタルライフライン整備加速事業（地下埋設物等の設備データ整備事業）",
-      "rank": "C",
-      "score": 27,
-      "maxLimit": "300000000",
-      "rate": "補助対象経費の1/3以内",
-      "deadline": "2026-07-03",
-      "reason": "DX系だが対象は公益事業データ整備機関。当社は非該当",
-      "requirements": "国内法人・データ変換ツールの設計開発体制",
-      "organization": "令和7年度補正　デジタルライフライン整備加速事業（地下埋設物等の設備データ整備事業）",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDapxMAD",
-      "detectedDate": "2026-06-21",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "中小企業生産性革命推進事業_事業承継・M&A補助金(15次公募)_事業承継促進枠",
       "rank": "C",
       "score": 30,
@@ -7164,23 +6977,6 @@
       "isNew": false
     },
     {
-      "name": "「精密発酵および細胞農業等における企業活動、技術開発、規制・制度整備等の分析調査」の公募",
-      "rank": "C",
-      "score": 18,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-03",
-      "reason": "NEDOのバイオ分野調査受託。当社の専門外",
-      "requirements": "NEDO公募・調査受託体制",
-      "organization": "P99029_戦略策定調査事業",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYtjMAH",
-      "detectedDate": "2026-06-21",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
       "name": "「バイオものづくり分野のLCAガイドラインの改善及び普及に向けた調査」の公募",
       "rank": "C",
       "score": 18,
@@ -7192,23 +6988,6 @@
       "organization": "P22021_バイオものづくり革命推進事業",
       "region": "全国",
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDa47MAD",
-      "detectedDate": "2026-06-21",
-      "status": "未確認",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "「NEDOプロジェクトにおけるアウトカム⽬標の在り⽅に関する調査」の公募",
-      "rank": "C",
-      "score": 28,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-03",
-      "reason": "政策調査の受託でコンサル領域だが事業評価の専門性が必要",
-      "requirements": "NEDO公募・調査受託体制",
-      "organization": "調査等",
-      "region": "全国",
-      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDZvAMAX",
       "detectedDate": "2026-06-21",
       "status": "未確認",
       "category": "国",
@@ -7347,23 +7126,6 @@
       "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDYjRMAX",
       "detectedDate": "2026-06-21",
       "status": "募集予定(開始2026-06-23)",
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "補助金・助成金：「令和8年度 地域の中堅・中核企業支援事業補助金（中堅・中核企業の経営力強化支援事業）に係る補助事業者の2次公募について」",
-      "rank": "C",
-      "score": 22,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-02",
-      "reason": "中核企業をハンズオン支援する事務局公募。当社は規模・実績不足",
-      "requirements": "支援プラットフォーム構築・ハンズオン支援体制",
-      "organization": "全国",
-      "region": "全国",
-      "url": "https://j-net21.smrj.go.jp/snavi2/articles/185246",
-      "detectedDate": "2026-06-21",
-      "status": "未確認",
       "category": "国",
       "isNew": false
     },
@@ -7875,7 +7637,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "再エネ等由来水素を活用した自立・分散型エネルギーシステム構築等事業",
@@ -7892,7 +7654,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "貿易プラットフォーム活用による貿易手続デジタル化推進事業",
@@ -7909,7 +7671,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "グローバルサウス未来志向型共創等事業",
@@ -7926,7 +7688,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "グローバルサウス未来志向型共創等事業（ウクライナ復興支援に向けた欧州企業連携・中東欧諸国等連携強化）",
@@ -7943,7 +7705,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "“実例から学ぶSNSの活用方法講習会”を開催します！",
@@ -7960,7 +7722,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "夏季見学会",
@@ -7977,7 +7739,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "8月5日（水曜）堺DX推進ラボ DX認定セミナー2026～DX戦略から、AI実装まで。 中小企業のDX、はじめの一歩。～を開催します！",
@@ -7994,7 +7756,7 @@
       "detectedDate": "2026-06-25",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "【農林水産省】令和7年度補正ウクライナ農業回復緊急支援事業（２次公募）",
@@ -8011,7 +7773,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "支援情報：「中小企業退職金共済制度」",
@@ -8028,7 +7790,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "融資・貸付：「取引先の支払条件改善等のための融資制度」",
@@ -8045,7 +7807,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「デジタル化・AI導入補助金2026「通常枠」※3次締切分」",
@@ -8062,7 +7824,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「デジタル化・AI導入補助金2026「インボイス枠（インボイス対応類型）」※3次締切分」",
@@ -8079,7 +7841,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「デジタル化・AI導入補助金2026「インボイス枠（電子取引類型）」※3次締切分」",
@@ -8096,7 +7858,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「デジタル化・AI導入補助金2026「セキュリティ対策推進枠」※3次締切分」",
@@ -8113,7 +7875,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「デジタル化・AI導入補助金2026「複数者連携デジタル化・AI導入枠」※2次締切分」",
@@ -8130,7 +7892,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "支援情報 ：「小規模企業共済制度」",
@@ -8147,7 +7909,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "融資・貸付 ：「経営セーフティ共済（中小企業倒産防止共済制度）」",
@@ -8164,7 +7926,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "（堺市地産地消推進協議会）「堺のめぐみ」もっと食べようキャンペーン企画広報業務の委託事業者を募集します",
@@ -8181,7 +7943,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "外国人材雇用支援セミナーを開催します",
@@ -8198,7 +7960,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "Good JOB!! in さかい 株式会社旭ウエルデックス（2026年7月17日）を開催します",
@@ -8215,7 +7977,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "ITパスポートスタートアップ講座（2026年7月～9月）を開催します",
@@ -8232,7 +7994,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "堺職フェス in アリオ鳳(2026年7月8日･9日）を開催します",
@@ -8249,7 +8011,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "生野区役所窓口サービス課（保険年金）会計年度任用職員（一般事務補助作業）を募集します。（生野区役所）",
@@ -8266,7 +8028,7 @@
       "detectedDate": "2026-06-26",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "「競争的な水素サプライチェーン構築に向けた技術開発事業／総合調査研究／我が国の漁港における水素エネルギー利活用ポテンシャル調査」の公募",
@@ -8283,7 +8045,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "「技術を社会実装するために必要な標準化・知財戦略マネジメントに関する調査」の公募",
@@ -8300,7 +8062,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "融資・貸付 ：「BCP資金」",
@@ -8317,7 +8079,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "補助金・助成金：「中小企業省力化投資補助金（一般型）（第7回公募）」",
@@ -8334,7 +8096,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認(重複候補)",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "融資・貸付 ：「災害復旧貸付」",
@@ -8351,7 +8113,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "融資・貸付 ：「小規模事業者経営改善資金融資制度（マル経融資）」",
@@ -8368,7 +8130,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "国",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "【国際ビジネス支援】IMTEX2027 大阪産業局ブース 参加企業募集！",
@@ -8385,7 +8147,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "大阪市の脱炭素化促進に係る補助金説明会の開催について（環境局）",
@@ -8402,7 +8164,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "【令和8年8月1日から令和8年9月30日】補助作業会計年度任用職員の募集について（大阪市北区役所窓口サービス課（保険年金））（北区役所）",
@@ -8419,7 +8181,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "【令和8年8月1日～令和8年9月30日】浪速区役所保健福祉課 一般事務補助の会計年度任用職員（いわゆるアルバイト）の募集について（浪速区役所）",
@@ -8436,7 +8198,7 @@
       "detectedDate": "2026-06-27",
       "status": "未確認",
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "令和８年度「水力発電導入促進支援事業費補助金（事業性評価支援事業）」（新規事業　３次締切分）",
@@ -11173,6 +10935,534 @@
       "detectedDate": "2026-07-01",
       "status": "未確認(重複候補)",
       "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "「スタートアップに対する経営管理・事業化支援人材の伴走支援モデルに係る調査事業」の公募",
+      "rank": "C",
+      "score": 28,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-30",
+      "reason": "NEDOの委託調査事業の受託公募で自社は補助対象でない",
+      "requirements": "-",
+      "organization": "調査等",
+      "region": "全国",
+      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDc0JMAT",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "創業・起業"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度　建築GX・DX推進事業",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-09-30",
+      "reason": "建築プロジェクト対象でIT支援業の当社は対象外",
+      "requirements": "-",
+      "organization": "住宅・建築物カーボンニュートラル総合推進事業",
+      "region": "全国",
+      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDZ2OMAX",
+      "detectedDate": "2026-07-02",
+      "status": "未確認(重複候補)",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ",
+        "製造・ものづくり"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "【東大阪市】補助金・助成金：【申請受付中】令和8年度東大阪市省エネ設備更新事業補助金のお知らせ",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2027-02-28",
+      "reason": "生産設備更新が対象で製造業向け・当社は対象外",
+      "requirements": "-",
+      "organization": "大阪府 東大阪市",
+      "region": "大阪府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186373",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "製造・ものづくり",
+        "省力化・自動化",
+        "環境・脱炭素・省エネ"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【京都市】補助金・助成金：（二次募集）令和8年度 宿泊施設の質の向上（受入環境充実）支援事業補助金の対象者募集",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-31",
+      "reason": "宿泊施設向けで業種が合わず対象外",
+      "requirements": "-",
+      "organization": "京都府 京都市",
+      "region": "京都府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186339",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "【兵庫県】補助金・助成金：「令和8年度自家消費型非住宅用太陽光発電設備導入補助事業」",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-11-30",
+      "reason": "太陽光設備導入向けで自社テーマと外れる",
+      "requirements": "-",
+      "organization": "兵庫県",
+      "region": "兵庫県",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186419",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ",
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "（令和8年7月1日公表）社会実装に向けた共創促進及びPR業務に係る公募プロポーザルを実施（地域産業創造課）",
+      "rank": "C",
+      "score": 40,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "補助金でなく業務委託公募・受注機会だが要件不明",
+      "requirements": "-",
+      "organization": "堺市",
+      "region": "大阪府堺市",
+      "url": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/sogyo/innovation/pr_proposal.html",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "IT・DX・AI",
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度堺市中小企業DXリスキリング補助金の申請を募集しています",
+      "rank": "A",
+      "score": 70,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "DX人材育成に直結し自社テーマ合致・堺市所在が要件の可能性",
+      "requirements": "堺市所在の中小企業であること等（詳細は要確認）",
+      "organization": "堺市",
+      "region": "大阪府堺市",
+      "url": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/dx_shien/reskilling.html",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "IT・DX・AI",
+        "雇用・労務・人材"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【令和9年4月1日から令和10年3月31日まで】校舎等施設維持管理補助員（学校園）（会計年度任用職員、障がい者を対象とした雇用）を募集します（教育委員会事務局教務部教職員人事担当）（教育委員会事務局）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "補助金でなく会計年度任用職員の採用募集で対象外",
+      "requirements": "-",
+      "organization": "大阪市",
+      "region": "大阪府大阪市",
+      "url": "https://www.city.osaka.lg.jp/kyoiku/page/0000681825.html",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【兵庫県福祉人材センターの取組み】社会福祉法人等奨学金返済支援制度事業補助金 法人担当者向け制度説明会を開催します】福祉・介護人材確保に向けた取組みについて（事業者向け）",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "社会福祉法人向けの制度説明会で福祉人材確保・対象外",
+      "requirements": "-",
+      "organization": "西宮市",
+      "region": "兵庫県西宮市",
+      "url": "https://www.nishi.or.jp/jigyoshajoho/kaigojigyo/fukushijinzai2.html",
+      "detectedDate": "2026-07-02",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "産業車両等の脱炭素化促進事業のうち、空港における脱炭素化促進事業②空港におけるEV・FCV型車両導入事業（二酸化炭素排出抑制対策事業費等補助金）",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "導入車両価格と標準車両価格の差額の2分の１",
+      "deadline": "2026-11-13",
+      "reason": "空港専用車両のEV/FCV化補助で、自社のAI活用支援事業とは無関係。",
+      "requirements": "事前登録された補助対象車両の導入、申請後に応募アドレスへメール連絡",
+      "organization": "令和８年度　産業車両等の脱炭素化促進事業のうち、空港における脱炭素化促進事業②空港におけるEV・FCV型車両導入事業（二酸化炭素排出抑制対策事業費等補助金）",
+      "region": "全国",
+      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDZDHMA5",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ",
+        "製造・ものづくり"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "「多感覚リアリティ、感性、質感等に関する俯瞰的調査」の公募",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-23",
+      "reason": "NEDOの研究俯瞰調査の受託公募で、通常の設備・販路補助でなく自社に不適。",
+      "requirements": "NEDO HP掲載要領に沿った受託応募書類",
+      "organization": "調査等",
+      "region": "全国",
+      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDbKSMA1",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "IT・DX・AI"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "補助金・助成金 ：「人材確保等支援助成金（中小企業団体助成コース）」",
+      "rank": "S",
+      "score": 88,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "事業主団体向けの助成で、単独の小規模事業者は直接の申請対象にならない。",
+      "requirements": "-",
+      "organization": "全国",
+      "region": "全国",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186517",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "雇用・労務・人材"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "【堺市】補助金・助成金：「令和8年度堺市中小企業DXリスキリング補助金」",
+      "rank": "B",
+      "score": 60,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2027-01-29",
+      "reason": "DX人材育成研修費の補助でIT/DX/人材テーマに直結。ただし堺市内企業限定のため所在地要確認。",
+      "requirements": "市内企業であること、社員向けDX研修等の実施",
+      "organization": "大阪府 堺市",
+      "region": "大阪府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186508",
+      "detectedDate": "2026-07-03",
+      "status": "未確認(重複候補)",
+      "targetIndustries": [
+        "IT・DX・AI",
+        "雇用・労務・人材"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【岸和田市】補助金・助成金：「岸和田市漁業用燃油価格高騰対策事業補助金について」",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-15",
+      "reason": "漁業者の燃油高騰対策で自社と無関係。",
+      "requirements": "漁業者であること、漁業経営セーフティネット構築事業の加入継続",
+      "organization": "大阪府 岸和田市",
+      "region": "大阪府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186461",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "農林・水産"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【豊岡市】補助金・助成金：「医療機関等物価高騰対策一時支援金」",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-08-31",
+      "reason": "豊岡市内の医療機関向け支援金で自社対象外。",
+      "requirements": "市内の対象医療施設であること",
+      "organization": "兵庫県 豊岡市",
+      "region": "兵庫県",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186466",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【加東市】補助金・助成金：「令和8年度加東市創業者支援補助事業補助金の申請者を募集します！」",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-08-21",
+      "reason": "加東市内での創業者向けで、大阪の既存事業者は対象外。",
+      "requirements": "加東市商工会の特定創業支援を受け推薦書取得、市内で創業/第二創業",
+      "organization": "兵庫県 加東市",
+      "region": "兵庫県",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186448",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "創業・起業"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【令和8年度9月1日採用】児童クラブ補助員（会計年度任用職員）を募集しています",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "補助金ではなく加古川市の会計年度任用職員（補助員）の採用募集で対象外。",
+      "requirements": "-",
+      "organization": "加古川市",
+      "region": "兵庫県加古川市",
+      "url": "https://www.city.kakogawa.lg.jp/soshikikarasagasu/kyouiku/kakuka/kyoikushidobu/shakaikyoiku_supotsushinkoka/shokuinsaiyo/kakogawagakudou/49254.html",
+      "detectedDate": "2026-07-03",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "「国際肌データのプラットフォームの構築の有用性ならびに医療機器産業への拡張可能性に関する調査」の公募",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-17",
+      "reason": "医療機器向けデータ基盤の調査受託公募でAI活用支援業と対象が合致せず対象外。",
+      "requirements": "-",
+      "organization": "調査等",
+      "region": "全国",
+      "url": "https://www.jgrants-portal.go.jp/subsidy/a0WJ200000CDbz3MAD",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "補助金・助成金：「新事業進出・ものづくり商業サービス補助金」",
+      "rank": "A",
+      "score": 80,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-09-30",
+      "reason": "新市場進出・高付加価値化を後押しする全国型で、自社の販路開拓・新事業展開にも申請余地。",
+      "requirements": "新市場・高付加価値事業への進出計画（事業計画書等）",
+      "organization": "全国",
+      "region": "全国",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186642",
+      "detectedDate": "2026-07-04",
+      "status": "未確認(重複候補)",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "補助金・助成金：「令和8年度予算「窓、壁等と一体となった太陽光発電設備の導入促進事業」の公募について（二次公募）」",
+      "rank": "C",
+      "score": 12,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-24",
+      "reason": "建材一体型太陽光設備の導入補助で自社の業種・設備と合致せず対象外。",
+      "requirements": "-",
+      "organization": "全国",
+      "region": "全国",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186580",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "補助金・助成金：「廃屋撤去・再生による地方温泉地等のまちづくり支援事業」",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2027-02-26",
+      "reason": "温泉地の廃屋撤去・まちづくり向けで自社事業と無関係。",
+      "requirements": "-",
+      "organization": "全国",
+      "region": "全国",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186502",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "category": "国",
+      "isNew": true
+    },
+    {
+      "name": "【箕面市】補助金・助成金：「障害者グループホーム整備費等補助金」",
+      "rank": "C",
+      "score": 8,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "障害者GHの整備・改修向けで自社の業種は対象外。",
+      "requirements": "-",
+      "organization": "大阪府 箕面市",
+      "region": "大阪府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186584",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【福知山市】補助金・助成金：「京都府集落営農経営力強化事業の要望調査について」",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "2026-07-07",
+      "reason": "集落営農の共同機械導入向けで農業者が対象、自社は対象外。",
+      "requirements": "-",
+      "organization": "京都府 福知山市",
+      "region": "京都府",
+      "url": "https://j-net21.smrj.go.jp/snavi2/articles/186538",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "農林・水産"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "【令和8年8月1日から令和8年9月30日】浪速区役所窓口サービス課（保険年金）会計年度任用職員（補助作業）の募集について（浪速区役所）",
+      "rank": "C",
+      "score": 2,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "区役所の会計年度任用職員（アルバイト）募集で補助金ではない。",
+      "requirements": "-",
+      "organization": "大阪市",
+      "region": "大阪府大阪市",
+      "url": "https://www.city.osaka.lg.jp/naniwa/page/0000682506.html",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 京都市AI・ロボティクス導入支援PoC補助金の募集開始 ～先進技術導入のきっかけ作りをサポート～",
+      "rank": "A",
+      "score": 74,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "京都市のAI・ロボ導入PoC補助。自社は市外だが顧客のAI導入支援で活用余地が大きい。",
+      "requirements": "-",
+      "organization": "京都市",
+      "region": "京都府京都市",
+      "url": "https://www.city.kyoto.lg.jp/sankan/page/0000355702.html",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "IT・DX・AI"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "野良猫不妊手術助成金交付説明会のお知らせ",
+      "rank": "C",
+      "score": 2,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "野良猫の不妊手術助成で事業者向けでなく対象外。",
+      "requirements": "-",
+      "organization": "尼崎市",
+      "region": "兵庫県尼崎市",
+      "url": "https://www.city.amagasaki.hyogo.jp/kurashi/iryou/pet/1024272.html",
+      "detectedDate": "2026-07-04",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
       "isNew": true
     }
   ]
