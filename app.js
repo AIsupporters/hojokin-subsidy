@@ -343,15 +343,33 @@ function relevanceFor(it, persp) {
   if (capB && level !== "B") { level = "B"; reasons.push("※主対象は他業種の可能性"); }
   if (pts === 0) reasons.push("業種の限定は読み取れませんでした（業種を問わない一般制度の可能性）");
 
-  // 6) v4補正: 適格性フロア（場所×業種×規模で常に使える定番の最低ランク保証）＋定番ブースト（予定/改善）＋掛け合わせ減点。台帳/LINEと同ロジック。
+  // 6) v5構造化属性（データ側=台帳O〜R列で抽出済み・新規制度にも効く）→ v4定番マスタ → 掛け合わせ減点 の順で補正。台帳/LINEと同ロジック。
   const st = matchStapleV3(name, plans, improves, persp);
-  // ハード除外: 小規模限定の定番（持続化）で規模が非該当 → 対象外は隠さず理由付きC（レビュー: 黙ってB/非表示はツール不信）。
-  if (st && st.e.smallOnly && SIZE && !isSmallBizV3(persp, SIZE)) {
+  // 小規模限定判定: 構造化(targetSize)＞定番マスタ の優先順位（構造化があればテキスト・マスタより信頼）
+  const hasSizeTag = it.targetSize !== undefined && it.targetSize !== "";
+  const smallLtd = hasSizeTag ? it.targetSize === "小規模限定" : !!(st && st.e.smallOnly);
+  // ハード除外: 小規模限定×規模非該当 → 対象外は隠さず理由付きC（レビュー: 黙ってB/非表示はツール不信）。
+  if (smallLtd && SIZE && !isSmallBizV3(persp, SIZE)) {
     const line = (persp && SMALL20_INDUSTRIES.includes(persp)) ? "20人以下" : "5人以下（製造業・宿泊業等は20人以下）";
     return C(`小規模事業者向けのため対象外の可能性：${persp || "この業種"}は従業員${line}が対象です。※従業員は「常時使用する従業員」で数えます（パート中心なら該当する場合あり）`);
   }
+  // (v5-a) 目的タグ照合: 制度の目的 ∩ ご選択の予定/改善（同一語彙＝完全一致）→ S級。未知の新制度にも効く
+  const intentSel = new Set([].concat(plans, improves));
+  const structHit = Array.isArray(it.purposes) ? it.purposes.filter((p) => intentSel.has(p)) : [];
+  if (structHit.length) {
+    level = raiseLevel(level, "S");
+    reasons.push(`制度の目的「${structHit.join("・")}」がご要望に一致`);
+  }
+  // (v5-b) 構造化フロア: 小規模限定×小規模該当→A床／雇用保険前提×常設→A床（着手前手続きの定番を常時表示）
+  if (it.targetSize === "小規模限定" && SIZE && isSmallBizV3(persp, SIZE) && REL_ORD["A"] > REL_ORD[level]) {
+    level = "A"; reasons.push("小規模事業者向けの制度で、あなたの規模が対象");
+  }
+  const needsIns = Array.isArray(it.requiredAxes) && it.requiredAxes.indexOf("雇用保険") >= 0;
+  if (needsIns && it.evergreen === true && SIZE && REL_ORD["A"] > REL_ORD[level]) {
+    level = "A"; reasons.push("雇用保険加入の従業員がいれば使える常設型の助成金（採用・研修等の着手前に手続きが必要）");
+  }
   if (st) {
-    const isSmall = st.e.smallOnly ? isSmallBizV3(persp, SIZE) : true;
+    const isSmall = smallLtd ? isSmallBizV3(persp, SIZE) : true;
     // (a) フロア: 意図が無くても定番は最低ランクを保証（持続化=小規模でS常時／雇用系=従業員ありでA常時など）
     const floor = floorLevelV3(st.e, persp, SIZE);
     if (floor && REL_ORD[floor] > REL_ORD[level]) {
@@ -368,7 +386,17 @@ function relevanceFor(it, persp) {
     // (c) 制度ごとの上限（人材確保等など第一候補にしない定番はA止まり）
     if (st.e.maxRank) level = capLevel(level, st.e.maxRank);
   }
+  // 掛け合わせ減点: Q列（構造化・既知）とテキスト推定をキー単位でマージ（coreが優先）
   const combo = findComboV3(name, rTgt + " " + req, plans, st && st.e);
+  if (Array.isArray(it.requiredAxes)) {
+    const P2 = new Set(plans);
+    for (const t of it.requiredAxes) {
+      if (t === "雇用保険" || t === "なし") continue;
+      const ax = COMBO_V3.find((a) => a.key === t);
+      if (!ax || ax.covered.some((p) => P2.has(p))) continue;
+      if (!combo.some((c) => c.key === t)) combo.push({ key: t, level: "condition" });
+    }
+  }
   if (combo.length) {
     const capped = capLevel(level, combo.some((a) => a.level === "core") ? "B" : "A");
     if (capped !== level) reasons.push(`※${combo.map((a) => a.key).join("・")}の要件との掛け合わせが前提（単独目的では使いにくい）`);
