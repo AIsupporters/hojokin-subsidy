@@ -25,6 +25,9 @@ function cleanReason(r) {
   }).filter(Boolean).join("。");
 }
 // 負のゲート（＝Cの根拠。実データ651件の言い回しから抽出）
+// v6: 手続き枠（既採択者向けの交付申請・共同申請等）。括弧内にあるものだけ＝「交付申請受付を開始」等の新規公募告知は誤爆しない。
+//     src/quality.mjs の isProceduralSlot と同じパターン（ブラウザ側ミラー。変更時は両方を直す）。
+const PROCEDURAL_RE = /[（(][^）)]*(交付申請|共同申請|実績報告)[^）)]*[）)]/;
 const JUNK_RE = /会計年度任用職員|(?:職員|アルバイト|パート|スタッフ).{0,10}募集/;          // 求人（「アルバイト」単独では弾かない＝雇入れ助成金の誤爆防止）
 const NONPROG_NAME_RE = /受賞|表彰|採択(?:者|結果)|募集結果|入札|委託事業者|積算基準/;         // 制度でない情報
 const NOTGRANT_REASON_RE = /補助金?では?な/;                                                // 検知メモ「補助金でない」
@@ -140,6 +143,23 @@ const STAPLES_V3 = [
   { key: "jinzai", label: "人材確保等支援助成金", re: /人材確保等支援助成金/, plans: ["人材採用"], improves: ["採用", "人手不足"], floor: { level: "B", cond: "emp" }, maxRank: "A" },
   { key: "shoene", label: "省エネ設備投資系補助金", re: /省エネ(ルギー)?.{0,20}(補助金|支援事業)/, plans: ["省エネ設備", "脱炭素"], improves: ["コスト削減"] },
 ];
+// v6: 業種タグ整合（台帳N列=9区分タグ × 選択業種=30業種）。src/quality.mjs INDUSTRY_30_TO_9 のミラー（変更時は両方を直す）。
+const IND_30_TO_9 = {
+  "製造業": "製造・ものづくり", "自動車関連業": "製造・ものづくり",
+  "IT・システム開発": "IT・DX・AI", "Web制作・デザイン": "IT・DX・AI", "通信業": "IT・DX・AI",
+  "人材サービス業": "雇用・労務・人材",
+  "医療業": "医療・介護・福祉", "介護・福祉業": "医療・介護・福祉",
+  "飲食業": "観光・飲食・小売", "宿泊・観光業": "観光・飲食・小売", "小売業": "観光・飲食・小売",
+  "農業・林業": "農林・水産", "水産・漁業": "農林・水産",
+  "エネルギー・環境業": "環境・脱炭素・省エネ",
+};
+// falseは「タグが明示的に他業種向け」のときだけ（タグ無し・全業種・対応が引けない業種はtrue＝誤ペナルティ防止）
+function tagCompatibleV6(tags, persp) {
+  if (!Array.isArray(tags) || tags.length === 0 || tags.indexOf("全業種") >= 0 || !persp) return true;
+  if (tags.indexOf(persp) >= 0) return true;
+  const mapped = IND_30_TO_9[persp];
+  return !mapped || tags.indexOf(mapped) >= 0;
+}
 // 小規模事業者に該当するか（フロアcond=small用）。eligibility.jsの小規模区分をブラウザ用に近似。
 //  1〜5人=全業種該当／6〜20人=製造・建設・運送・宿泊・娯楽のみ該当／21人以上=非該当。
 const SMALL20_INDUSTRIES = ["製造業", "建設・工事業", "運送・物流業", "宿泊・観光業", "娯楽・イベント業"];
@@ -292,6 +312,9 @@ function relevanceFor(it, persp) {
   const C = (reason) => ({ kind: "industry", level: "C", pts: 0, reasons: [reason], gated: true });
 
   // 0) 補助金でない情報（求人・表彰・告知等）→ C。ただし希望支援タイプ（融資等）に合致すれば救済して通常採点
+  // v6: 手続き枠（既採択者向け）と地域検疫（「全国」表記だが実態は圏外地域限定・データ側でマーク済み）は最優先でC
+  if (PROCEDURAL_RE.test(name)) return C("既に採択された事業者向けの手続き枠（新規申請の公募ではない）");
+  if (it.foreignPlace) return C(`対象地域が「${it.foreignPlace}」の制度とみられるため対象外の可能性（登録上は全国表記）`);
   if (JUNK_RE.test(text)) return C("求人・お知らせ情報のため対象外の可能性が高い");
   if (NONPROG_NAME_RE.test(name) && !GRANT_NAME_RE.test(name)) return C("表彰・採択結果などのお知らせ情報");
   const supportRescue = supports.some((k) => SUPPORT_MAP[k] && anyHit(text, SUPPORT_MAP[k]));
@@ -354,24 +377,44 @@ function relevanceFor(it, persp) {
     return C(`小規模事業者向けのため対象外の可能性：${persp || "この業種"}は従業員${line}が対象です。※従業員は「常時使用する従業員」で数えます（パート中心なら該当する場合あり）`);
   }
   // (v5-a) 目的タグ照合: 制度の目的 ∩ ご選択の予定/改善（同一語彙＝完全一致）→ S級。未知の新制度にも効く
+  // v6: 対象業種タグが明示的に他業種ならS昇格させず最高B（目的の単語一致だけで他業種の制度を上位に出さない）
   const intentSel = new Set([].concat(plans, improves));
+  // 予定と改善で同じ概念が別トークンの組は相互展開（src/fit.mjs INTENT_ALIAS のミラー）
+  for (const w of [].concat(plans, improves)) {
+    const alias = { "採用": "人材採用", "人材採用": "採用", "AI活用": "AI導入", "AI導入": "AI活用" }[w];
+    if (alias) intentSel.add(alias);
+  }
   const structHit = Array.isArray(it.purposes) ? it.purposes.filter((p) => intentSel.has(p)) : [];
   if (structHit.length) {
-    level = raiseLevel(level, "S");
-    reasons.push(`制度の目的「${structHit.join("・")}」がご要望に一致`);
+    if (tagCompatibleV6(it.targetIndustries, persp)) {
+      level = raiseLevel(level, "S");
+      reasons.push(`制度の目的「${structHit.join("・")}」がご要望に一致`);
+    } else {
+      level = capLevel(level, "B");
+      reasons.push(`目的「${structHit.join("・")}」は一致するが、制度の主対象は他業種の可能性`);
+    }
   }
-  // (v5-b) 構造化フロア: 小規模限定×小規模該当→A床／雇用保険前提×常設→A床（着手前手続きの定番を常時表示）
+  // v6: 雇用系フロアの意図ゲート（採用・人材系の意図がある人だけA床。無条件A床だと雇用系が全員の上位を占拠する）
+  const hrIntent = plans.indexOf("人材採用") >= 0 || plans.indexOf("人材育成") >= 0
+    || improves.indexOf("採用") >= 0 || improves.indexOf("人手不足") >= 0;
+  // (v5-b) 構造化フロア: 小規模限定×小規模該当→A床／雇用保険前提×常設→意図ありA床・意図なしB床（v6）
   if (it.targetSize === "小規模限定" && SIZE && isSmallBizV3(persp, SIZE) && REL_ORD["A"] > REL_ORD[level]) {
     level = "A"; reasons.push("小規模事業者向けの制度で、あなたの規模が対象");
   }
   const needsIns = Array.isArray(it.requiredAxes) && it.requiredAxes.indexOf("雇用保険") >= 0;
-  if (needsIns && it.evergreen === true && SIZE && REL_ORD["A"] > REL_ORD[level]) {
-    level = "A"; reasons.push("雇用保険加入の従業員がいれば使える常設型の助成金（採用・研修等の着手前に手続きが必要）");
+  if (needsIns && it.evergreen === true && SIZE) {
+    // 意図あり×目的タグ未付与だけA床（タグ済みで一致なら上のS判定で処理済み＝ここに来るタグ済みは不一致なのでB）
+    const purposesTagged = Array.isArray(it.purposes) && it.purposes.length > 0;
+    const insLvl = hrIntent && !purposesTagged ? "A" : "B";
+    if (REL_ORD[insLvl] > REL_ORD[level]) {
+      level = insLvl; reasons.push("雇用保険加入の従業員がいれば使える常設型の助成金（採用・研修等の着手前に手続きが必要）");
+    }
   }
   if (st) {
     const isSmall = smallLtd ? isSmallBizV3(persp, SIZE) : true;
-    // (a) フロア: 意図が無くても定番は最低ランクを保証（持続化=小規模でS常時／雇用系=従業員ありでA常時など）
-    const floor = floorLevelV3(st.e, persp, SIZE);
+    // (a) フロア: 意図が無くても定番は最低ランクを保証（持続化=小規模でS常時など）。v6: 雇用系(cond=emp)のA床は意図ゲート
+    let floor = floorLevelV3(st.e, persp, SIZE);
+    if (floor === "A" && st.e.floor && st.e.floor.cond === "emp" && !hrIntent) floor = "B";
     if (floor && REL_ORD[floor] > REL_ORD[level]) {
       level = floor;
       reasons.push(st.e.floor.cond === "small"
@@ -575,6 +618,7 @@ function card(it, persp, rel) {
       <span class="tag ${catCls}">${esc(it.category)}</span>
       ${isRecent(it) ? '<span class="tag new">新着</span>' : ""}
       ${it.verified ? '<span class="tag verified">公式確認済</span>' : ""}
+      ${it.variants > 1 ? `<span class="tag" title="同じ制度の公募回・枠違いをまとめて表示しています">公募回・枠 全${esc(it.variants)}件</span>` : ""}
     </div>
     ${relLine(it, persp, rel)}
     <div class="facts">
