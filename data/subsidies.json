@@ -1,20 +1,18 @@
 {
-  "lastUpdated": "2026-07-22",
-  "total": 634,
+  "lastUpdated": "2026-07-23",
+  "total": 750,
   "byRank": {
     "S": 6,
     "A": 14,
     "B": 32,
-    "C": 582
+    "C": 698
   },
   "sources": [
     "jGrants（国＋大阪・京都・兵庫）",
     "J-Net21（全国＋大阪・京都・兵庫）",
-    "大阪RSS（府・産業局・堺/大阪/高槻/吹田）",
-    "京都RSS（京都産業21・京都市/宇治/亀岡/福知山/長岡京/舞鶴）",
-    "兵庫RSS（県・ひょうご産業活性化C・西宮/姫路/尼崎/明石/加古川）"
+    "大阪・京都・兵庫の97自治体の公式RSS（府県・産業支援機関を含む104フィード）"
   ],
-  "uncovered": "未巡回（直クロール未対応）：神戸市（公開RSS無し・jGrants/J-Net21で補完）、大阪・京都・兵庫の残市町村・商工会議所・民間財団助成 → 順次拡大",
+  "uncovered": "未巡回（公開RSSが無く直クロール未対応）：神戸市・八尾市・松原市・柏原市・交野市・豊能町・与謝野町・豊岡市・市川町・佐用町・新温泉町の11自治体（jGrants/J-Net21で補完）、南丹市・多可町は調査中。商工会議所・民間財団助成は未対応 → 順次拡大",
   "items": [
     {
       "name": "令和８年度 脱炭素成長型経済構造移行推進対策費補助金 （業務用建築物の脱炭素改修加速化事業）",
@@ -5799,31 +5797,6 @@
       ],
       "requiredAxes": [
         "脱炭素・省エネ"
-      ],
-      "evergreen": false,
-      "category": "国",
-      "isNew": false
-    },
-    {
-      "name": "補助金・助成金 ：「雇用就農資金（雇用就農者育成・独立支援タイプ、新法人設立支援タイプ）」",
-      "rank": "C",
-      "score": 6,
-      "maxLimit": "",
-      "rate": "",
-      "deadline": "2026-07-22",
-      "reason": "農業法人の就農研修向け。対象外",
-      "requirements": "-（詳細はリンク先要確認）",
-      "organization": "全国",
-      "region": "全国",
-      "url": "https://j-net21.smrj.go.jp/snavi2/articles/184793",
-      "detectedDate": "2026-06-14",
-      "status": "未確認",
-      "purposes": [
-        "人材採用",
-        "人材育成"
-      ],
-      "requiredAxes": [
-        "雇用保険"
       ],
       "evergreen": false,
       "category": "国",
@@ -12689,7 +12662,7 @@
       ],
       "evergreen": false,
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "【大阪市】補助金・助成金：「新たな手法による太陽光発電の導入にかかる費用の一部を補助します」",
@@ -12717,7 +12690,7 @@
       ],
       "evergreen": false,
       "category": "大阪",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "地域クラブ活動「まいかつ」参加者支援補助金のご案内",
@@ -12738,7 +12711,7 @@
       ],
       "evergreen": false,
       "category": "京都",
-      "isNew": true
+      "isNew": false
     },
     {
       "name": "「プレシード・シード期の概念実証／実現可能性調査における支援方策に関する調査」の公募",
@@ -13122,6 +13095,2679 @@
       ],
       "requiredAxes": [],
       "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 地球温暖化対策設備導入補助事業について",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "岸和田市内事業者向けの省エネ設備補助。自社所在地・業種の要件を要確認",
+      "requirements": "対策計画書等",
+      "organization": "岸和田市",
+      "region": "大阪府岸和田市",
+      "url": "https://www.city.kishiwada.lg.jp/site/zeroco2/ontai-hojyo2026-2.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "国の交付金を活用した物価高騰対策について（令和8年度）",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "交付金の活用状況を示す市の広報ページで、申請できる制度の公募ではない",
+      "requirements": "-",
+      "organization": "岸和田市",
+      "region": "大阪府岸和田市",
+      "url": "https://www.city.kishiwada.lg.jp/page/bukka-r8.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "岸和田市医療機関等物価高騰対策補助金について（申込期限は7月31日です）",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "岸和田市内の医療機関・薬局向けの物価高騰対策。業種が該当せず対象外",
+      "requirements": "市内医療機関であること",
+      "organization": "岸和田市",
+      "region": "大阪府岸和田市",
+      "url": "https://www.city.kishiwada.lg.jp/page/bukkakoutou.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【事業者向け】物流の脱炭素化（EV・FCトラック）促進補助金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "EV・FCトラック導入が対象。運送・物流事業者向けで自社業種は非該当",
+      "requirements": "車両導入計画",
+      "organization": "岸和田市",
+      "region": "大阪府岸和田市",
+      "url": "https://www.city.kishiwada.lg.jp/site/zeroco2/butsuryu-zeroco2.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "製造・ものづくり"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【中小事業者向け】対策計画書に基づくZEV導入促進補助金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "ZEV(電動車)導入が対象。対策計画書の提出が前提で自社業種は非該当",
+      "requirements": "対策計画書",
+      "organization": "岸和田市",
+      "region": "大阪府岸和田市",
+      "url": "https://www.city.kishiwada.lg.jp/site/zeroco2/chusho-zev.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "市民公益活動推進助成金審査部会を開催します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "助成金の審査部会開催のお知らせで、申請できる公募情報ではない",
+      "requirements": "-",
+      "organization": "豊中市",
+      "region": "大阪府豊中市",
+      "url": "https://www.city.toyonaka.osaka.jp/machi/npo/katudo/iinkai/jyoseikinshinsabukai.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "（大阪府からのお知らせ）（事業者向け）令和8年度 物流の脱炭素化（EV・FCトラック）促進補助金",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "大阪府のEV・FCトラック補助の市による周知。運送事業者向けで自社は非該当",
+      "requirements": "車両導入計画",
+      "organization": "豊中市",
+      "region": "大阪府豊中市",
+      "url": "https://www.city.toyonaka.osaka.jp/machi/kankyoseisaku/tikyu_mati/jigyousha/R8-jigyou3.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "製造・ものづくり"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "幼児2人同乗用自転車購入に助成金を交付します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "幼児2人同乗用自転車の購入助成で、子育て世帯向け。事業者は対象外",
+      "requirements": "-",
+      "organization": "泉大津市",
+      "region": "大阪府泉大津市",
+      "url": "https://www.city.izumiotsu.lg.jp/kakuka/shiminseikatu/kankyouka/hojyokin/10343.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度ひらかたゼロカーボン推進補助金について",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "枚方市内のゼロカーボン推進補助。市内所在と脱炭素要件が前提で要確認",
+      "requirements": "-",
+      "organization": "枚方市",
+      "region": "大阪府枚方市",
+      "url": "https://www.city.hirakata.osaka.jp/0000053655.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "脱炭素",
+        "省エネ設備"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 枚方市カラス対策ネット等購入補助事業について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "カラス対策ネットの購入補助で、住民・自治会向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "枚方市",
+      "region": "大阪府枚方市",
+      "url": "https://www.city.hirakata.osaka.jp/0000053407.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "小児慢性特定疾病医療費助成制度",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "小児慢性特定疾病の医療費助成で個人向け制度。事業者は対象外",
+      "requirements": "-",
+      "organization": "枚方市",
+      "region": "大阪府枚方市",
+      "url": "https://www.city.hirakata.osaka.jp/0000001421.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "障害福祉サービス事業者等従業者の研修費用、試験受験費用を補助します！",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "障害福祉サービス事業者の研修・受験費補助。業種が該当せず対象外",
+      "requirements": "市内事業所であること",
+      "organization": "茨木市",
+      "region": "大阪府茨木市",
+      "url": "https://www.city.ibaraki.osaka.jp/kikou/kenkof/syogaifukushika/jkhjhuhuh/ninteikyufu/jhjhk/68691.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "人材育成"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【保険医療機関・保険薬局向け】茨木市医療機関物価高騰支援給付金について",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "茨木市内の保険医療機関・薬局向けの給付金。業種が該当せず対象外",
+      "requirements": "市内医療機関であること",
+      "organization": "茨木市",
+      "region": "大阪府茨木市",
+      "url": "https://www.city.ibaraki.osaka.jp/kikou/kenkoi/iryoseisaku/menu/59386.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "富田林市物価高騰対応食費支援事業（おこめ券の配布）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "物価高騰対応のおこめ券配布で住民向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "富田林市",
+      "region": "大阪府富田林市",
+      "url": "https://www.city.tondabayashi.lg.jp/soshiki/4/137795.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【令和8年度から対象年齢を拡大！】富田林市奨学金返還支援助成金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "奨学金返還支援の助成で個人(市民)向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "富田林市",
+      "region": "大阪府富田林市",
+      "url": "https://www.city.tondabayashi.lg.jp/soshiki/4/125063.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "「文化振興基金助成事業」の申請を追加募集します",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "文化振興基金による文化団体向け助成の追加募集。一般事業者向けではない",
+      "requirements": "-",
+      "organization": "富田林市",
+      "region": "大阪府富田林市",
+      "url": "https://www.city.tondabayashi.lg.jp/soshiki/53/53200.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "富田林市ツアー造成促進事業補助金のご案内",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "富田林市のツアー造成促進補助。旅行業者向けで自社業種は非該当",
+      "requirements": "ツアー造成計画",
+      "organization": "富田林市",
+      "region": "大阪府富田林市",
+      "url": "https://www.city.tondabayashi.lg.jp/soshiki/36/144145.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "新サービス開発"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度富田林市住宅用脱炭素化機器等導入促進助成金",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用の脱炭素化機器導入助成で、住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "富田林市",
+      "region": "大阪府富田林市",
+      "url": "https://www.city.tondabayashi.lg.jp/soshiki/17/93860.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "河内長野市再生可能エネルギー導入促進補助金【重点対策加速化事業】",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "再生可能エネルギー導入促進補助。設備導入が前提で自社の目的とは合致しない",
+      "requirements": "-",
+      "organization": "河内長野市",
+      "region": "大阪府河内長野市",
+      "url": "https://www.city.kawachinagano.lg.jp/soshiki/14/88723.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "脱炭素",
+        "省エネ設備"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【受付中！】省エネ住宅にするなら今がおトク！設備導入費を補助します！",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "省エネ住宅の設備導入費補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "大東市",
+      "region": "大阪府大東市",
+      "url": "https://www.city.daito.lg.jp/soshiki/17/68961.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "大東市子ども食堂支援事業のご案内(事業者向け)",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "子ども食堂の運営者向け支援。事業内容が該当せず対象外",
+      "requirements": "市内での子ども食堂運営",
+      "organization": "大東市",
+      "region": "大阪府大東市",
+      "url": "https://www.city.daito.lg.jp/soshiki/61/1130.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和9年度介護施設等の整備に関する事業補助金（大阪府地域医療介護総合確保基金事業 ）事業量調査",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "介護施設整備の事業量調査で、次年度の意向確認。業種も該当せず対象外",
+      "requirements": "-",
+      "organization": "羽曳野市",
+      "region": "大阪府羽曳野市",
+      "url": "https://www.city.habikino.lg.jp/soshiki/hokenfukushi/kounenkaigo/kaigojigyousha/13548.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "工場新設"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度介護施設等の整備に関する事業（大阪府地域医療介護総合確保基金事業）補助金の申請について",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "介護施設等の整備補助。介護事業者向けで自社業種は非該当",
+      "requirements": "整備計画",
+      "organization": "羽曳野市",
+      "region": "大阪府羽曳野市",
+      "url": "https://www.city.habikino.lg.jp/soshiki/hokenfukushi/kounenkaigo/kaigojigyousha/10772.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "医療・介護・福祉"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "工場新設"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【お詫びと訂正】リーフレット「子ども・子育て支援金の保険料（令和8年度）の誤りについて",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "リーフレット誤記のお詫びと訂正のお知らせで、補助制度の公募ではない",
+      "requirements": "-",
+      "organization": "高石市",
+      "region": "大阪府高石市",
+      "url": "https://www.city.takaishi.lg.jp/kakuka/fukushi_hoken/kenkozoshin_ka/koukikoureisyairyou/kisaiayamarinoowabi.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "下水道改造助成金の助成期間を延長します（令和7年度供用開始のかた向け）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "下水道改造の助成期間延長で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "藤井寺市",
+      "region": "大阪府藤井寺市",
+      "url": "https://www.city.fujiidera.lg.jp/soshiki/toshiseibi/gesuidosoumu/21303.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【大阪府補助事業】ZEV導入促進補助金",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "大阪府のZEV導入促進補助を市が周知。車両導入が対象で自社業種は非該当",
+      "requirements": "対策計画書",
+      "organization": "東大阪市",
+      "region": "大阪府東大阪市",
+      "url": "https://www.city.higashiosaka.lg.jp/0000042386.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "生活保護受給世帯エアコン購入費補助事業について(対象者向け)",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "生活保護受給世帯のエアコン購入費補助で個人向け。事業者は対象外",
+      "requirements": "-",
+      "organization": "東大阪市",
+      "region": "大阪府東大阪市",
+      "url": "https://www.city.higashiosaka.lg.jp/0000044925.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【精神保健福祉相談補助員(西保健センター)】を募集",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "精神保健福祉相談補助員の職員募集(求人)で、補助金制度ではない",
+      "requirements": "-",
+      "organization": "東大阪市",
+      "region": "大阪府東大阪市",
+      "url": "https://www.city.higashiosaka.lg.jp/0000044896.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度小学校給食における食物アレルギー対応補助金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "小学校給食の食物アレルギー対応補助で、学校給食に関する制度",
+      "requirements": "-",
+      "organization": "泉南市",
+      "region": "大阪府泉南市",
+      "url": "https://www.city.sennan.lg.jp/kakuka/kyouiku/kyouiku_soumu/kyushokukakari/about/kyushokufee/12395.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【大阪府】令和8年度物流の脱炭素化（EV・FC トラック）促進補助金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "大阪府のEV・FCトラック補助の市による周知。運送事業者向けで自社は非該当",
+      "requirements": "車両導入計画",
+      "organization": "四條畷市",
+      "region": "大阪府四條畷市",
+      "url": "https://www.city.shijonawate.lg.jp/page/128575.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "製造・ものづくり"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【大阪府】令和8年度中小事業者の対策計画書に基づく ZEV導入促進補助金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "大阪府のZEV導入促進補助の市による周知。車両導入が対象で自社は非該当",
+      "requirements": "対策計画書",
+      "organization": "四條畷市",
+      "region": "大阪府四條畷市",
+      "url": "https://www.city.shijonawate.lg.jp/page/128558.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "耐震診断及び耐震改修補助金について",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "民間建築物の耐震診断・改修補助。建物所有者向けで自社の目的と合致しない",
+      "requirements": "建築物の耐震診断",
+      "organization": "阪南市",
+      "region": "大阪府阪南市",
+      "url": "https://www.city.hannan.lg.jp/kakuka/toshi/toshi/taishinka/1597994486626.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "不問",
+      "purposes": [
+        "店舗改装"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "生ごみ処理機等の購入補助について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "生ごみ処理機の購入補助で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "島本町",
+      "region": "大阪府島本町",
+      "url": "https://www.town.shimamoto.lg.jp/soshiki/17/24017.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "【受付中】忠岡町省エネ製品買替え促進補助金について",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "省エネ製品の買替え促進補助。主に住民向けで事業者向けではない",
+      "requirements": "-",
+      "organization": "忠岡町",
+      "region": "大阪府忠岡町",
+      "url": "https://www.town.tadaoka.osaka.jp/soshiki/seikatsu_kankyo/2/5729.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "purposes": [
+        "省エネ設備"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "自治振興協議会活動における補助金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "自治振興協議会(地縁団体)の活動補助で、一般事業者向けではない",
+      "requirements": "-",
+      "organization": "忠岡町",
+      "region": "大阪府忠岡町",
+      "url": "https://www.town.tadaoka.osaka.jp/soshiki/jichi_bosai/1/4_1/5880.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "岬町住民生活支援金のお知らせ",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住民生活支援金のお知らせで個人向け給付。事業者向けではない",
+      "requirements": "-",
+      "organization": "岬町",
+      "region": "大阪府岬町",
+      "url": "https://www.town.misaki.osaka.jp/soshiki/matidukuri/kikaku/juminseikatsushienkin/5916.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "物価高騰対応重点支援地方創生臨時交付金の活用状況",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "臨時交付金の活用状況の公表ページで、申請できる制度ではない",
+      "requirements": "-",
+      "organization": "太子町",
+      "region": "大阪府太子町",
+      "url": "https://www.town.taishi.osaka.jp/busyo/seisakusoumubu/hisyoseisakuka/sinchakujyouhou/6299.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度千早赤阪村地域公共交通利用料助成事業の協力事業者登録について",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "公共交通利用助成の協力事業者登録の案内。交通事業者向けで自社は非該当",
+      "requirements": "協力事業者登録",
+      "organization": "千早赤阪村",
+      "region": "大阪府千早赤阪村",
+      "url": "https://www.vill.chihayaakasaka.osaka.jp/kakuka/soumu/soumuseisaku/koukyo_koutsu/takuchike/12279.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "requiredAxes": [],
+      "evergreen": true,
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度千早赤阪村公共交通利用助成事業",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "公共交通の利用助成で住民向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "千早赤阪村",
+      "region": "大阪府千早赤阪村",
+      "url": "https://www.vill.chihayaakasaka.osaka.jp/kakuka/soumu/soumuseisaku/koukyo_koutsu/takuchike/11872.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "路線バス通学定期券購入費用を補助します！（令和8年度事業）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "路線バス通学定期券の購入費補助で、通学者(個人)向け",
+      "requirements": "-",
+      "organization": "千早赤阪村",
+      "region": "大阪府千早赤阪村",
+      "url": "https://www.vill.chihayaakasaka.osaka.jp/kakuka/soumu/soumuseisaku/koukyo_koutsu/takuchike/12106.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "大阪",
+      "isNew": true
+    },
+    {
+      "name": "綾部市団体事業補助金事業実績書等（令和7年度分）を公開します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "団体事業補助金の実績書公開で、申請できる公募情報ではない",
+      "requirements": "-",
+      "organization": "綾部市",
+      "region": "京都府綾部市",
+      "url": "https://www.city.ayabe.lg.jp/0000006500.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "きょうと地域連携交付金事業の実績を公表します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "きょうと地域連携交付金の実績公表で、申請できる公募情報ではない",
+      "requirements": "-",
+      "organization": "綾部市",
+      "region": "京都府綾部市",
+      "url": "https://www.city.ayabe.lg.jp/0000004699.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "2026年度水田収益力強化ビジョン",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "水田収益力強化ビジョンで農業者・地域協議会向け。自社業種は非該当",
+      "requirements": "-",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/soshiki/10/30532.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "農林・水産"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "宮津市女性が働きやすい職場環境づくり推進事業費補助金のご案内",
+      "rank": "C",
+      "score": 40,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "宮津市内事業者の職場環境づくり補助。市内所在が前提で自社は対象外",
+      "requirements": "市内事業所であること",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/soshiki/5/29980.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "雇用・労務・人材"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "人材採用",
+        "業務効率化"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "建築士による『木造住宅耐震相談会』を開催します！！",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "木造住宅の耐震相談会の開催案内で、事業者向けの補助公募ではない",
+      "requirements": "-",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/soshiki/12/22595.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "「みやづ企業活動応援補助金」各種補助金で事業継続を応援！（令和8年7月1日～）",
+      "rank": "C",
+      "score": 45,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "宮津市内事業者の事業継続を支援する補助群。市内所在が前提で自社は対象外",
+      "requirements": "市内事業所であること",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/site/press/30425.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "売上を伸ばしたい",
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "【募集中】宮津市事業者人手不足対策等支援補助金",
+      "rank": "C",
+      "score": 45,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "宮津市内事業者の人手不足対策・労働環境改善・生産性向上の補助。市内限定",
+      "requirements": "市内事業所であること",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/soshiki/9/30346.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "雇用・労務・人材"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "人手不足",
+        "業務効率化",
+        "採用"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 宮津市中小企業者等奨学金返還支援事業補助金について",
+      "rank": "C",
+      "score": 40,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "市内中小企業者の奨学金返還を支援し人材確保を促す制度。市内所在が前提",
+      "requirements": "市内事業所であること",
+      "organization": "宮津市",
+      "region": "京都府宮津市",
+      "url": "https://www.city.miyazu.kyoto.jp/soshiki/9/26344.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "雇用・労務・人材"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "人材採用",
+        "採用"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "コミュニティ助成事業",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "コミュニティ助成事業で自治会・地域団体向け。一般事業者向けではない",
+      "requirements": "-",
+      "organization": "城陽市",
+      "region": "京都府城陽市",
+      "url": "https://www.city.joyo.kyoto.jp/0000011283.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "きょうと地域連携交付金について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "きょうと地域連携交付金の制度説明ページで、事業者向けの公募ではない",
+      "requirements": "-",
+      "organization": "城陽市",
+      "region": "京都府城陽市",
+      "url": "https://www.city.joyo.kyoto.jp/0000010283.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "地域未来づくりプロジェクト交付金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "地域未来づくりプロジェクト交付金で地域団体向け。一般事業者向けではない",
+      "requirements": "-",
+      "organization": "向日市",
+      "region": "京都府向日市",
+      "url": "https://www.city.muko.kyoto.jp/site/shiminkyodo/18335.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "子ども・子育て支援金制度について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "子ども・子育て支援金制度の説明で、事業者が申請する補助ではない",
+      "requirements": "-",
+      "organization": "向日市",
+      "region": "京都府向日市",
+      "url": "https://www.city.muko.kyoto.jp/soshiki/22/17444.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "農作物へ影響を与える害虫への補助金交付事業が始まります。",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "農作物の害虫対策への補助交付事業で、農業者向け。自社業種は非該当",
+      "requirements": "-",
+      "organization": "向日市",
+      "region": "京都府向日市",
+      "url": "https://www.city.muko.kyoto.jp/soshiki/15/17197.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "農林・水産"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "八幡市家計支援給付金",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "家計支援給付金で世帯向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "八幡市",
+      "region": "京都府八幡市",
+      "url": "https://www.city.yawata.kyoto.jp/0000010833.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "地方創生臨時交付金（新型コロナウイルス感染症対応・物価高騰対応重点支援）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "地方創生臨時交付金の説明ページで、申請できる制度の公募ではない",
+      "requirements": "-",
+      "organization": "八幡市",
+      "region": "京都府八幡市",
+      "url": "https://www.city.yawata.kyoto.jp/0000011121.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "【7月から内容拡充】令和8年度京丹後市信用保証料補助金",
+      "rank": "C",
+      "score": 45,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "京丹後市内事業者の信用保証料補助。市内所在が前提で自社は対象外",
+      "requirements": "市内事業所・保証付融資",
+      "organization": "京丹後市",
+      "region": "京都府京丹後市",
+      "url": "https://www.city.kyotango.lg.jp/top/soshiki/shokokanko/shokoshinko/1_1/3682.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": true,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "申請書ダウンロード（医療費助成制度）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "医療費助成制度の申請書ダウンロードページで、事業者向けではない",
+      "requirements": "-",
+      "organization": "木津川市",
+      "region": "京都府木津川市",
+      "url": "https://www.city.kizugawa.lg.jp/0000000841.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "地域未来づくりプロジェクト交付金（旧：地域交響プロジェクト交付金）",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "地域未来づくりプロジェクト交付金で地域団体向け。一般事業者向けではない",
+      "requirements": "-",
+      "organization": "木津川市",
+      "region": "京都府木津川市",
+      "url": "https://www.city.kizugawa.lg.jp/0000002259.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "きょうと地域連携交付金事業",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "きょうと地域連携交付金事業の説明で、事業者向けの公募ではない",
+      "requirements": "-",
+      "organization": "木津川市",
+      "region": "京都府木津川市",
+      "url": "https://www.city.kizugawa.lg.jp/0000003283.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "日常生活用具の購入費助成",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "日常生活用具の購入費助成で障害のある方向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "木津川市",
+      "region": "京都府木津川市",
+      "url": "https://www.city.kizugawa.lg.jp/0000001042.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "【雨水タンク設置助成金交付制度のご案内】雨水を貯めて使おう!（令和8年5月掲載）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "雨水タンク設置の助成で住民向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "大山崎町",
+      "region": "京都府大山崎町",
+      "url": "https://www.town.oyamazaki.kyoto.jp/annai/jyogesuidoka/gesuidokakari/oshirase/4854.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "太陽光発電設備、蓄電設備、高効率給湯機器、コージェネレーションシステム設備への町補助金について（令和8年度）",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "太陽光・蓄電池等の町補助金。住宅所有者向けが中心で事業者向けではない",
+      "requirements": "-",
+      "organization": "井手町",
+      "region": "京都府井手町",
+      "url": "https://www.town.ide.kyoto.jp/soshiki/sangyoukankyou/shinsei_tetuduki/4904.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "purposes": [
+        "省エネ設備"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "きょうと地域連携交付金に係る自己評価調書について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "交付金に係る自己評価調書の公表で、申請できる制度ではない",
+      "requirements": "-",
+      "organization": "笠置町",
+      "region": "京都府笠置町",
+      "url": "http://www.town.kasagi.lg.jp/contents_detail.php?frmId=1744",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "京丹波町通学安全見守り機器購入補助金について",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "通学安全見守り機器の購入補助で、保護者(個人)向け",
+      "requirements": "-",
+      "organization": "京丹波町",
+      "region": "京都府京丹波町",
+      "url": "https://www.town.kyotamba.kyoto.jp/kakukakarasagasu/kyoikuiinkai_gakkokyoikuka/10314.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度京丹波フードバレー推進事業費補助金について",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "京丹波町のフードバレー推進事業補助。食品関連事業者向けで自社は非該当",
+      "requirements": "町内事業者であること",
+      "organization": "京丹波町",
+      "region": "京都府京丹波町",
+      "url": "https://www.town.kyotamba.kyoto.jp/kakukakarasagasu/kikakukeiei/gyomuannai_1/7/kyotambafoodvalley1/8173.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "農林・水産"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "新商品開発"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "地方創生関係交付金事業の効果検証",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "地方創生関係交付金事業の効果検証の公表で、公募情報ではない",
+      "requirements": "-",
+      "organization": "伊根町",
+      "region": "京都府伊根町",
+      "url": "https://www.town.ine.kyoto.jp/soshiki/kikakukanko/2/7/sousei/tihousousei_koukakensyou.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "令和6年度伊根町低所得者支援給付金（住民税非課税世帯への3万円給付及び子ども加算）について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "低所得者支援給付金で住民税非課税世帯向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "伊根町",
+      "region": "京都府伊根町",
+      "url": "https://www.town.ine.kyoto.jp/soshiki/jumin/3/1869.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "京都",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度洲本市地域公共交通等運行継続支援事業助成金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "燃料高騰を受けた地域公共交通事業者への助成。業種が該当せず対象外",
+      "requirements": "市内で交通事業を営むこと",
+      "organization": "洲本市",
+      "region": "兵庫県洲本市",
+      "url": "https://www.city.sumoto.lg.jp/soshiki/7/37731.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【兵庫県】令和8年度自家消費型非住宅用太陽光発電設備導入補助事業の募集開始について",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "兵庫県の事業者向け自家消費型太陽光補助。設備導入が前提で自社は非該当",
+      "requirements": "設備導入計画",
+      "organization": "洲本市",
+      "region": "兵庫県洲本市",
+      "url": "https://www.city.sumoto.lg.jp/soshiki/14/37416.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "洲本市自家消費型住宅用太陽光発電設備等導入促進事業補助金のご案内",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光の導入促進補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "洲本市",
+      "region": "兵庫県洲本市",
+      "url": "https://www.city.sumoto.lg.jp/soshiki/14/35792.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 洲本市省エネエアコン購入促進補助金のご案内（受付終了）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "省エネエアコン購入促進補助(受付終了)で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "洲本市",
+      "region": "兵庫県洲本市",
+      "url": "https://www.city.sumoto.lg.jp/soshiki/14/35631.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "住居確保給付金（家賃補助）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住居確保給付金(家賃補助)で生活困窮者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "芦屋市",
+      "region": "兵庫県芦屋市",
+      "url": "https://www.city.ashiya.lg.jp/fukushi/chiikifukushi/jyukyokakuhokyuhukin.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "住居確保給付金（転居費用補助）",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住居確保給付金(転居費用)で生活困窮者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "芦屋市",
+      "region": "兵庫県芦屋市",
+      "url": "https://www.city.ashiya.lg.jp/fukushi/chiikifukushi/jyukyokakuhokyuhukintennkyo.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "生ごみ減量・堆肥化容器購入費助成制度",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "生ごみ減量・堆肥化容器の購入助成で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "伊丹市",
+      "region": "兵庫県伊丹市",
+      "url": "https://www.city.itami.lg.jp/SOSIKI/SHIMIN/SEIKATSUKANKYO/GOMI_NO_GENRYO_SIGEN/1384223100212.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【県事業：事業者向け】自家消費型非住宅用太陽光発電設備導入補助事業",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "兵庫県の事業者向け非住宅用太陽光補助。設備導入が前提で自社は非該当",
+      "requirements": "設備導入計画",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/soshiki/kankyo/2026062401.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "※受付停止 （住民向け）自家消費型住宅用太陽光発電設備導入補助事業について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光の補助(受付停止)で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/soshiki/kankyo/2025100101.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "スズメバチの駆除費用を補助します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "スズメバチ駆除費用の補助で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/soshiki/kankyo/suzumebachikujyo.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "子ども子育て支援金制度について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "子ども子育て支援金制度の説明で、事業者が申請する補助ではない",
+      "requirements": "-",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/soshiki/shimin/kodomokosodate.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "相生市防災リーダー育成補助金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "防災リーダー育成の補助で、地域の防災活動者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/soshiki/kikikanri/bousaireader2025.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "新生児聴覚検査費助成事業",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "新生児聴覚検査費の助成で子育て世帯向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "相生市",
+      "region": "兵庫県相生市",
+      "url": "https://www.city.aioi.lg.jp/site/kosodatesedaihoukatu/sinseijityoukakukensahijyoseijigyou.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "乳幼児・こども医療費助成制度等の改正に関するコールセンター等業務委託に係る公募型プロポーザルについて",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "業務委託の公募型プロポーザル(入札)であり、補助金の公募ではない",
+      "requirements": "-",
+      "organization": "宝塚市",
+      "region": "兵庫県宝塚市",
+      "url": "https://www.city.takarazuka.hyogo.jp/1060684/1060713/keiyaku/1030913/1063221/1063969.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "宝塚市新規出店改装チャレンジ応援補助金【出店促進型補助金】",
+      "rank": "C",
+      "score": 45,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "宝塚市内での新規出店・改装を支援する補助。市内出店が前提で自社は対象外",
+      "requirements": "市内での出店・改装",
+      "organization": "宝塚市",
+      "region": "兵庫県宝塚市",
+      "url": "https://www.city.takarazuka.hyogo.jp/1060684/1060712/1061604/1042197/1042203.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "店舗改装",
+        "売上を伸ばしたい"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度こどもサポートセンター補助員（会計年度任用職員）を募集します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "会計年度任用職員の募集(求人)で、補助金制度ではない",
+      "requirements": "-",
+      "organization": "三木市",
+      "region": "兵庫県三木市",
+      "url": "https://www.city.miki.lg.jp/soshiki/27/95930.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "太陽光発電設備等導入補助金",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "太陽光発電設備等の導入補助。住宅向けが中心で事業者向けではない",
+      "requirements": "-",
+      "organization": "三木市",
+      "region": "兵庫県三木市",
+      "url": "https://www.city.miki.lg.jp/soshiki/22/86349.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "purposes": [
+        "省エネ設備"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "会計年度任用職員【事務補助員・事務補助員（障がい者）】を募集します！",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "会計年度任用職員(事務補助員)の募集(求人)で、補助金制度ではない",
+      "requirements": "-",
+      "organization": "三木市",
+      "region": "兵庫県三木市",
+      "url": "https://www.city.miki.lg.jp/soshiki/8/95501.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "省エネ家電 買替促進事業補助金",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "省エネ家電の買替促進補助で住民向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "高砂市",
+      "region": "兵庫県高砂市",
+      "url": "https://www.city.takasago.lg.jp/soshikikarasagasu/kankyoutaisakuka/4/hojyokinn/12176.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【受付中】令和8年度川西市自家消費型住宅用太陽光発電設備等導入補助金について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光等の導入補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "川西市",
+      "region": "兵庫県川西市",
+      "url": "https://www.city.kawanishi.hyogo.jp/kurashi/gomi_kankyo/kankyo/1024026.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "川西市大学等進学支援金給付制度",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "大学等進学支援金の給付制度で学生・世帯向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "川西市",
+      "region": "兵庫県川西市",
+      "url": "https://www.city.kawanishi.hyogo.jp/kurashi/1017448/1017455/syogakukin/1014766.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度養父市会計年度任用職員を募集します【事務補助員（産休・育休代替）】",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "会計年度任用職員の募集(求人)で、補助金制度ではない",
+      "requirements": "-",
+      "organization": "養父市",
+      "region": "兵庫県養父市",
+      "url": "https://www.city.yabu.hyogo.jp/soshiki/kikakusomu/somuzaisei/3/10239.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "養父市創業・第二創業補助金の申請受付について",
+      "rank": "C",
+      "score": 50,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "養父市内での創業・第二創業を支援する補助。市内創業が前提で自社は対象外",
+      "requirements": "市内での創業計画",
+      "organization": "養父市",
+      "region": "兵庫県養父市",
+      "url": "https://www.city.yabu.hyogo.jp/soshiki/sangyokankyo/shoko/1/2470.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "創業・起業"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "新サービス開発",
+        "売上を伸ばしたい"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【お知らせ】駅周辺の駐車利用料金を助成（令和8年4月から9月ご利用分）",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "駅周辺の駐車利用料金助成で利用者向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "丹波市",
+      "region": "兵庫県丹波市",
+      "url": "https://www.city.tamba.lg.jp/soshiki/furusatotejusokushinka/gyomuannai/1_1/2/7352.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【令和8年度】 丹波市周遊バス旅行促進事業補助金について",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "丹波市の周遊バス旅行促進補助。旅行・バス事業者向けで自社は非該当",
+      "requirements": "旅行商品の造成",
+      "organization": "丹波市",
+      "region": "兵庫県丹波市",
+      "url": "https://www.city.tamba.lg.jp/soshiki/shokokanko/kanko/1-2/12584.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "新サービス開発"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度南あわじ市地域公共交通等運行継続支援事業助成金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "燃料高騰を受けた地域公共交通事業者への助成。業種が該当せず対象外",
+      "requirements": "市内で交通事業を営むこと",
+      "organization": "南あわじ市",
+      "region": "兵庫県南あわじ市",
+      "url": "http://www.city.minamiawaji.hyogo.jp/soshiki/koutsuu/keizokusien.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "南あわじ市地場産業等LPガス価格高騰対策一時支援金",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "地場産業等のLPガス価格高騰対策の一時支援金。市内事業者が対象で自社は非該当",
+      "requirements": "市内事業所であること",
+      "organization": "南あわじ市",
+      "region": "兵庫県南あわじ市",
+      "url": "http://www.city.minamiawaji.hyogo.jp/soshiki/shoukou/jibasan-lpgasu.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "製造・ものづくり"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "南あわじ市空き家等活用まちづくり支援事業補助金",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "指定まちづくり会社による空き家活用事業への支援。対象者が限定され非該当",
+      "requirements": "市指定のまちづくり会社",
+      "organization": "南あわじ市",
+      "region": "兵庫県南あわじ市",
+      "url": "http://www.city.minamiawaji.hyogo.jp/soshiki/shoku/akiyamachidukuri.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "purposes": [
+        "店舗改装"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "「南あわじ市 生活応援商品券」の給付について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "生活応援商品券の給付で住民向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "南あわじ市",
+      "region": "兵庫県南あわじ市",
+      "url": "http://www.city.minamiawaji.hyogo.jp/soshiki/fukushi/seikatsuouenshouhinken.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "民間賃貸住宅等整備促進事業補助金（令和８年度新規認定受付開始）",
+      "rank": "C",
+      "score": 20,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "民間賃貸住宅等の整備促進補助。不動産・建築事業者向けで自社は非該当",
+      "requirements": "住宅整備計画",
+      "organization": "南あわじ市",
+      "region": "兵庫県南あわじ市",
+      "url": "http://www.city.minamiawaji.hyogo.jp/soshiki/toshi/minkanchintai.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "purposes": [
+        "工場新設"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度住宅リフォーム助成事業を実施します！",
+      "rank": "C",
+      "score": 10,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅リフォーム助成で住宅所有者向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "朝来市",
+      "region": "兵庫県朝来市",
+      "url": "https://www.city.asago.hyogo.jp/soshiki/25/14420.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "住宅用太陽光発電設備等導入促進補助金を実施します",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光等の導入促進補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "朝来市",
+      "region": "兵庫県朝来市",
+      "url": "https://www.city.asago.hyogo.jp/soshiki/27/25517.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "電気自動車等普及促進補助金",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "電気自動車等の普及促進補助。住民向けが中心で自社の目的とは合致しない",
+      "requirements": "-",
+      "organization": "朝来市",
+      "region": "兵庫県朝来市",
+      "url": "https://www.city.asago.hyogo.jp/soshiki/15/25359.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "purposes": [
+        "車両購入予定",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "朝来市既存住宅断熱化促進事業補助金",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "既存住宅の断熱化促進補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "朝来市",
+      "region": "兵庫県朝来市",
+      "url": "https://www.city.asago.hyogo.jp/soshiki/27/25515.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "除雪機械運転資格取得補助事業について",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "除雪機械の運転資格取得補助。降雪地の担い手向けで自社は非該当",
+      "requirements": "-",
+      "organization": "朝来市",
+      "region": "兵庫県朝来市",
+      "url": "https://www.city.asago.hyogo.jp/soshiki/26/20197.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "purposes": [
+        "人材育成"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "就労者居住施設整備支援補助金 【再募集】",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "就労者の居住施設整備を支援する補助。市内で施設整備する事業者が対象",
+      "requirements": "市内での施設整備",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/syoukou/51033.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "工場新設",
+        "人手不足"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 淡路市地域公共交通等運行継続支援事業助成金について",
+      "rank": "C",
+      "score": 25,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "燃料高騰を受けた地域公共交通事業者への助成。業種が該当せず対象外",
+      "requirements": "市内で交通事業を営むこと",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/toshisoumu/56473.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "資金繰り"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "女性活躍推進等助成金について",
+      "rank": "C",
+      "score": 45,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "淡路市内事業者の女性活躍推進を支援する助成。市内所在が前提で自社は対象外",
+      "requirements": "市内事業所であること",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/jinken/56154.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "雇用・労務・人材"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "人材採用",
+        "採用",
+        "人手不足"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "非住宅用太陽光発電設備導入補助事業(県事業)について",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "兵庫県の非住宅用太陽光導入補助。設備導入が前提で自社業種は非該当",
+      "requirements": "設備導入計画",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/seikatsu/56219.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "自治会組織（町内会等）への補助制度について（ごみ関係）※ステーション整備補助金につきましては今年度の受付は終了しました",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "自治会(町内会)向けのごみステーション整備等の補助。事業者向けではない",
+      "requirements": "-",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/seikatsu/48237.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "町内会で活用できる補助制度等のご案内",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "町内会で活用できる補助制度の案内で、一般事業者向けではない",
+      "requirements": "-",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/soumu/55657.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【市民税非課税世帯の高校生対象】令和8年度特定奨学金・通学助成費の申請について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "非課税世帯の高校生向け奨学金・通学助成で個人向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/gakkou/55690.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8年度 淡路市防犯カメラ設置補助事業について",
+      "rank": "C",
+      "score": 15,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "防犯カメラ設置補助。自治会・地域向けが中心で一般事業者向けではない",
+      "requirements": "-",
+      "organization": "淡路市",
+      "region": "兵庫県淡路市",
+      "url": "https://www.city.awaji.lg.jp/soshiki/kikikanri/27635.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【非FIT対象】稲美町自家消費型住宅用太陽光発電設備等導入補助金交付制度",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光等の導入補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "稲美町",
+      "region": "兵庫県稲美町",
+      "url": "https://www.town.hyogo-inami.lg.jp/0000007496.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "令和8(2026)年度 稲美町にぎわい創出事業補助金 対象イベント",
+      "rank": "C",
+      "score": 30,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "稲美町のにぎわい創出事業補助(対象イベント)。町内イベント主催者が対象",
+      "requirements": "町内でのイベント開催",
+      "organization": "稲美町",
+      "region": "兵庫県稲美町",
+      "url": "https://www.town.hyogo-inami.lg.jp/0000006767.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "観光・飲食・小売"
+      ],
+      "purposes": [
+        "広告"
+      ],
+      "requiredAxes": [],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "子ども・子育て支援金制度について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "子ども・子育て支援金制度の説明で、事業者が申請する補助ではない",
+      "requirements": "-",
+      "organization": "稲美町",
+      "region": "兵庫県稲美町",
+      "url": "https://www.town.hyogo-inami.lg.jp/0000007629.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "医療費の助成",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "医療費の助成制度で個人向け。事業者向けの補助ではない",
+      "requirements": "-",
+      "organization": "福崎町",
+      "region": "兵庫県福崎町",
+      "url": "https://www.town.fukusaki.hyogo.jp/0000001040.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "自家消費型住宅用太陽光発電設備等導入補助事業について",
+      "rank": "C",
+      "score": 5,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "住宅用太陽光等の導入補助で住宅所有者向け。事業者向けではない",
+      "requirements": "-",
+      "organization": "太子町",
+      "region": "兵庫県太子町",
+      "url": "https://www.town.hyogo-taishi.lg.jp/soshikikarasagasu/kankyo/kougaitiikikannkyou/7403.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "全業種"
+      ],
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "自家消費型非住宅用太陽光発電設備補助金",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "太子町の非住宅用太陽光補助。事業所への設備導入が前提で自社は非該当",
+      "requirements": "設備導入計画",
+      "organization": "太子町",
+      "region": "兵庫県太子町",
+      "url": "https://www.town.hyogo-taishi.lg.jp/soshikikarasagasu/kankyo/kougaitiikikannkyou/7439.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
+      "isNew": true
+    },
+    {
+      "name": "【兵庫県事業：事業者向け】自家消費型非住宅用太陽光発電設備補助金について",
+      "rank": "C",
+      "score": 35,
+      "maxLimit": "",
+      "rate": "",
+      "deadline": "",
+      "reason": "兵庫県の事業者向け非住宅用太陽光補助。設備導入が前提で自社は非該当",
+      "requirements": "設備導入計画",
+      "organization": "上郡町",
+      "region": "兵庫県上郡町",
+      "url": "https://www.town.kamigori.hyogo.jp/soshiki/juminka/gyomuannai/kankyo/ondanka/7917.html",
+      "detectedDate": "2026-07-23",
+      "status": "未確認",
+      "targetIndustries": [
+        "環境・脱炭素・省エネ"
+      ],
+      "targetSize": "中小まで",
+      "purposes": [
+        "省エネ設備",
+        "脱炭素"
+      ],
+      "requiredAxes": [
+        "脱炭素・省エネ"
+      ],
+      "evergreen": false,
+      "category": "兵庫",
       "isNew": true
     }
   ]
